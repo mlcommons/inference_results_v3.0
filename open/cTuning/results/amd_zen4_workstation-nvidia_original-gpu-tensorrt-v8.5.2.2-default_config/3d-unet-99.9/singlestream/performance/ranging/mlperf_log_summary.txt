@@ -1,0 +1,59 @@
+================================================
+MLPerf Results Summary
+================================================
+SUT name : Server_3DUNet
+Scenario : SingleStream
+Mode     : PerformanceOnly
+90th percentile latency (ns) : 431577402
+Result is : VALID
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+Early Stopping Result:
+ * Processed at least 64 queries (2795).
+ * Would discard 241 highest latency queries.
+ * Early stopping 90th percentile estimate: 431924700
+ * Early stopping 99th percentile estimate: 496971239
+
+================================================
+Additional Stats
+================================================
+QPS w/ loadgen overhead         : 4.51
+QPS w/o loadgen overhead        : 4.51
+
+Min latency (ns)                : 28107509
+Max latency (ns)                : 497348828
+Mean latency (ns)               : 221814603
+50.00 percentile latency (ns)   : 173281608
+90.00 percentile latency (ns)   : 431577402
+95.00 percentile latency (ns)   : 496023671
+97.00 percentile latency (ns)   : 496532234
+99.00 percentile latency (ns)   : 496829034
+99.90 percentile latency (ns)   : 497175784
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 1
+target_qps : 2.32558
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 2795
+max_query_count : 0
+qsl_rng_seed : 10003631887983097364
+sample_index_rng_seed : 17183018601990103738
+schedule_rng_seed : 12134888396634371638
+accuracy_log_rng_seed : 0
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 0
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 43
+
+No warnings encountered during test.
+
+No errors encountered during test.

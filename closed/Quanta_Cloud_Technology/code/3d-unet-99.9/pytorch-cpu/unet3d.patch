@@ -1,0 +1,1674 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3b9e4982..193149f1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,6 +4,12 @@ set(LINUX TRUE)
+ set(CMAKE_INSTALL_MESSAGE NEVER)
+ # set(CMAKE_VERBOSE_MAKEFILE ON)
+ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
++IF (DEFINED ENV{CC})
++  SET(CMAKE_C_COMPILER "$ENV{CC}")
++ENDIF()
++IF (DEFINED ENV{CXX})
++  SET(CMAKE_CXX_COMPILER "$ENV{CXX}")
++ENDIF()
+ 
+ set(PLUGIN_NAME torch_ipex)
+ 
+diff --git a/cmake/CPU.cmake b/cmake/CPU.cmake
+index eb675d5f..fac2d42e 100644
+--- a/cmake/CPU.cmake
++++ b/cmake/CPU.cmake
+@@ -26,7 +26,7 @@ IF(CMAKE_BUILD_TYPE MATCHES Debug)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g -D_DEBUG")
+ ELSE()
+   message("Release build.")
+-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -DNDEBUG")
++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=sapphirerapids -O2 -DNDEBUG")
+ ENDIF()
+ 
+ IF("${IPEX_DISP_OP}" STREQUAL "1")
+@@ -70,11 +70,20 @@ IF (C_AVX512_FOUND OR CXX_AVX512_FOUND)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx512f")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx512bw")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx512vl")
++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx512dq")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mf16c")
+ ENDIF()
+ IF (C_AVX512_BF16_FOUND OR CXX_AVX512_BF16_FOUND)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx512bf16 -DAVX512_BF16")
+ ENDIF()
++IF (C_AVX512_VNNI_FOUND OR CXX_AVX512_VNNI_FOUND)
++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx512vnni -DAVX512_VNNI")
++ENDIF()
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=sapphirerapids")
++IF (C_AMX_TILE_FOUND OR CXX_AMX_TILE_FOUND)
++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mamx-tile -mamx-int8 -DAMX_TILE")
++  message("AMX found, AMX_TILE is defined OK.")
++ENDIF()
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
+ # These flags are not available in GCC-4.8.5. Set only when using clang.
+ # Compared against https://gcc.gnu.org/onlinedocs/gcc-4.8.5/gcc/Option-Summary.html
+diff --git a/cmake/Modules/FindAVX.cmake b/cmake/Modules/FindAVX.cmake
+index 31853a36..72ccb721 100644
+--- a/cmake/Modules/FindAVX.cmake
++++ b/cmake/Modules/FindAVX.cmake
+@@ -21,12 +21,39 @@ SET(AVX512_BF16_CODE "
+ 
+   int main() {
+     __m512 src;
+-    // detect avx512f and avx512bf16
++    // detect avx512vl and avx512bf16
+     _mm512_cvtneps_pbh(src);
+     return 0;
+   }
+ ")
+ 
++SET(AVX512_VNNI_CODE "
++  #include <stdint.h>
++  #include <immintrin.h>
++
++  int main() {
++    char a1 = 1;
++    char a2 = 2;
++    char a3 = 0;
++    __m512i src1 = _mm512_set1_epi8(a1);
++    __m512i src2 = _mm512_set1_epi8(a2);
++    __m512i src3 = _mm512_set1_epi8(a3);
++    // detect avx512_vnni
++    _mm512_dpbusds_epi32(src3, src1, src2);
++    return src3[0];
++  }
++")
++
++SET(AMX_TILE_CODE "
++  #include <stdint.h>
++  #include <immintrin.h>
++  #include <emmintrin.h>
++  int main() {
++    _tile_release();
++    return 0;
++  }
++")
++
+ MACRO(CHECK_SSE lang type flags)
+   SET(__FLAG_I 1)
+   SET(CMAKE_REQUIRED_FLAGS_SAVE ${CMAKE_REQUIRED_FLAGS})
+@@ -55,8 +82,14 @@ MACRO(CHECK_SSE lang type flags)
+   MARK_AS_ADVANCED(${lang}_${type}_FOUND ${lang}_${type}_FLAGS)
+ ENDMACRO()
+ 
+-CHECK_SSE(C "AVX512" " ;-mavx512f -mavx512bw -mavx512vl")
+-CHECK_SSE(CXX "AVX512" " ;-mavx512f -mavx512bw -mavx512vl")
++CHECK_SSE(C "AVX512" " ;-mavx512f -mavx512bw -mavx512vl -mavx512dq")
++CHECK_SSE(CXX "AVX512" " ;-mavx512f -mavx512bw -mavx512vl -mavx512dq")
++
++CHECK_SSE(C "AVX512_BF16" " ;-mavx512vl -mavx512bf16")
++CHECK_SSE(CXX "AVX512_BF16" " ;-mavx512vl -mavx512bf16")
++
++CHECK_SSE(C "AVX512_VNNI" " ;-mavx512vnni")
++CHECK_SSE(CXX "AVX512_VNNI" " ;-mavx512vnni")
+ 
+-CHECK_SSE(C "AVX512_BF16" " ;-mavx512f -mavx512bf16")
+-CHECK_SSE(CXX "AVX512_BF16" " ;-mavx512f -mavx512bf16")
++CHECK_SSE(C "AMX_TILE" " ;-mamx-tile")
++CHECK_SSE(CXX "AMX_TILE" " ;-mamx-tile")
+diff --git a/torch_ipex/csrc/cpu/FusionOPs.cpp b/torch_ipex/csrc/cpu/FusionOPs.cpp
+index fc0e6366..27d8c4e5 100644
+--- a/torch_ipex/csrc/cpu/FusionOPs.cpp
++++ b/torch_ipex/csrc/cpu/FusionOPs.cpp
+@@ -17,14 +17,18 @@
+ #include "dbl/Common.h"
+ #include "dbl/Conv.h"
+ #include "dbl/Linear.h"
++#include "dbl/Deconv.h"
+ #include "ShadeDataContext.h"
+ 
+ #include "dil/dil.hpp"
++#include "cal_mean_var.hpp"
+ 
+ namespace torch_ipex {
+ namespace cpu {
+ 
+ using namespace dbl::comm;
++using Time = std::chrono::high_resolution_clock;
++
+ 
+ at::Tensor dil_convolution_outplace_fusion(
+     const at::Tensor& input,
+@@ -310,6 +314,218 @@ at::Tensor AtenIpexJITDev::dil_convolution_relu(
+     "Convolution_Relu");
+ }
+ 
++at::Tensor AtenIpexJITDev::dil_convolution_instancenorm_relu(
++    const at::Tensor& input,
++    const at::Tensor& weight,
++    at::IntArrayRef stride,
++    at::IntArrayRef padding,
++    at::IntArrayRef dilation,
++    int64_t groups,
++    const at::Tensor& in_weight,
++    const at::Tensor& in_bias) {
++
++  if (check_auto_mix_int8_fp32() && check_int8_calibration()) {
++    auto dil_input = try_gen_dil_tensor(input);
++    auto dil_weight = try_gen_dil_tensor(weight);
++    c10::optional<dil::tensor> dil_bias{c10::nullopt};
++    dil::attr_t attr;
++    dil::tensor dil_conv = dbl::conv::convolution_impl(dil_input, dil_weight, dil_bias, padding, stride, dilation, groups, attr, {});
++    auto conv_output = dbl::comm::gen_aten_tensor_by(std::move(dil_conv));
++    insert_or_updata_observer({input}, {conv_output}, "Conv3d", Int8OptConfig::fetch_and_add_ops_id());
++
++    dil::tensor dil_norm = dbl::comm::try_gen_dil_tensor(conv_output);
++    const dil::tensor norm_weight = dbl::comm::try_gen_dil_tensor(in_weight);
++    const dil::tensor norm_bias = dbl::comm::try_gen_dil_tensor(in_bias);
++    dil::tensor dil_norm_output;
++    dil::batch_normalization_forward_inference::compute(
++      dil_norm, norm_weight, norm_bias, dil_norm_output, 1e-5, {}, {}, dil::batch_normalization_flag::fuse_norm_relu);
++    auto norm_output = dbl::comm::gen_aten_tensor_by(std::move(dil_norm_output));
++    insert_or_updata_observer({conv_output}, {norm_output}, "BatchNorm", Int8OptConfig::fetch_and_add_ops_id());
++    return norm_output;
++  }
++
++  dil::tensor dil_input;
++  dil::tensor dil_weight;
++  c10::optional<dil::tensor> dil_bias{c10::nullopt};
++
++  bool quantized = true;
++  std::vector<float> output_scale = {};
++  if (check_auto_mix_int8_fp32() && !check_int8_calibration()) {
++    int64_t num_ops_id = Int8OptConfig::fetch_and_add_ops_id();
++    // quantized = dbl::comm::get_int8_quantized_status(num_ops_id);
++    std::vector<std::vector<float>> scales = dbl::comm::get_int8_scales({}, false, num_ops_id);
++    if (quantized) {
++      output_scale.push_back(scales[1][0]);
++      dbl::comm::reorder_to_int8_for_mix_prec(input, scales[0]);
++      dbl::comm::reorder_to_int8_for_mix_prec(weight, {});
++    } else {
++      dbl::comm::reorder_to_dtype(input, at::kFloat);
++      dbl::comm::reorder_to_dtype(weight, at::kFloat);
++    }
++  }
++
++  dil_input = try_gen_dil_tensor(input);
++  dbl::conv::prepack_conv_weights(input, dil_input, weight, stride, padding, dilation, groups);
++  dil_weight = try_gen_dil_tensor(weight);
++
++  dil::attr_t attr;
++  dil::tensor dil_conv = dbl::conv::convolution_impl(dil_input, dil_weight, dil_bias, padding, stride, dilation, groups, attr, output_scale);
++
++  std::vector<float> bn_input_scales = {};
++  std::vector<float> bn_output_scales = {};
++
++  if (check_auto_mix_int8_fp32() && !check_int8_calibration()) {
++    int64_t num_ops_id = Int8OptConfig::fetch_and_add_ops_id();
++    bool quantized = dbl::comm::get_int8_quantized_status(num_ops_id);
++    std::vector<std::vector<float>> scales = dbl::comm::get_int8_scales({}, false, num_ops_id);
++    bn_input_scales = scales[0];
++    bn_output_scales = scales[1];
++  }
++
++  const dil::tensor norm_weight = dbl::comm::try_gen_dil_tensor(in_weight);
++  const dil::tensor norm_bias = dbl::comm::try_gen_dil_tensor(in_bias);
++  dil::tensor dil_norm_output;
++  double eps = 1e-5;
++
++  auto src_type = dil_conv.get_data_type();
++  if (src_type == dil::data_type::u8 || src_type == dil::data_type::s8) 
++  {
++    dil_norm_output = intel_mlperf::dil_instnorm_channel_last(dil_conv, in_weight, in_bias, bn_input_scales[0], bn_output_scales[0]);
++    dil_norm_output.set_scale(bn_output_scales);
++  } else
++  {
++    dil::batch_normalization_forward_inference::compute(
++      dil_conv, norm_weight, norm_bias, dil_norm_output, eps, bn_input_scales, bn_output_scales, dil::batch_normalization_flag::fuse_norm_relu);
++  }
++
++  auto aten_output = dbl::comm::gen_aten_tensor_by(std::move(dil_norm_output));
++  return aten_output;
++}
++
++at::Tensor AtenIpexJITDev::dil_deconvolution3d(
++    const at::Tensor& input,
++    const at::Tensor& weight,
++    at::IntArrayRef stride,
++    at::IntArrayRef padding,
++    at::IntArrayRef output_padding,
++    int64_t groups,
++    at::IntArrayRef dilation
++    ) {
++
++  auto weight_dil_type = dbl::comm::try_gen_dil_tensor(weight).is_public_format();
++  if (weight_dil_type) { weight.transpose_(0, 1); }
++
++  dil::tensor dil_input;
++  dil::tensor dil_weight;
++  c10::optional<dil::tensor> dil_bias{c10::nullopt};
++
++  auto src_dil_type = dbl::comm::try_gen_dil_tensor(input).get_data_type();
++  bool quantized = false;
++  std::vector<float> output_scale = {};
++  std::vector<float> input_scale = {};
++  if (check_auto_mix_int8_fp32() && !check_int8_calibration()) {
++    int64_t num_ops_id = Int8OptConfig::fetch_and_add_ops_id();
++    quantized = dbl::comm::get_int8_quantized_status(num_ops_id);
++    std::vector<std::vector<float>> scales = dbl::comm::get_int8_scales({}, false, num_ops_id);
++    if (quantized) {
++      output_scale.push_back(scales[1][0]);
++      input_scale.push_back(scales[0][0]);
++      dbl::comm::reorder_to_int8_for_mix_prec(input, scales[0]);
++      dbl::comm::reorder_to_int8_for_mix_prec(weight, {});
++    } else {
++      dbl::comm::reorder_to_dtype(input, at::kFloat);
++      dbl::comm::reorder_to_dtype(weight, at::kFloat);
++    }
++  }
++
++  std::vector<int64_t> padding_r = {0, 0, 0};
++  dil_input = dbl::comm::try_gen_dil_tensor(input);
++  dbl::deconv::prepack_deconv3d_weights(input, weight, stride, padding, padding_r, output_padding, dilation, groups, false);
++  dil_weight = dbl::comm::try_gen_dil_tensor(weight);
++
++  dil::attr_t attr;
++  if (quantized) {
++    const dil::scale_t weights_scales;
++    auto& weights_scales_in =
++          dil_weight.has_scale() ? dil_weight.get_scale() : weights_scales;
++
++    dil::scale_t bias_scales, op_scales;
++    std::tie(bias_scales, op_scales) = dil::utils::compute_scales(
++            input_scale[0], output_scale[0], weights_scales_in);
++    attr.set_output_scales(2, op_scales);
++  }
++  
++  dil::tensor dil_output = dbl::deconv::deconvolution_impl(dil_input, dil_weight, dil_bias, padding, padding_r, output_padding, stride, dilation, groups, attr);
++  auto aten_output = dbl::comm::gen_aten_tensor_by(std::move(dil_output));
++
++  if (check_auto_mix_int8_fp32() && check_int8_calibration()) {
++    insert_or_updata_observer({input}, {aten_output}, "Deconv3d", Int8OptConfig::fetch_and_add_ops_id());
++  }
++
++  return aten_output;
++}
++
++Ipex_concat::Ipex_concat()
++{
++  dil::tensor::desc out_md_1 = dil::tensor::desc({1, 640, 8, 8, 8}, dil::tensor::data_type::s8, dil::tensor::format_tag::acdeb);
++  dil::tensor::desc out_md_2 = dil::tensor::desc({1, 512, 16, 16, 16}, dil::tensor::data_type::s8, dil::tensor::format_tag::acdeb);
++  dil::tensor::desc out_md_3 = dil::tensor::desc({1, 256, 32, 32, 32}, dil::tensor::data_type::s8, dil::tensor::format_tag::acdeb);
++  dil::tensor::desc out_md_4 = dil::tensor::desc({1, 128, 64, 64, 64}, dil::tensor::data_type::s8, dil::tensor::format_tag::acdeb);
++  dil::tensor::desc out_md_5 = dil::tensor::desc({1, 64, 128, 128, 128}, dil::tensor::data_type::s8, dil::tensor::format_tag::acdeb);
++  dil_out_1.zero_init(out_md_1);
++  dil_out_2.zero_init(out_md_2);
++  dil_out_3.zero_init(out_md_3);
++  dil_out_4.zero_init(out_md_4);
++  dil_out_5.zero_init(out_md_5);
++}
++
++Ipex_concat ipex_concat;
++
++at::Tensor AtenIpexJITDev::dil_concat3d(const at::TensorList tensors, const int64_t dim)
++{
++  auto t1_ = dbl::comm::try_gen_dil_tensor(tensors[0]).get_data_type();
++  if (t1_ == dil::data_type::f32)
++  {
++    return at::cat(tensors, dim);
++  }
++  else
++  {
++    auto dil_input1 = dbl::comm::try_gen_dil_tensor(tensors[0]);
++    auto dil_input2 = dbl::comm::try_gen_dil_tensor(tensors[1]);
++
++    auto in_sz = dil_input1.get_dims();
++    dil::tensor dil_out;
++    // if (in_sz[1] != 32)
++    // {
++    //   auto out_sz = {in_sz[0], in_sz[1] * 2, in_sz[2], in_sz[3], in_sz[4]};
++    //   auto out_md = dil::tensor::desc(out_sz, dil::tensor::data_type::s8, dil::tensor::format_tag::acdeb);
++    //   dil_out.init(out_md);
++    // }
++    // else
++    // {
++    //   dil_out = ipex_concat.dil_out_s;
++    // }
++    if (in_sz[1] == 32) {
++      dil_out = ipex_concat.dil_out_5;
++    } else if (in_sz[1] == 64) {
++      dil_out = ipex_concat.dil_out_4;
++    } else if (in_sz[1] == 128) {
++      dil_out = ipex_concat.dil_out_3;
++    } else if (in_sz[1] == 256) {
++      dil_out = ipex_concat.dil_out_2;
++    } else if (in_sz[1] == 320) {
++      dil_out = ipex_concat.dil_out_1;
++    }
++    
++    // auto start = Time::now();
++    intel_mlperf::my_concat(dil_input1, dil_input2, dil_out, dim);
++    // auto during = std::chrono::duration_cast<std::chrono::nanoseconds>(Time::now() - start).count();
++    // printf(",,,concat,,,,,,,%f\n", (float)during * 1e-6);
++    auto aten_output = dbl::comm::gen_aten_tensor_by(std::move(dil_out));
++    return aten_output;
++  }
++}
++
+ at::Tensor AtenIpexJITDev::dil_convolution_elu(
+     const at::Tensor& input,
+     const at::Tensor& weight,
+diff --git a/torch_ipex/csrc/cpu/FusionOPs.h b/torch_ipex/csrc/cpu/FusionOPs.h
+index 8250f534..71477415 100644
+--- a/torch_ipex/csrc/cpu/FusionOPs.h
++++ b/torch_ipex/csrc/cpu/FusionOPs.h
+@@ -25,6 +25,9 @@ namespace ipex {
+   static auto conv3d_sum = Symbol::fromQualString("ipex::conv3d_sum");
+   static auto conv3d_sum_relu = Symbol::fromQualString("ipex::conv3d_sum_relu");
+ 
++  static auto conv3d_instnorm_relu = Symbol::fromQualString("ipex::conv3d_instnorm_relu");
++  static auto deconv3d = Symbol::fromQualString("ipex::deconv3d");
++  static auto cat = Symbol::fromQualString("ipex::cat");
+ }
+ 
+ }} // namespace torch::jit
+@@ -51,6 +54,24 @@ class AtenIpexJITDev {
+ 
+   static at::Tensor dil_linear_fuse_eltwise(const at::Tensor& self, const at::Tensor& weight, const at::Tensor& bias, const dil::attr_t& attr);
+ 
++  static at::Tensor dil_convolution_instancenorm_relu(const at::Tensor& input, const at::Tensor& weight, at::IntArrayRef stride, at::IntArrayRef padding, at::IntArrayRef dilation, int64_t groups, const at::Tensor& in_weight, const at::Tensor& in_bias);
++
++  static at::Tensor dil_deconvolution3d(const at::Tensor& input, const at::Tensor& weight, at::IntArrayRef stride, at::IntArrayRef padding, at::IntArrayRef output_padding, int64_t groups, at::IntArrayRef dilation);
++
++  static at::Tensor dil_concat3d(const at::TensorList tensors, const int64_t dim);
++
++};
++
++class Ipex_concat {
++  public:
++  Ipex_concat();
++
++  dil::tensor dil_out_1;
++  dil::tensor dil_out_2;
++  dil::tensor dil_out_3;
++  dil::tensor dil_out_4;
++  dil::tensor dil_out_5;
++
+ };
+ 
+ }  // namespace cpu
+diff --git a/torch_ipex/csrc/cpu/bf16/vec/vec_type_cvt.h b/torch_ipex/csrc/cpu/bf16/vec/vec_type_cvt.h
+index 895c624f..16612dbc 100644
+--- a/torch_ipex/csrc/cpu/bf16/vec/vec_type_cvt.h
++++ b/torch_ipex/csrc/cpu/bf16/vec/vec_type_cvt.h
+@@ -27,7 +27,7 @@ inline __m256i trunc_fp32_to_bf16(const __m512 src) {
+ 
+ inline __m256i cvt_fp32_to_bf16(const __m512 src) {
+ #if defined(AVX512_BF16)
+-  return _mm512_cvtneps_pbh(src);
++  return (__m256i)_mm512_cvtneps_pbh(src);
+ #else
+   return trunc_fp32_to_bf16(src);
+ #endif
+diff --git a/torch_ipex/csrc/cpu/cal_mean_var.cpp b/torch_ipex/csrc/cpu/cal_mean_var.cpp
+new file mode 100644
+index 00000000..9cd424cb
+--- /dev/null
++++ b/torch_ipex/csrc/cpu/cal_mean_var.cpp
+@@ -0,0 +1,617 @@
++#include <c10/core/MemoryFormat.h>
++#include <c10/core/ScalarType.h>
++#include <c10/core/TensorOptions.h>
++
++#include "cal_mean_var.hpp"
++#include "el_common_intrin.hpp"
++
++namespace intel_mlperf {
++
++template <>
++void i_instancenorm_tpp<16>::calc_mean_var(float *in, float *m, float *v, int64_t c, int64_t bl) 
++{
++  auto vlen = c / 16;
++  __m512 sm[vlen];
++  __m512 smm[vlen];
++  for (int i = 0; i < vlen; ++i)
++  {
++    sm[i] = _mm512_setzero_ps();
++    smm[i] = _mm512_setzero_ps();
++  }
++
++  auto* pin = in;
++  auto rbl =_mm512_set1_ps(1.0 / bl);
++  for (auto i = 0; i < bl; ++i)
++  {
++    for (auto j = 0; j < vlen; ++j)
++    {
++      auto f = _mm512_loadu_ps(&pin[(i * vlen + j) * 16]);
++      sm[j] += f;
++      smm[j] += f * f;
++    }
++  }
++
++  for (auto i = 0; i < vlen; ++i)
++  {
++    _mm512_storeu_ps(&m[i * 16], sm[i] * rbl);
++    _mm512_storeu_ps(&v[i * 16], smm[i] * rbl);
++  }
++}
++
++template <>
++void i_instancenorm_tpp<16>::calc_mean_var_int8(int8_t *in, float *m, float *v, int64_t c, int64_t bl) 
++{
++  auto vlen = c / 16;
++  __m512 sm[vlen];
++  __m512 smm[vlen];
++  for (int i = 0; i < vlen; ++i)
++  {
++    sm[i] = _mm512_setzero_ps();
++    smm[i] = _mm512_setzero_ps();
++  }
++
++  auto* pin = in;
++  auto rbl =_mm512_set1_ps(1.0 / bl);
++  for (auto i = 0; i < bl; ++i)
++  {
++    for (auto j = 0; j < vlen; ++j)
++    {
++      auto f = _mm512_loadu_i8_to_fp32(&pin[(i * vlen + j) * 16]);
++      sm[j] += f;
++      smm[j] += f * f;
++    }
++  }
++
++  for (auto i = 0; i < vlen; ++i)
++  {
++    _mm512_storeu_ps(&m[i * 16], sm[i] * rbl);
++    _mm512_storeu_ps(&v[i * 16], smm[i] * rbl);
++  }
++}
++
++template <>
++void i_instancenorm_tpp<16>::calc_norm(float *in, float *out, float *w, float *b, float *m, float *v, int64_t c, int64_t bl) 
++{
++  auto vlen = c / 16;
++  __m512 _m[vlen];
++  __m512 _v[vlen];
++  __m512 _w[vlen];
++  __m512 _b[vlen];
++  for (int i = 0; i < vlen; ++i)
++  {
++    _m[i] = _mm512_setzero_ps();
++    _v[i] = _mm512_setzero_ps();
++    _w[i] = _mm512_setzero_ps();
++    _b[i] = _mm512_setzero_ps();
++  }
++
++  auto veps = _mm512_set1_ps(1e-5);
++  for (auto i = 0; i < vlen; ++i)
++  {
++    _m[i] = _mm512_loadu_ps(&m[i * 16]);
++    _v[i] = 1. / _mm512_sqrt_ps(_mm512_loadu_ps(&v[i * 16]) + veps);
++    _w[i] = _mm512_loadu_ps(&w[i * 16]);
++    _b[i] = _mm512_loadu_ps(&b[i * 16]);
++  }
++
++  auto* pin = in;
++  auto* pout = out;
++  for (auto i = 0; i < bl; ++i)
++  {
++    for (auto j = 0; j < vlen; ++j)
++    {
++      auto f = _mm512_loadu_ps(&pin[(i * vlen + j) * 16]);
++      auto o = (f - _m[j]) * _w[j] * _v[j] + _b[j];
++      _mm512_storeu_ps(&pout[(i * vlen + j) * 16], o);
++    }
++  }
++}
++
++template <>
++void i_instancenorm_tpp<16>::calc_norm_int8(int8_t *in, int8_t *out, float *w, float *b, float *m, float *v, int64_t c, int64_t bl, float is, float os) 
++{
++  auto vlen = c / 16;
++  __m512 _m[vlen];
++  __m512 _v[vlen];
++  __m512 _w[vlen];
++  __m512 _b[vlen];
++  for (int i = 0; i < vlen; ++i)
++  {
++    _m[i] = _mm512_setzero_ps();
++    _v[i] = _mm512_setzero_ps();
++    _w[i] = _mm512_setzero_ps();
++    _b[i] = _mm512_setzero_ps();
++  }
++
++  auto veps = _mm512_set1_ps(1e-5);
++  for (auto i = 0; i < vlen; ++i)
++  {
++    _m[i] = _mm512_loadu_ps(&m[i * 16]);
++    _v[i] = 1. / _mm512_sqrt_ps(_mm512_loadu_ps(&v[i * 16]) + veps);
++    _w[i] = _mm512_loadu_ps(&w[i * 16]);
++    _b[i] = _mm512_loadu_ps(&b[i * 16]);
++  }
++
++  auto* pin = in;
++  auto* pout = out;
++  auto voscale = _mm512_set1_ps(os);
++  auto viscale = _mm512_set1_ps(is);
++  auto vo_off = _mm_set1_epi8(0);
++
++  for (auto i = 0; i < bl; ++i)
++  {
++    for (auto j = 0; j < vlen; ++j)
++    {
++      auto f = _mm512_loadu_i8_to_fp32(&pin[(i * vlen + j) * 16]);
++      auto o = (f - _m[j]) * _w[j] * _v[j] + _b[j];
++      auto r = _mm512_scale_minmax_i8_ps(o, voscale);
++      _mm512_mask_cvtepi32_storeu_epi8(&pout[(i * vlen + j) * 16], 0xffff, r, vo_off);
++    }
++  }
++}
++
++template <>
++void i_instancenorm_tpp<16>::calc_norm_int8_new(int8_t *in, int8_t *out, float *sc, float *sh, int64_t c, int64_t bl, float is, float os) 
++{
++  auto vlen = c / 16;
++  __m512 vscale[vlen];
++  __m512 vshift[vlen];
++  for (int i = 0; i < vlen; ++i)
++  {
++    vscale[i] = _mm512_setzero_ps();
++    vshift[i] = _mm512_setzero_ps();
++  }
++
++  auto voscale = _mm512_set1_ps(os);
++  auto viscale = _mm512_set1_ps(is);
++  auto veps = _mm512_set1_ps(1e-5);
++
++  for (auto i = 0; i < vlen; ++i)
++  {
++    vscale[i] = _mm512_loadu_ps(&sc[i * 16]);
++    vshift[i] = _mm512_loadu_ps(&sh[i * 16]);
++  }
++
++  auto* pin = in;
++  auto* pout = out;
++  auto vo_off = _mm_set1_epi8(0);
++
++  for (auto i = 0; i < bl; ++i)
++  {
++    for (auto j = 0; j < vlen; ++j)
++    {
++      auto f = _mm512_loadu_i8_to_fp32(&pin[(i * vlen + j) * 16]);
++      auto o = _mm512_fmadd_ps(f, vscale[j], vshift[j]);
++      auto r = _mm512_scale_minmax_i8_ps(o, voscale);
++      _mm512_mask_cvtepi32_storeu_epi8(&pout[(i * vlen + j) * 16], 0xffff, r, vo_off);
++    }
++  }
++}
++
++at::Tensor instnorm_channel_last(const at::Tensor& input, const at::Tensor& weight, const at::Tensor& bias, float o_scale) 
++{
++  auto in_sz = input.sizes();
++  auto batch = in_sz[0];
++  auto channel = in_sz[1];
++  auto block_len = in_sz[2];
++  auto reduce_l = in_sz[2] * in_sz[3] * in_sz[4];
++  auto block_num = reduce_l / block_len;
++  auto mean_t = at::empty({batch, block_num, channel}, at::TensorOptions().dtype<float>().memory_format(c10::MemoryFormat::Contiguous));
++  auto var_t = at::empty({batch, block_num, channel}, at::TensorOptions().dtype<float>().memory_format(c10::MemoryFormat::Contiguous));
++  auto output = at::empty(in_sz, input.options().memory_format(input.suggest_memory_format()));
++
++  auto* in_ptr = input.data_ptr();
++  auto* out_ptr = output.data_ptr();
++  auto* w_ptr = weight.data_ptr();
++  auto* b_ptr = bias.data_ptr();
++  auto* m_ptr = mean_t.data_ptr();
++  auto* v_ptr = var_t.data_ptr();
++  auto data_type = input.scalar_type();
++
++  // calculate mean and variance
++  if (data_type == c10::ScalarType::Float) {
++    #   pragma omp parallel for
++    for (auto i = 0; i < batch * block_num; ++i)
++    {
++      auto* bin = reinterpret_cast<float (*)[block_len * channel]>(in_ptr);
++      auto* m = reinterpret_cast<float (*)[channel]>(m_ptr);
++      auto* v = reinterpret_cast<float (*)[channel]>(v_ptr);
++      i_instancenorm_tpp<16>::calc_mean_var(bin[i], m[i], v[i], channel, block_len);
++    }
++  } else if (data_type == c10::ScalarType::Char)
++  {
++    #   pragma omp parallel for
++    for (auto i = 0; i < batch * block_num; ++i)
++    {
++      auto* bin = reinterpret_cast<int8_t (*)[block_len * channel]>(in_ptr);
++      auto* m = reinterpret_cast<float (*)[channel]>(m_ptr);
++      auto* v = reinterpret_cast<float (*)[channel]>(v_ptr);
++      i_instancenorm_tpp<16>::calc_mean_var_int8(bin[i], m[i], v[i], channel, block_len);
++    }
++  }
++
++  auto mt = at::mean(mean_t, 1);
++  auto mt2 = at::mean(var_t, 1);
++  auto vt = mt2 - mt * mt;
++  auto* mt_ptr = mt.data_ptr();
++  auto* vt_ptr = vt.data_ptr();
++
++  // calculate norm
++  if (data_type == c10::ScalarType::Float) {
++    #   pragma omp parallel for
++    for (auto i = 0; i < batch * block_num; ++i)
++    {
++      auto* bin = reinterpret_cast<float (*)[block_len * channel]>(in_ptr);
++      auto* w = reinterpret_cast<float (*)>(w_ptr);
++      auto* b = reinterpret_cast<float (*)>(b_ptr);
++      auto* m = reinterpret_cast<float (*)[channel]>(mt_ptr);
++      auto* v = reinterpret_cast<float (*)[channel]>(vt_ptr);
++      auto* bout = reinterpret_cast<float (*)[block_len * channel]>(out_ptr);
++      i_instancenorm_tpp<16>::calc_norm(bin[i], bout[i], w, b, m[i/block_num], v[i/block_num], channel, block_len);
++    }
++  } else if (data_type == c10::ScalarType::Char) {
++    #   pragma omp parallel for
++    for (auto i = 0; i < batch * block_num; ++i)
++    {
++      auto* bin = reinterpret_cast<int8_t (*)[block_len * channel]>(in_ptr);
++      auto* w = reinterpret_cast<float (*)>(w_ptr);
++      auto* b = reinterpret_cast<float (*)>(b_ptr);
++      auto* m = reinterpret_cast<float (*)[channel]>(mt_ptr);
++      auto* v = reinterpret_cast<float (*)[channel]>(vt_ptr);
++      auto* bout = reinterpret_cast<int8_t (*)[block_len * channel]>(out_ptr);
++      i_instancenorm_tpp<16>::calc_norm_int8(bin[i], bout[i], w, b, m[i/block_num], v[i/block_num], channel, block_len, 1.0, o_scale);
++    }  
++  }
++  return output;
++}
++
++dil::tensor dil_instnorm_channel_last(const dil::tensor& input, const at::Tensor& weight, const at::Tensor& bias, float i_scale, float o_scale) 
++{
++  auto in_sz = input.get_dims();
++  auto batch = in_sz[0];
++  auto channel = in_sz[1];
++  auto block_len = in_sz[2];
++  auto reduce_l = in_sz[2] * in_sz[3] * in_sz[4];
++  auto block_num = reduce_l / block_len;
++  auto mean_t = at::empty({batch, block_num, channel}, at::TensorOptions().dtype<float>().memory_format(c10::MemoryFormat::Contiguous));
++  auto var_t = at::empty({batch, block_num, channel}, at::TensorOptions().dtype<float>().memory_format(c10::MemoryFormat::Contiguous));
++
++  auto* in_ptr = input.get_data_handle();
++  auto* w_ptr = weight.data_ptr();
++  auto* b_ptr = bias.data_ptr();
++  auto* m_ptr = mean_t.data_ptr();
++  auto* v_ptr = var_t.data_ptr();
++  auto data_type = input.get_data_type();
++
++  // calculate mean and variance
++  if (data_type == dil::data_type::f32) {
++    #   pragma omp parallel for
++    for (auto i = 0; i < batch * block_num; ++i)
++    {
++      auto* bin = reinterpret_cast<float (*)[block_len * channel]>(in_ptr);
++      auto* m = reinterpret_cast<float (*)[channel]>(m_ptr);
++      auto* v = reinterpret_cast<float (*)[channel]>(v_ptr);
++      i_instancenorm_tpp<16>::calc_mean_var(bin[i], m[i], v[i], channel, block_len);
++    }
++  } else if (data_type == dil::data_type::u8 || data_type == dil::data_type::s8)
++  {
++    #   pragma omp parallel for
++    for (auto i = 0; i < batch * block_num; ++i)
++    {
++      auto* bin = reinterpret_cast<int8_t (*)[block_len * channel]>(in_ptr);
++      auto* m = reinterpret_cast<float (*)[channel]>(m_ptr);
++      auto* v = reinterpret_cast<float (*)[channel]>(v_ptr);
++      i_instancenorm_tpp<16>::calc_mean_var_int8(bin[i], m[i], v[i], channel, block_len);
++    }
++  }
++
++  auto mt = at::mean(mean_t, 1);
++  auto mt2 = at::mean(var_t, 1);
++  auto vt = mt2 - mt * mt;
++  auto* mt_ptr = mt.data_ptr();
++  auto* vt_ptr = vt.data_ptr();
++  mt = mt.reshape({channel});  // batch = 1 in inference
++  vt = vt.reshape({channel});
++
++  at::Tensor scale, shift;
++  auto scale_temp = weight / at::sqrt(vt + 1e-5);
++  scale = scale_temp;
++  shift = (bias - mt * scale_temp);
++  auto* scale_ptr = scale.data_ptr();
++  auto* shift_ptr = shift.data_ptr();
++
++  auto dil_output = input;
++  auto* out_ptr = dil_output.get_data_handle();
++
++  // calculate norm
++  if (data_type == dil::data_type::f32) {
++    #   pragma omp parallel for
++    for (auto i = 0; i < batch * block_num; ++i)
++    {
++      auto* bin = reinterpret_cast<float (*)[block_len * channel]>(in_ptr);
++      auto* w = reinterpret_cast<float (*)>(w_ptr);
++      auto* b = reinterpret_cast<float (*)>(b_ptr);
++      auto* m = reinterpret_cast<float (*)[channel]>(mt_ptr);
++      auto* v = reinterpret_cast<float (*)[channel]>(vt_ptr);
++      auto* bout = reinterpret_cast<float (*)[block_len * channel]>(out_ptr);
++      i_instancenorm_tpp<16>::calc_norm(bin[i], bout[i], w, b, m[i/block_num], v[i/block_num], channel, block_len);
++    }
++  } else if (data_type == dil::data_type::u8 || data_type == dil::data_type::s8) {
++    #   pragma omp parallel for
++    for (auto i = 0; i < batch * block_num; ++i)
++    {
++      auto* bin = reinterpret_cast<int8_t (*)[block_len * channel]>(in_ptr);
++      auto* sc = reinterpret_cast<float (*)>(scale_ptr);
++      auto* sh = reinterpret_cast<float (*)>(shift_ptr);
++      auto* bout = reinterpret_cast<int8_t (*)[block_len * channel]>(out_ptr);
++      i_instancenorm_tpp<16>::calc_norm_int8_new(bin[i], bout[i], sc, sh, channel, block_len, i_scale, o_scale);
++    }  
++  }
++  return dil_output;
++}
++
++std::vector<at::Tensor> dil_inst_mean_var_clast (const dil::tensor& input) 
++{
++  auto in_sz = input.get_dims();
++  auto batch = in_sz[0];
++  auto channel = in_sz[1];
++  auto block_len = in_sz[2];
++  auto reduce_l = in_sz[2] * in_sz[3] * in_sz[4];
++  auto block_num = reduce_l / block_len;
++  auto mean_t = at::empty({batch, block_num, channel}, at::TensorOptions().dtype<float>().memory_format(c10::MemoryFormat::Contiguous));
++  auto var_t = at::empty({batch, block_num, channel}, at::TensorOptions().dtype<float>().memory_format(c10::MemoryFormat::Contiguous));
++
++  auto* in_ptr = input.get_data_handle();
++  auto* m_ptr = mean_t.data_ptr();
++  auto* v_ptr = var_t.data_ptr();
++  auto data_type = input.get_data_type();
++
++  // calculate mean and variance
++  if (data_type == dil::data_type::f32) {
++    #   pragma omp parallel for
++    for (auto i = 0; i < batch * block_num; ++i)
++    {
++      auto* bin = reinterpret_cast<float (*)[block_len * channel]>(in_ptr);
++      auto* m = reinterpret_cast<float (*)[channel]>(m_ptr);
++      auto* v = reinterpret_cast<float (*)[channel]>(v_ptr);
++      i_instancenorm_tpp<16>::calc_mean_var(bin[i], m[i], v[i], channel, block_len);
++    }
++  } else if (data_type == dil::data_type::u8 || data_type == dil::data_type::s8)
++  {
++    #   pragma omp parallel for
++    for (auto i = 0; i < batch * block_num; ++i)
++    {
++      auto* bin = reinterpret_cast<int8_t (*)[block_len * channel]>(in_ptr);
++      auto* m = reinterpret_cast<float (*)[channel]>(m_ptr);
++      auto* v = reinterpret_cast<float (*)[channel]>(v_ptr);
++      i_instancenorm_tpp<16>::calc_mean_var_int8(bin[i], m[i], v[i], channel, block_len);
++    }
++  }
++
++  auto mt = at::mean(mean_t, 1);
++  auto mt2 = at::mean(var_t, 1);
++  auto vt = mt2 - mt * mt; 
++  return {mt, vt};
++}
++
++template <>
++void i_instancenorm_tpp<16>::ref(float *in, float &m, float &v, int64_t rl) 
++{
++  int64_t d;
++  auto vsum = _mm512_setzero_ps();
++  auto vsum2 = _mm512_setzero_ps();
++
++  auto* pin = in;
++
++  // Pass 1, statistics
++  for (d = 0; d < rl / 16 * 16; d += 16) {
++    auto f = _mm512_loadu_ps(&pin[d]);
++    auto s = f;
++    auto ss = s * s;
++    vsum += s;
++    vsum2 += ss;
++  }
++  // Tail
++  if (d < rl) {
++    auto rem = rl - d;
++    __mmask16 k = (1<<rem) -1;
++    auto zeros = _mm512_setzero_ps();
++    auto f = _mm512_mask_loadu_ps(zeros, k, &pin[d]);
++    auto s = f;
++    auto ss = s * s;
++    vsum += s;
++    vsum2 += ss;
++  }
++
++  auto vmean = _mm512_mean_reduce_ps(vsum, rl);
++  auto vmean2 = _mm512_mean_reduce_ps(vsum2, rl);
++  auto vvar2 =  vmean2 - vmean * vmean;
++
++  m = vmean[0];
++  v = vvar2[0];
++}
++
++template <>
++void i_instancenorm_tpp<16>::ref(int8_t *in, float &m, float &v, int64_t rl) 
++{
++  int64_t d;
++  auto vsum = _mm512_setzero_ps();
++  auto vsum2 = _mm512_setzero_ps();
++
++  auto pin = in;
++
++  // Pass 1
++  for (d = 0; d < rl / 16 * 16; d += 16) {
++    auto f = _mm512_loadu_i8_to_fp32(&pin[d]);
++    auto s = f;
++    auto ss = s * s;
++
++    vsum += s;
++    vsum2 += ss;
++  }
++  // Tail
++  if (d < rl) {
++    auto rem = rl - d;
++    __mmask16 k = (1<<rem) -1;
++    auto zeros = _mm_setzero_si128();
++    auto f = _mm512_mask_loadu_i8_to_fp32(zeros, k, &pin[d]);
++    auto s = f;
++    auto ss = s * s;
++
++    vsum += s;
++    vsum2 += ss;
++  }
++
++  auto vmean = _mm512_mean_reduce_ps(vsum, rl);
++  auto vmean2 = _mm512_mean_reduce_ps(vsum2, rl);
++  auto vvar2 =  vmean2 - vmean * vmean;
++  m = vmean[0];
++  v = vvar2[0];
++}
++
++
++std::vector<at::Tensor> inst_mean_var (const at::Tensor& input) 
++{
++  auto in_sz = input.sizes();
++  auto batch = in_sz[0] * in_sz[1];
++  auto reduce_l = in_sz[2] * in_sz[3] * in_sz[4];
++  auto mean_t = at::empty(batch, at::TensorOptions().dtype<float>().memory_format(c10::MemoryFormat::Contiguous));
++  auto var_t = at::empty(batch, at::TensorOptions().dtype<float>().memory_format(c10::MemoryFormat::Contiguous));
++
++  auto* in = input.data_ptr();
++  auto* mean = mean_t.data_ptr();
++  auto* var = var_t.data_ptr();
++  auto data_type = input.scalar_type();
++
++  if (data_type == c10::ScalarType::Char) {
++#   pragma omp parallel for
++    for (auto i = 0; i < batch; ++i) {
++      auto* pin = reinterpret_cast<int8_t (*)[reduce_l]>(in);
++      auto* pm = reinterpret_cast<float *>(mean);
++      auto* pv = reinterpret_cast<float *>(var);
++
++      i_instancenorm_tpp<16>::ref(pin[i], pm[i], pv[i], reduce_l);
++    }
++  } else if (data_type == c10::ScalarType::Float) {
++#   pragma omp parallel for
++    for (auto i = 0; i < batch; ++i) {
++      auto* pin = reinterpret_cast<float (*)[reduce_l]>(in);
++      auto* pm = reinterpret_cast<float *>(mean);
++      auto* pv = reinterpret_cast<float *>(var);
++
++      i_instancenorm_tpp<16>::ref(pin[i], pm[i], pv[i], reduce_l);
++    }
++  } // throw here
++
++  std::vector<at::Tensor> output;
++  output.push_back(mean_t);
++  output.push_back(var_t);
++  return output;
++}
++
++std::vector<at::Tensor> dil_inst_mean_var (const dil::tensor& input) 
++{
++  auto in_sz = input.get_dims();
++  auto batch = in_sz[0] * in_sz[1];
++  auto reduce_l = in_sz[2] * in_sz[3] * in_sz[4];
++  auto mean_t = at::empty(batch, at::TensorOptions().dtype<float>().memory_format(c10::MemoryFormat::Contiguous));
++  auto var_t = at::empty(batch, at::TensorOptions().dtype<float>().memory_format(c10::MemoryFormat::Contiguous));
++
++  auto* in = input.get_data_handle();
++  auto* mean = mean_t.data_ptr();
++  auto* var = var_t.data_ptr();
++  auto data_type = input.get_data_type();
++
++  if (data_type == dil::data_type::u8 || data_type == dil::data_type::s8) {
++#   pragma omp parallel for
++    for (auto i = 0; i < batch; ++i) {
++      auto* pin = reinterpret_cast<int8_t (*)[reduce_l]>(in);
++      auto* pm = reinterpret_cast<float *>(mean);
++      auto* pv = reinterpret_cast<float *>(var);
++
++      i_instancenorm_tpp<16>::ref(pin[i], pm[i], pv[i], reduce_l);
++    }
++  } else if (data_type == dil::data_type::f32) {
++#   pragma omp parallel for
++    for (auto i = 0; i < batch; ++i) {
++      auto* pin = reinterpret_cast<float (*)[reduce_l]>(in);
++      auto* pm = reinterpret_cast<float *>(mean);
++      auto* pv = reinterpret_cast<float *>(var);
++
++      i_instancenorm_tpp<16>::ref(pin[i], pm[i], pv[i], reduce_l);
++    }
++  } // throw here
++
++  std::vector<at::Tensor> output;
++  output.push_back(mean_t);
++  output.push_back(var_t);
++  return output;
++}
++
++template <>
++void i_instancenorm_tpp<16>::ref_concat(int8_t *in1, int8_t *in2, int8_t *out, int64_t c, int64_t bl) 
++{
++  auto* pin1 = in1;
++  auto* pin2 = in2;
++  auto* pout = out;
++  int len = 64;
++  auto row = bl;
++  auto col = c / len;
++
++  for (auto i = 0; i < row; ++i)
++  {
++    for (auto j = 0; j < col; ++j)
++    {
++      auto f1 = _mm512_loadu_si512((__m512i *)&pin1[i * c + j * len]);
++      auto f2 = _mm512_loadu_si512((__m512i *)&pin2[i * c + j * len]);
++      _mm512_storeu_si512((__m512i *)&pout[i * 2 * c + j * len], f1);
++      _mm512_storeu_si512((__m512i *)&pout[i * 2 * c + j * len + c], f2);
++    }
++  }
++}
++
++template <>
++void i_instancenorm_tpp<16>::ref_concat32(int8_t *in1, int8_t *in2, int8_t *out, int64_t c, int64_t bl) 
++{
++  auto* pin1 = in1;
++  auto* pin2 = in2;
++  auto* pout = out;
++  int len = 16;
++  auto row = bl;
++  auto col = c / len;
++
++  for (auto i = 0; i < row; ++i)
++  {
++    for (auto j = 0; j < col; ++j)
++    {
++      auto f1 = _mm_loadu_si128((__m128i *)&pin1[i * c + j * len]);
++      auto f2 = _mm_loadu_si128((__m128i *)&pin2[i * c + j * len]);
++      _mm_storeu_si128((__m128i *)&pout[i * 2 * c + j * len], f1);
++      _mm_storeu_si128((__m128i *)&pout[i * 2 * c + j * len + c], f2);
++    }
++  }
++}
++
++void my_concat(const dil::tensor& input1, const dil::tensor& input2, dil::tensor& output, int dim)
++{
++  auto in_sz = input1.get_dims();
++  auto channel = in_sz[1];
++  auto reduce_l = in_sz[0] * in_sz[2] * in_sz[3] * in_sz[4];
++  auto block_len = in_sz[2];
++  auto batch = reduce_l / block_len;
++
++  auto* in_p1 = input1.get_data_handle();
++  auto* in_p2 = input2.get_data_handle();
++  auto* d_ptr = output.get_data_handle();
++
++  #   pragma omp parallel for
++  for (auto i = 0; i < batch; ++i)
++  {
++      auto* bin1 = reinterpret_cast<int8_t (*)[block_len * channel]>(in_p1);
++      auto* bin2 = reinterpret_cast<int8_t (*)[block_len * channel]>(in_p2);
++      auto* bout = reinterpret_cast<int8_t (*)[block_len * channel * 2]>(d_ptr);
++      i_instancenorm_tpp<16>::ref_concat32(bin1[i], bin2[i], bout[i], channel, block_len);
++  }
++}
++
++}
+diff --git a/torch_ipex/csrc/cpu/cal_mean_var.hpp b/torch_ipex/csrc/cpu/cal_mean_var.hpp
+new file mode 100644
+index 00000000..2a7d8d16
+--- /dev/null
++++ b/torch_ipex/csrc/cpu/cal_mean_var.hpp
+@@ -0,0 +1,34 @@
++#pragma once
++#include <torch/torch.h>
++#include <iostream>
++#include <vector>
++#include "dil/dil.hpp"
++
++namespace intel_mlperf {
++
++    std::vector<at::Tensor> inst_mean_var(const at::Tensor& input);
++    std::vector<at::Tensor> dil_inst_mean_var(const dil::tensor& input);
++    std::vector<at::Tensor> dil_inst_mean_var_clast(const dil::tensor& input);
++
++    at::Tensor instnorm_channel_last(const at::Tensor& input, const at::Tensor& weight, const at::Tensor& bias, float o_scale);
++    dil::tensor dil_instnorm_channel_last(const dil::tensor& input, const at::Tensor& weight, const at::Tensor& bias, float i_scale, float o_scale);
++
++    void my_concat(const dil::tensor& input1, const dil::tensor& input2, dil::tensor& output, int dim);
++
++    template <int vec_length>
++    class i_instancenorm_tpp {
++        public:
++
++        static void calc_mean_var(float *in, float *m, float *v, int64_t c, int64_t bl);
++        static void calc_mean_var_int8(int8_t *in, float *m, float *v, int64_t c, int64_t bl);
++
++        static void calc_norm(float *in, float *out, float *w, float *b, float *m, float *v, int64_t c, int64_t bl);
++        static void calc_norm_int8(int8_t *in, int8_t *out, float *w, float *b, float *m, float *v, int64_t c, int64_t bl, float is, float os);
++        static void calc_norm_int8_new(int8_t *in, int8_t *out, float *scale, float *shift, int64_t c, int64_t bl, float is, float os);
++        
++        static void ref(float *in, float &m, float &v, int64_t rl);
++        static void ref(int8_t *in, float &m, float &v, int64_t rl);
++        static void ref_concat(int8_t *in1, int8_t *in2, int8_t *out, int64_t c, int64_t bl);
++        static void ref_concat32(int8_t *in1, int8_t *in2, int8_t *out, int64_t c, int64_t bl);
++    };
++}
+diff --git a/torch_ipex/csrc/cpu/dbl/Common.cpp b/torch_ipex/csrc/cpu/dbl/Common.cpp
+index e7c22815..cffe1a7a 100644
+--- a/torch_ipex/csrc/cpu/dbl/Common.cpp
++++ b/torch_ipex/csrc/cpu/dbl/Common.cpp
+@@ -210,7 +210,7 @@ std::tuple<std::vector<std::vector<float>>, std::vector<std::vector<int32_t>>> g
+   }
+ }
+ 
+-void reorder_to_int8_for_mix_prec(const at::Tensor& tensor, std::vector<float> scales, bool uint8_used, std::vector<int32_t> shift) {
++void reorder_to_int8_for_mix_prec(const at::Tensor& tensor, std::vector<float> scales, bool uint8_used, std::vector<int32_t> shift, bool per_tensor) {
+   if (!check_auto_mix_int8_fp32() || check_int8_calibration())
+     return;
+ 
+@@ -227,9 +227,13 @@ void reorder_to_int8_for_mix_prec(const at::Tensor& tensor, std::vector<float> s
+ 
+   auto inner_scales = scales;
+   if (scales.empty()) {
+-    // compute weight scales for per_channel
+-    for (auto i = 0; i < tensor.size(0); i++) {
+-      inner_scales.push_back(float(127.5) / tensor[i].abs().max().item<float>());
++    if (per_tensor) {
++      inner_scales.push_back(float(127.5) / tensor.abs().max().item<float>());
++    } else {
++      // compute weight scales for per_channel
++      for (auto i = 0; i < tensor.size(0); i++) {
++        inner_scales.push_back(float(127.5) / tensor[i].abs().max().item<float>());
++      }
+     }
+   }
+ 
+diff --git a/torch_ipex/csrc/cpu/dbl/Common.h b/torch_ipex/csrc/cpu/dbl/Common.h
+index c6cfc572..f5fa490f 100644
+--- a/torch_ipex/csrc/cpu/dbl/Common.h
++++ b/torch_ipex/csrc/cpu/dbl/Common.h
+@@ -26,7 +26,7 @@ bool get_int8_quantized_status(const int64_t ops_id);
+ // for asymmetric quantization
+ std::tuple<std::vector<std::vector<float>>, std::vector<std::vector<int32_t>>> get_int8_asymmetric(const int64_t ops_id);
+ 
+-void reorder_to_int8_for_mix_prec(const at::Tensor& tensor, std::vector<float> scales, bool uint8_used = false, std::vector<int32_t> shift = {});
++void reorder_to_int8_for_mix_prec(const at::Tensor& tensor, std::vector<float> scales, bool uint8_used = false, std::vector<int32_t> shift = {}, bool per_tensor = false);
+ 
+ /**
+  * Reorder the input tensor to the specified scalar type.
+diff --git a/torch_ipex/csrc/cpu/dbl/Deconv.cpp b/torch_ipex/csrc/cpu/dbl/Deconv.cpp
+index b8c3fe96..9670f955 100644
+--- a/torch_ipex/csrc/cpu/dbl/Deconv.cpp
++++ b/torch_ipex/csrc/cpu/dbl/Deconv.cpp
+@@ -19,7 +19,7 @@ std::vector<int64_t> calc_deconv_input_size(
+   auto dim = output_size.size();
+   std::vector<int64_t> input_size(dim);
+   input_size[0] = output_size[0];
+-  input_size[1] = kernel_size[1] * groups;
++  input_size[1] = kernel_size[0] * groups;
+   for (size_t d = 2; d < dim; ++d) {
+     auto kernel = dilation[d - 2] * (kernel_size[d] - 1) + 1;
+     input_size[d] = (output_size[d] - 1) * stride[d - 2] - (2 * padding[d - 2]) +
+@@ -165,6 +165,54 @@ void prepack_deconv_weights(
+   }
+ }
+ 
++void prepack_deconv3d_weights(
++    const at::Tensor& input,
++    const at::Tensor& weight,
++    at::IntArrayRef stride,
++    at::IntArrayRef padding,
++    std::vector<int64_t> padding_r, 
++    at::IntArrayRef output_padding,
++    at::IntArrayRef dilation,
++    int64_t groups,
++    bool with_bias) {
++  // Prepack weight tensor if it's either a *cpu tensor* or a *plain dil tensor*
++  //
++  // Note: weight tensor will not be re-packed unless user has implicitly
++  //       triggered `to_public` by accessing its data
++  //       One caveat is when the input size has changed and prepacked weight
++  //       might not be the best fit for new input size, the weight will not
++  //       be re-packed in such cases, but it still ensures the correctness
++  //
++  // TODO: once semantics of "own shade context" is equivalent to
++  //       "is dil tensor", we could remove the first check below
++  if (!cpu::ShadeDataContext::isPackedTensor(weight)) {
++
++    auto dil_weight = dbl::comm::try_gen_dil_tensor(weight);
++    auto output_sizes = calc_deconv_input_size(input.sizes(), weight.sizes(), padding, output_padding, stride, dilation, groups);
++    auto packed_desc = dil::convolution_transpose_forward::expected_weights_desc(
++        weight.sizes().vec(),
++        dil_weight.get_data_type(),
++        stride.vec(),
++        padding.vec(),
++        padding_r,
++        dilation.vec(),
++        groups,
++        dil::algorithm::deconvolution_direct,
++        dil::prop_kind::forward,
++        input.sizes().vec(),
++        output_sizes,
++        with_bias);
++
++    dil::tensor packed_weight {packed_desc};
++    if (dil_weight.has_scale()) {
++      packed_weight.set_scale(dil_weight.get_scale());
++    }
++    packed_weight.feed_from(dil_weight);
++    dbl::comm::equip_dil_buffer(weight, packed_weight);
++    cpu::ShadeDataContext::setPackedTensor(weight, true);
++  }
++}
++
+ }  // namespace deconv
+ }  // namespace dbl
+ }  // namespace cpu
+diff --git a/torch_ipex/csrc/cpu/dbl/Deconv.h b/torch_ipex/csrc/cpu/dbl/Deconv.h
+index 19a83617..17678545 100644
+--- a/torch_ipex/csrc/cpu/dbl/Deconv.h
++++ b/torch_ipex/csrc/cpu/dbl/Deconv.h
+@@ -48,6 +48,17 @@ void prepack_deconv_weights(
+     int64_t groups,
+     bool with_bias);
+ 
++void prepack_deconv3d_weights(
++    const at::Tensor& input,
++    const at::Tensor& weight,
++    at::IntArrayRef stride,
++    at::IntArrayRef padding,
++    std::vector<int64_t>  padding_r,
++    at::IntArrayRef output_padding,
++    at::IntArrayRef dilation,
++    int64_t groups,
++    bool with_bias);
++
+ }  // namespace deconv
+ }  // namespace dbl
+ }  // namespace cpu
+diff --git a/torch_ipex/csrc/cpu/dil/dil/operators/conv.hpp b/torch_ipex/csrc/cpu/dil/dil/operators/conv.hpp
+index fc2522c1..0e770daa 100644
+--- a/torch_ipex/csrc/cpu/dil/dil/operators/conv.hpp
++++ b/torch_ipex/csrc/cpu/dil/dil/operators/conv.hpp
+@@ -206,7 +206,7 @@ struct convolution_forward : public dnnl::convolution_forward {
+       y_dims.push_back(out_size);
+     }
+     x_dtype = dtype == data_type::bf16 ? dtype : x_dtype;
+-    auto y_dtype = dtype != data_type::s8 ? dtype : data_type::s32;
++    auto y_dtype = dtype != data_type::s8 ? dtype : data_type::s8;
+     tensor::desc src_desc(x_dims, x_dtype);
+     tensor::desc dst_desc(y_dims, y_dtype);
+ 
+diff --git a/torch_ipex/csrc/cpu/dil/dil/operators/deconv.hpp b/torch_ipex/csrc/cpu/dil/dil/operators/deconv.hpp
+index d5202b62..542ae853 100644
+--- a/torch_ipex/csrc/cpu/dil/dil/operators/deconv.hpp
++++ b/torch_ipex/csrc/cpu/dil/dil/operators/deconv.hpp
+@@ -37,7 +37,7 @@ struct convolution_transpose_forward : public dnnl::deconvolution_forward {
+                       int groups = 1,
+                       const attr_t& attr = attr_t(),
+                       algorithm aalgorithm = algorithm::deconvolution_direct,
+-                      prop_kind aprop_kind = prop_kind::forward,
++                      prop_kind aprop_kind = prop_kind::forward_inference,
+                       const engine& aengine = engine::cpu_engine()) {
+     static tensor dummy_bias;
+     compute_impl</*with_bias=*/false>(
+@@ -65,7 +65,7 @@ struct convolution_transpose_forward : public dnnl::deconvolution_forward {
+     auto weights_dims_g =
+         grouped ? utils::group_dims(weights_dims, groups) : weights_dims;
+     // (g)iohw -> (g)oihw
+-    std::swap(weights_dims_g[grouped + 0], weights_dims_g[grouped + 1]);
++    // std::swap(weights_dims_g[grouped + 0], weights_dims_g[grouped + 1]);
+     auto weights_desc = tensor::desc(weights_dims_g, dtype);
+ 
+     auto dims_in = weights_desc.get_dims();
+@@ -91,8 +91,8 @@ struct convolution_transpose_forward : public dnnl::deconvolution_forward {
+       y_dims = dst_dims;
+     }
+ 
+-    auto x_dtype = (dtype != data_type::s8) ? dtype : data_type::u8;
+-    auto y_dtype = (dtype != data_type::s8) ? dtype : data_type::s32;
++    auto x_dtype = (dtype != data_type::s8) ? dtype : data_type::s8;
++    auto y_dtype = (dtype != data_type::s8) ? dtype : data_type::s8;
+     tensor::desc src_desc(x_dims, x_dtype);
+     tensor::desc dst_desc(y_dims, y_dtype);
+ 
+@@ -112,10 +112,10 @@ struct convolution_transpose_forward : public dnnl::deconvolution_forward {
+     // embed group info into weights_desc
+     if (grouped) {
+       // [g, o, i/g, ...] -> [g, i/g, o, ...]
+-      return tensor::desc(pd.weights_desc(), groups).transpose(1, 2);
++      return tensor::desc(pd.weights_desc(), groups);
+     } else {
+       // [o, i, ...] -> [i, o, ...]
+-      return tensor::desc(pd.weights_desc(), groups).transpose(0, 1);
++      return tensor::desc(pd.weights_desc(), groups);
+     } 
+   }
+ 
+@@ -169,11 +169,11 @@ struct convolution_transpose_forward : public dnnl::deconvolution_forward {
+                            const engine& aengine) {
+ 
+     // make weights and dilates compatible with DNNL
+-    auto weights_ = weights.make_grouped_weights(groups, true);
++    auto weights_ = weights.make_grouped_weights(groups);
+     auto dilates_ = utils::get_compatible_dilates(dilates);
+ 
+     // align weights data type with src
+-    data_type dst_data_type = src.get_data_type() == data_type::bf16 ? data_type::bf16
++    data_type dst_data_type = src.get_data_type() == data_type::s8 ? data_type::s8
+                                                         : data_type::f32;
+     auto src_desc = src.get_desc().to_format_any().to_type(dst_data_type);
+     auto weights_desc = weights_.get_desc().to_format_any().to_type(dst_data_type);
+diff --git a/torch_ipex/csrc/cpu/el_common_intrin.hpp b/torch_ipex/csrc/cpu/el_common_intrin.hpp
+new file mode 100644
+index 00000000..ca5a5944
+--- /dev/null
++++ b/torch_ipex/csrc/cpu/el_common_intrin.hpp
+@@ -0,0 +1,121 @@
++#pragma once
++#include <immintrin.h>
++
++static inline __m512i _mm512_scale_minmax_i8_ps(__m512 x, __m512 vS) {
++  auto max = _mm512_set1_ps(127.f);
++  auto min = _mm512_set1_ps(0.f);
++
++  auto m = _mm512_roundscale_ps(x * vS, _MM_FROUND_TO_NEAREST_INT);
++  auto c1 = _mm512_min_ps(m, max);
++  auto c2 = _mm512_max_ps(c1, min);
++  return _mm512_cvtps_epi32(c2);
++}
++
++static inline void _mm512_mask_cvtepi32_storeu_epi8(
++    void* base_addr, __mmask16 k, __m512i x, __m128i off) {
++  auto z = _mm512_cvtepi32_epi8(x);
++  auto o = z ^ off;
++  _mm_mask_storeu_epi8(base_addr, k, o);
++}
++
++static inline __m256 _mm256_max_reduce_ps(__m256 v) {
++  auto perm0 = _mm256_permute_ps(v, _MM_SHUFFLE(2,3,0,1));
++  auto m1 = _mm256_max_ps(v, perm0);
++  auto perm1 = _mm256_permute_ps(m1, _MM_SHUFFLE(1,0,3,2));
++  auto m2 = _mm256_max_ps(perm1, m1);
++  auto perm2 = _mm256_permute2f128_ps(m2, m2, 0x01);
++  auto m3 = _mm256_max_ps(perm2, m2);
++  return m3;
++}
++
++static inline float _mm256_reduce_max_ps(__m256 v) {
++  return _mm256_max_reduce_ps(v)[0];
++}
++
++static inline __m256 _mm256_add_reduce_ps(__m256 v) {
++  auto perm0 = _mm256_permute_ps(v, _MM_SHUFFLE(2,3,0,1));
++  auto m1 = v + perm0;
++  auto perm1 = _mm256_permute_ps(m1, _MM_SHUFFLE(1,0,3,2));
++  auto m2 = m1 + perm1;
++  auto perm2 = _mm256_permute2f128_ps(m2, m2, 0x01);
++  auto m3 = m2 + perm2;
++  return m3;
++}
++
++static inline float _mm256_reduce_add_ps(__m256 v) {
++  return _mm256_add_reduce_ps(v)[0];
++}
++
++static inline __m512 _mm512_max_reduce_ps(__m512 v) {
++  auto perm0 = _mm512_permute_ps(v, _MM_SHUFFLE(2,3,0,1));
++  auto m1 = _mm512_max_ps(v, perm0);
++  auto perm1 = _mm512_permute_ps(m1, _MM_SHUFFLE(1,0,3,2));
++  auto m2 = _mm512_max_ps(perm1, m1);
++  auto perm2 = _mm512_shuffle_f32x4(m2, m2, _MM_SHUFFLE(2,3,0,1));
++  auto m3 = _mm512_max_ps(perm2, m2);
++  auto perm3 = _mm512_shuffle_f32x4(m3, m3, _MM_SHUFFLE(1,0,3,2));
++  auto m4 = _mm512_max_ps(perm3, m3);
++  return m4;
++}
++
++static inline __m512 _mm512_add_reduce_ps(__m512 v) {
++  auto perm0 = _mm512_permute_ps(v, _MM_SHUFFLE(2,3,0,1));
++  auto m1 = v + perm0;
++  auto perm1 = _mm512_permute_ps(m1, _MM_SHUFFLE(1,0,3,2));
++  auto m2 = m1 + perm1;
++  auto perm2 = _mm512_shuffle_f32x4(m2, m2, _MM_SHUFFLE(2,3,0,1));
++  auto m3 = m2 + perm2;
++  auto perm3 = _mm512_shuffle_f32x4(m3, m3, _MM_SHUFFLE(1,0,3,2));
++  auto m4 = m3 + perm3;
++  return m4;
++}
++
++inline static __m512 _mm512_loadu_i8_to_fp32(
++    void const* mem_addr) {
++  auto l = _mm_loadu_si128((__m128i *)mem_addr);
++  auto i = _mm512_cvtepi8_epi32(l);
++  return _mm512_cvtepi32_ps(i);
++}
++
++inline static __m512 _mm512_loadu_c8_to_fp32(
++    void const* mem_addr) {
++  auto l = _mm_loadu_si128((__m128i *)mem_addr);
++  auto c = _mm_set1_epi32(0x80808080);
++  auto decomp = _mm_xor_si128(c, l);
++  auto i = _mm512_cvtepi8_epi32(decomp);
++  return _mm512_cvtepi32_ps(i);
++}
++
++inline static __m512 _mm512_mask_loadu_i8_to_fp32(
++    __m128i src, __mmask64 k, void const* mem_addr) {
++  auto l = _mm_mask_loadu_epi8(src, k, mem_addr);
++  auto i = _mm512_cvtepi8_epi32(l);
++  return _mm512_cvtepi32_ps(i);
++}
++
++inline static __m512 _mm512_mask_loadu_c8_to_fp32(
++    __m128i src, __mmask64 k, void const* mem_addr) {
++  auto l = _mm_mask_loadu_epi8(src, k, mem_addr);
++  auto c = _mm_set1_epi32(0x80808080);
++  auto decomp = _mm_xor_si128(c, l);
++  auto i = _mm512_cvtepi8_epi32(decomp);
++  return _mm512_cvtepi32_ps(i);
++}
++
++inline static __m512 _mm512_loadu_i32_to_fp32(
++    void const* mem_addr) {
++  auto l = _mm512_loadu_si512(mem_addr);
++  return _mm512_cvtepi32_ps(l);
++}
++
++inline static __m512 _mm512_mask_loadu_i32_to_fp32(
++    __m512i src, __mmask64 k, void const* mem_addr) {
++  auto l = _mm512_mask_load_epi32(src, k, mem_addr);
++  return _mm512_cvtepi32_ps(l);
++}
++
++inline static __m512 _mm512_mean_reduce_ps(__m512 v, int64_t N) {
++  auto rN = _mm512_set1_ps(1./N);
++  auto vsum = _mm512_add_reduce_ps(v);
++  return vsum * rN;
++}
+diff --git a/torch_ipex/csrc/cpu/int8/Config.cpp b/torch_ipex/csrc/cpu/int8/Config.cpp
+index e3787742..b403f680 100644
+--- a/torch_ipex/csrc/cpu/int8/Config.cpp
++++ b/torch_ipex/csrc/cpu/int8/Config.cpp
+@@ -167,11 +167,13 @@ Int8OptConfig::get_indicator_scales(std::vector<bool> i_uint8_used,
+       inputs_scale[i] /= 127.5;
+       inputs_scale[i] *= 255.5;
+       scale_update = true;
++      inputs_uint8_used[i] = i_uint8_used[i];
+     } else if (inputs_uint8_used[i] && !i_uint8_used[i]) {
+       // update zero_point and scales
+       inputs_scale[i] /= 255.5;
+       inputs_scale[i] *= 127.5;
+       scale_update = true;
++      inputs_uint8_used[i] = i_uint8_used[i];
+     }
+   }
+   for (auto j = 0; j < o_uint8_used.size(); j++) {
+@@ -180,11 +182,13 @@ Int8OptConfig::get_indicator_scales(std::vector<bool> i_uint8_used,
+       outputs_scale[j] /= 127.5;
+       outputs_scale[j] *= 255.5;
+       scale_update = true;
++      outputs_uint8_used[j] = o_uint8_used[j];
+     } else if (outputs_uint8_used[j] && !o_uint8_used[j]) {
+       // update zero_point and scales
+       outputs_scale[j] /= 255.5;
+       outputs_scale[j] *= 127.5;
+       scale_update = true;
++      outputs_uint8_used[j] = o_uint8_used[j];
+     }
+   }
+   if (scale_update) {
+@@ -237,4 +241,4 @@ int64_t Int8OptConfig::fetch_and_add_ops_id() {
+ }
+ 
+ thread_local int64_t Int8OptConfig::current_ops_id = 0;
+-} // namespace torch_ipex
+\ No newline at end of file
++} // namespace torch_ipex
+diff --git a/torch_ipex/csrc/jit/fusion_pass.cpp b/torch_ipex/csrc/jit/fusion_pass.cpp
+index 9df0c015..7b382abd 100644
+--- a/torch_ipex/csrc/jit/fusion_pass.cpp
++++ b/torch_ipex/csrc/jit/fusion_pass.cpp
+@@ -303,6 +303,12 @@ OpFuser::RuleTab OpFuser::dnnlRules = {
+ };
+ 
+ void FusionPass(std::shared_ptr<Graph> &graph) {
++  graph_rewrite::FuseConvolutionWithInstanceNormAndRelu(graph);
++
++  graph_rewrite::ReplaceAtenDeConvWithIPEXDeconv(graph);
++
++  graph_rewrite::ReplaceAtenCatWithIPEXCat(graph);
++  
+   // Replace _convolution with conv2d or conv3d
+   graph_rewrite::replaceConvolutionWithAtenConv(graph);
+ 
+diff --git a/torch_ipex/csrc/jit/graph_rewrite.cpp b/torch_ipex/csrc/jit/graph_rewrite.cpp
+index a2a5c961..9925ed11 100644
+--- a/torch_ipex/csrc/jit/graph_rewrite.cpp
++++ b/torch_ipex/csrc/jit/graph_rewrite.cpp
+@@ -144,6 +144,113 @@ void FuseShuffle(std::shared_ptr<Graph>& graph) {
+   rewriter_shuffle_2d.runOnGraph(graph);
+ }
+ 
++std::unordered_map<std::string, c10::IValue> getInstNormParams(
++    const Match& match,
++    const std::unordered_map<std::string, Value*>& vmap) {
++  std::unordered_map<std::string, c10::IValue> calc_values;
++  const auto& match_vmap = match.values_map;
++  auto use_input_stats = getIValue("use_input_stats", match_vmap, vmap).value();
++  calc_values["use_input_stats"] = use_input_stats;
++  return calc_values;
++}
++
++
++void FuseConvolutionWithInstanceNormAndRelu(std::shared_ptr<Graph>& graph) {
++  std::string from_pattern = R"(
++      graph(%a, %w, %b, %stride:int[], %padding:int[], %dilation:int[],
++              %transposed:bool, %output_padding:int[], %groups:int, %benchmark:bool,
++              %deterministic:bool, %cudnn_enabled:bool, %allow_tf32:bool,
++            %iw, %ib, %running_mean, %running_var, %use_input_stats:bool, %momentum:float,
++              %eps:float, %cudnn_enabled2:bool):
++        %r = aten::_convolution(%a, %w, %b, %stride, %padding, %dilation,
++            %transposed, %output_padding, %groups, %benchmark, %deterministic, %cudnn_enabled, %allow_tf32)
++        %s = aten::instance_norm(%r, %iw, %ib, %running_mean, %running_var,
++            %use_input_stats, %momentum, %eps, %cudnn_enabled2)
++        %t = aten::relu(%s)
++        return (%t) )";
++  std::string conv_instnorm_relu = R"(
++      graph(%a, %w, %b, %stride:int[], %padding:int[], %dilation:int[],
++              %transposed:bool, %output_padding:int[], %groups:int, %benchmark:bool,
++              %deterministic:bool, %cudnn_enabled:bool, %allow_tf32:bool,
++            %iw, %ib, %running_mean, %running_var, %use_input_stats:bool, %momentum:float,
++              %eps:float, %cudnn_enabled2:bool):
++        %r = ipex::conv3d_instnorm_relu(%a, %w, %stride, %padding, %dilation, %groups,
++                                         %iw, %ib)
++        return (%r) )";
++
++  auto filter_conv3d = [](const Match& match,
++                          const std::unordered_map<std::string, Value*>& vmap) {
++    auto conv_value_map = getConvParams(match, vmap);
++    auto inorm_value_map = getInstNormParams(match, vmap);
++
++    if (conv_value_map["output_padding"].toIntList().size() != 3 ||
++        conv_value_map["stride"].toIntList().size() != 3 ||
++        conv_value_map["padding"].toIntList().size() != 3 ||
++        conv_value_map["dilation"].toIntList().size() != 3) {
++      return false;
++    }
++    return inorm_value_map["use_input_stats"].toBool() &&
++        !conv_value_map["transposed"].toBool() &&
++        (conv_value_map["output_padding"].toIntList()[0] == 0) &&
++        (conv_value_map["output_padding"].toIntList()[1] == 0) &&
++        (conv_value_map["output_padding"].toIntList()[2] == 0);
++  };
++  SubgraphRewriter conv3d_rewriter;
++  conv3d_rewriter.RegisterRewritePattern(from_pattern, conv_instnorm_relu);
++  conv3d_rewriter.runOnGraph(graph, filter_conv3d);
++}
++
++void ReplaceAtenDeConvWithIPEXDeconv(std::shared_ptr<Graph>& graph)
++{
++  std::string from_pattern = R"(
++      graph(%a, %w, %b, %stride:int[], %padding:int[], %dilation:int[],
++              %transposed:bool, %output_padding:int[], %groups:int, %benchmark:bool,
++              %deterministic:bool, %cudnn_enabled:bool, %allow_tf32:bool):
++        %r = aten::_convolution(%a, %w, %b, %stride, %padding, %dilation,
++            %transposed, %output_padding, %groups, %benchmark, %deterministic, %cudnn_enabled, %allow_tf32)
++        return (%r) )";
++  std::string deconv = R"(
++      graph(%a, %w, %b, %stride:int[], %padding:int[], %dilation:int[],
++              %transposed:bool, %output_padding:int[], %groups:int, %benchmark:bool,
++              %deterministic:bool, %cudnn_enabled:bool, %allow_tf32:bool):
++        %r = ipex::deconv3d(%a, %w, %stride, %padding, %output_padding, %groups, %dilation)
++        return (%r) )";
++  
++  auto filter_conv_transpose3d =
++      [](const Match& match,
++         const std::unordered_map<std::string, Value*>& vmap) {
++        auto calc_value_map = getConvParams(match, vmap);
++        if (calc_value_map["output_padding"].toIntList().size() != 3 ||
++            calc_value_map["stride"].toIntList().size() != 3 ||
++            calc_value_map["padding"].toIntList().size() != 3 ||
++            calc_value_map["dilation"].toIntList().size() != 3) {
++          return false;
++        }
++        return calc_value_map["transposed"].toBool();
++      };
++
++  SubgraphRewriter deconv3d_rewriter;
++  deconv3d_rewriter.RegisterRewritePattern(from_pattern, deconv);
++  deconv3d_rewriter.runOnGraph(graph, filter_conv_transpose3d);
++}
++
++void ReplaceAtenCatWithIPEXCat(std::shared_ptr<Graph>& graph)
++{
++  std::string from_pattern = R"(
++      graph(%a, %axis):
++        %r = aten::cat(%a, %axis)
++        return (%r) )";
++        
++  std::string ipex_cat = R"(
++      graph(%a, %axis):
++        %r = ipex::cat(%a, %axis)
++        return (%r) )";
++
++  SubgraphRewriter cat_rewriter;
++  cat_rewriter.RegisterRewritePattern(from_pattern, ipex_cat);
++  cat_rewriter.runOnGraph(graph);
++}
++
+ void FuseConvolutionWithEltwise(std::shared_ptr<Graph>& graph) {
+   std::string conv2d_swish_fusion = R"(
+       graph(%a, %w, %b, %stride:int[], %padding:int[], %dilation:int[], %groups:int):
+diff --git a/torch_ipex/csrc/jit/graph_rewrite.h b/torch_ipex/csrc/jit/graph_rewrite.h
+index 76a70983..c78c3644 100644
+--- a/torch_ipex/csrc/jit/graph_rewrite.h
++++ b/torch_ipex/csrc/jit/graph_rewrite.h
+@@ -23,6 +23,10 @@ void replaceConvolutionWithAtenConv(std::shared_ptr<Graph>& graph);
+ void FuseConvolutionWithEltwise(std::shared_ptr<Graph>& graph);
+ void FuseShuffle(std::shared_ptr<Graph>& graph);
+ 
++void FuseConvolutionWithInstanceNormAndRelu(std::shared_ptr<Graph>& graph);
++void ReplaceAtenCatWithIPEXCat(std::shared_ptr<Graph>& graph);
++void ReplaceAtenDeConvWithIPEXDeconv(std::shared_ptr<Graph>& graph);
++
+ } // namespace graph_rewrite_helper
+ } // namespace jit
+ } // namespace torch
+diff --git a/torch_ipex/csrc/jit/register_dnnl_jit_ops.cpp b/torch_ipex/csrc/jit/register_dnnl_jit_ops.cpp
+index 70bc8cbb..1ff0dc3a 100644
+--- a/torch_ipex/csrc/jit/register_dnnl_jit_ops.cpp
++++ b/torch_ipex/csrc/jit/register_dnnl_jit_ops.cpp
+@@ -188,6 +188,75 @@ RegisterOperators op({
+       },
+       aliasAnalysisFromSchema()
+       ),
++
++    Operator(
++      "ipex::conv3d_instnorm_relu(Tensor input, Tensor weight, int[3] stride, int[3] padding, int[3] dilation, int groups, Tensor in_weight, Tensor in_bias) -> Tensor",
++      [] (const Node* node) ->Operation {
++        if (torch_ipex::check_auto_dnnl()) {
++          return [] (Stack* stack) {
++            auto result = AtenIpexJITDev::dil_convolution_instancenorm_relu(
++                (std::move(peek(stack, 0, 8))).toTensor(),
++                (std::move(peek(stack, 1, 8))).toTensor(),
++                (std::move(peek(stack, 2, 8))).toIntVector(),
++                (std::move(peek(stack, 3, 8))).toIntVector(),
++                (std::move(peek(stack, 4, 8))).toIntVector(),
++                (std::move(peek(stack, 5, 8))).toInt(),
++                (std::move(peek(stack, 6, 8))).toTensor(),
++                (std::move(peek(stack, 7, 8))).toTensor());
++            drop(stack, 8);
++            pack(stack, std::move(result));
++            return 0;
++          };
++        } else {
++          TORCH_CHECK(false, "PyTorch native path not support convolution relu fusion now for 3d case");
++        }
++      },
++      aliasAnalysisFromSchema()
++      ),
++
++    Operator(
++      "ipex::deconv3d(Tensor input, Tensor weight, int[3] stride, int[3] padding, int[3] output_padding, int groups, int[3] dilation) -> Tensor",
++      [] (const Node* node) ->Operation {
++        if (torch_ipex::check_auto_dnnl()) {
++          return [] (Stack* stack) {
++            auto result = AtenIpexJITDev::dil_deconvolution3d(
++                (std::move(peek(stack, 0, 7))).toTensor(),
++                (std::move(peek(stack, 1, 7))).toTensor(),
++                (std::move(peek(stack, 2, 7))).toIntVector(),
++                (std::move(peek(stack, 3, 7))).toIntVector(),
++                (std::move(peek(stack, 4, 7))).toIntVector(),
++                (std::move(peek(stack, 5, 7))).toInt(),
++                (std::move(peek(stack, 6, 7))).toIntVector());
++            drop(stack, 7);
++            pack(stack, std::move(result));
++            return 0;
++          };
++        } else {
++          TORCH_CHECK(false, "PyTorch native path not support convolution relu fusion now for 3d case");
++        }
++      },
++      aliasAnalysisFromSchema()
++      ),
++    Operator(
++      "ipex::cat(Tensor[] inputs, int axis=1) -> Tensor",
++      [] (const Node* node) ->Operation {
++        if (torch_ipex::check_auto_dnnl()) {
++          return [] (Stack* stack) {
++            auto result = AtenIpexJITDev::dil_concat3d(
++                (std::move(peek(stack, 0, 2))).toTensorVector(),
++                (std::move(peek(stack, 1, 2))).toInt());
++            drop(stack, 2);
++            pack(stack, std::move(result));
++            return 0;
++          };
++        } else {
++          TORCH_CHECK(false, "PyTorch native path not support convolution relu fusion now for 3d case");
++        }
++      },
++      aliasAnalysisFromSchema()
++      ),
++ 
++
+     Operator(
+       "ipex::conv2d_sum(Tensor input, Tensor weight, Tensor? bias, int[2] stride, int[2] padding, int[2] dilation, int groups, Tensor(a!) accumu, *, Scalar alpha) -> Tensor(a!)",
+       [] (const Node* node) ->Operation {

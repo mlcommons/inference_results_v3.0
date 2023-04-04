@@ -1,0 +1,313 @@
+make[1]: Entering directory '/work'
+TEST01 trial 1
+make[2]: Entering directory '/work'
+benchmark : Benchmark.BERT
+buffer_manager_thread_count : 0
+coalesced_tensor : True
+data_dir : /home/ubuntu/mlpinf-v3/v3.0.3-partner-drop/data
+enable_interleaved : False
+gpu_batch_size : 1024
+gpu_copy_streams : 2
+gpu_inference_streams : 2
+input_dtype : int32
+input_format : linear
+log_dir : build/compliance_logs/TEST01
+offline_expected_qps : 13600
+precision : int8
+preprocessed_data_dir : /home/ubuntu/mlpinf-v3/v3.0.3-partner-drop/preprocessed_data
+scenario : Scenario.Offline
+system : SystemConfiguration(host_cpu_conf=CPUConfiguration(layout={CPU(name='Intel(R) Xeon(R) Gold 6444Y', architecture=<CPUArchitecture.x86_64: AliasedName(name='x86_64', aliases=(), patterns=())>, core_count=16, threads_per_core=2): 2}), host_mem_conf=MemoryConfiguration(host_memory_capacity=Memory(quantity=528.06514, byte_suffix=<ByteSuffix.GB: (1000, 3)>, _num_bytes=528065140000), comparison_tolerance=0.05), accelerator_conf=AcceleratorConfiguration(layout=defaultdict(<class 'int'>, {GPU(name='NVIDIA A100 80GB PCIe', accelerator_type=<AcceleratorType.Discrete: AliasedName(name='Discrete', aliases=(), patterns=())>, vram=Memory(quantity=80.0, byte_suffix=<ByteSuffix.GiB: (1024, 3)>, _num_bytes=85899345920), max_power_limit=300.0, pci_id='0x20B510DE', compute_sm=80): 4})), numa_conf=NUMAConfiguration(numa_nodes={0: NUMANode(index=0, cpus=[Interval(start=0, end=7), Interval(start=32, end=39)], gpus=[0]), 1: NUMANode(index=1, cpus=[Interval(start=8, end=15), Interval(start=40, end=47)], gpus=[1]), 2: NUMANode(index=2, cpus=[Interval(start=16, end=23), Interval(start=48, end=55)], gpus=[2]), 3: NUMANode(index=3, cpus=[Interval(start=24, end=31), Interval(start=56, end=63)], gpus=[3])}, num_numa_nodes=4), system_id='A100X4_751GE')
+tensor_path : build/preprocessed_data/squad_tokenized/input_ids.npy,build/preprocessed_data/squad_tokenized/segment_ids.npy,build/preprocessed_data/squad_tokenized/input_mask.npy
+use_graphs : False
+use_small_tile_gemm_plugin : True
+system_id : A100X4_751GE
+config_name : A100X4_751GE_bert_Offline
+workload_setting : WorkloadSetting(HarnessType.Custom, AccuracyTarget.k_99, PowerSetting.MaxP)
+optimization_level : plugin-enabled
+use_cpu : False
+use_inferentia : False
+config_ver : custom_k_99_MaxP
+accuracy_level : 99%
+inference_server : custom
+audit_test_name : TEST01
+skip_file_checks : True
+power_limit : None
+cpu_freq : None
+&&&& RUNNING BERT_HARNESS # ./build/bin/harness_bert
+[I] [TRT] Loaded engine size: 609 MiB
+[I] [TRT] Loaded engine size: 609 MiB
+[I] [TRT] Loaded engine size: 609 MiB
+[I] [TRT] Loaded engine size: 609 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +1821, GPU +370, now: CPU 7601, GPU 1086 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +1854, GPU +374, now: CPU 7639, GPU 1090 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +1871, GPU +374, now: CPU 7656, GPU 1090 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +1906, GPU +374, now: CPU 7693, GPU 1504 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +320, GPU +58, now: CPU 7921, GPU 1144 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +267, GPU +54, now: CPU 7923, GPU 1144 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +285, GPU +54, now: CPU 7924, GPU 1144 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +232, GPU +54, now: CPU 7925, GPU 1558 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +1, GPU +389, now: CPU 1, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +1, GPU +389, now: CPU 1, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +1, GPU +389, now: CPU 1, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +1, GPU +389, now: CPU 1, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 4880, GPU 4264 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 4880, GPU 4272 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 1, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 5392, GPU 3850 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 5392, GPU 3858 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 1, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 5904, GPU 3850 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 5904, GPU 3858 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 1, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 6416, GPU 3850 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 6416, GPU 3858 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +1, GPU +0, now: CPU 2, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 6928, GPU 7566 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 6928, GPU 7576 (MiB)
+[I] [TRT] Could not set default profile 0 for execution context. Profile index must be set explicitly.
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 2, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 7440, GPU 7152 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 7440, GPU 7162 (MiB)
+[I] [TRT] Could not set default profile 0 for execution context. Profile index must be set explicitly.
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 2, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 7952, GPU 7152 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 7952, GPU 7162 (MiB)
+[I] [TRT] Could not set default profile 0 for execution context. Profile index must be set explicitly.
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 2, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 8464, GPU 7152 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 8464, GPU 7162 (MiB)
+[I] [TRT] Could not set default profile 0 for execution context. Profile index must be set explicitly.
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 2, GPU 389 (MiB)
+================================================
+MLPerf Results Summary
+================================================
+SUT name : BERT SERVER
+Scenario : Offline
+Mode     : PerformanceOnly
+Samples per second: 12339.7
+Result is : VALID
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+
+================================================
+Additional Stats
+================================================
+Min latency (ns)                : 3617926130
+Max latency (ns)                : 727410124955
+Mean latency (ns)               : 444023073778
+50.00 percentile latency (ns)   : 472305675264
+90.00 percentile latency (ns)   : 694649261391
+95.00 percentile latency (ns)   : 713837291340
+97.00 percentile latency (ns)   : 720241273268
+99.00 percentile latency (ns)   : 725400684038
+99.90 percentile latency (ns)   : 727251803425
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 8976000
+target_qps : 13600
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 1
+max_query_count : 0
+qsl_rng_seed : 10003631887983097364
+sample_index_rng_seed : 17183018601990103738
+schedule_rng_seed : 12134888396634371638
+accuracy_log_rng_seed : 720381539243781796
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 4096
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 10833
+
+9 warnings encountered. See detailed log.
+
+No errors encountered during test.
+Verifying accuracy. This might take a while...
+Reading accuracy mode results...
+Reading performance mode results...
+num_acc_log_entries = 10833
+num_acc_log_duplicate_keys = 0
+num_acc_log_data_mismatch = 0
+num_perf_log_entries = 3998
+num_perf_log_qsl_idx_match = 3998
+num_perf_log_data_mismatch = 52
+num_missing_qsl_idxs = 0
+TEST FAIL
+
+Parsing arguments.
+Created a baseline accuracy file: mlperf_log_accuracy_baseline.json
+{"exact_match": 26.111636707663198, "f1": 28.48951066396865}
+Reading examples...
+Loading cached features from 'eval_features.pickle'...
+Loading LoadGen logs...
+Post-processing predictions...
+Writing predictions to: predictions.json
+Evaluating predictions...
+{"exact_match": 26.09271523178808, "f1": 28.46816335785313}
+Reading examples...
+Loading cached features from 'eval_features.pickle'...
+Loading LoadGen logs...
+Post-processing predictions...
+Writing predictions to: build/compliance_logs/TEST01/A100X4_751GE_TRT/bert-99/Offline/predictions.json
+Evaluating predictions...
+Verifying performance.
+reference score = 12392.9
+test score = 12339.7
+TEST PASS
+TEST PASS
+make[2]: Leaving directory '/work'
+make[1]: Leaving directory '/work'
+make[1]: Entering directory '/work'
+TEST04 trial 1
+make[2]: Entering directory '/work'
+Sleep to reset thermal state before TEST04...
+make[2]: Leaving directory '/work'
+make[1]: Leaving directory '/work'
+make[1]: Entering directory '/work'
+TEST05 trial 1
+make[2]: Entering directory '/work'
+Sleep to reset thermal state before TEST05...
+benchmark : Benchmark.BERT
+buffer_manager_thread_count : 0
+coalesced_tensor : True
+data_dir : /home/ubuntu/mlpinf-v3/v3.0.3-partner-drop/data
+enable_interleaved : False
+gpu_batch_size : 1024
+gpu_copy_streams : 2
+gpu_inference_streams : 2
+input_dtype : int32
+input_format : linear
+log_dir : build/compliance_logs/TEST05
+offline_expected_qps : 13600
+precision : int8
+preprocessed_data_dir : /home/ubuntu/mlpinf-v3/v3.0.3-partner-drop/preprocessed_data
+scenario : Scenario.Offline
+system : SystemConfiguration(host_cpu_conf=CPUConfiguration(layout={CPU(name='Intel(R) Xeon(R) Gold 6444Y', architecture=<CPUArchitecture.x86_64: AliasedName(name='x86_64', aliases=(), patterns=())>, core_count=16, threads_per_core=2): 2}), host_mem_conf=MemoryConfiguration(host_memory_capacity=Memory(quantity=528.06514, byte_suffix=<ByteSuffix.GB: (1000, 3)>, _num_bytes=528065140000), comparison_tolerance=0.05), accelerator_conf=AcceleratorConfiguration(layout=defaultdict(<class 'int'>, {GPU(name='NVIDIA A100 80GB PCIe', accelerator_type=<AcceleratorType.Discrete: AliasedName(name='Discrete', aliases=(), patterns=())>, vram=Memory(quantity=80.0, byte_suffix=<ByteSuffix.GiB: (1024, 3)>, _num_bytes=85899345920), max_power_limit=300.0, pci_id='0x20B510DE', compute_sm=80): 4})), numa_conf=NUMAConfiguration(numa_nodes={0: NUMANode(index=0, cpus=[Interval(start=0, end=7), Interval(start=32, end=39)], gpus=[0]), 1: NUMANode(index=1, cpus=[Interval(start=8, end=15), Interval(start=40, end=47)], gpus=[1]), 2: NUMANode(index=2, cpus=[Interval(start=16, end=23), Interval(start=48, end=55)], gpus=[2]), 3: NUMANode(index=3, cpus=[Interval(start=24, end=31), Interval(start=56, end=63)], gpus=[3])}, num_numa_nodes=4), system_id='A100X4_751GE')
+tensor_path : build/preprocessed_data/squad_tokenized/input_ids.npy,build/preprocessed_data/squad_tokenized/segment_ids.npy,build/preprocessed_data/squad_tokenized/input_mask.npy
+use_graphs : False
+use_small_tile_gemm_plugin : True
+system_id : A100X4_751GE
+config_name : A100X4_751GE_bert_Offline
+workload_setting : WorkloadSetting(HarnessType.Custom, AccuracyTarget.k_99, PowerSetting.MaxP)
+optimization_level : plugin-enabled
+use_cpu : False
+use_inferentia : False
+config_ver : custom_k_99_MaxP
+accuracy_level : 99%
+inference_server : custom
+audit_test_name : TEST05
+skip_file_checks : True
+power_limit : None
+cpu_freq : None
+&&&& RUNNING BERT_HARNESS # ./build/bin/harness_bert
+[I] [TRT] Loaded engine size: 609 MiB
+[I] [TRT] Loaded engine size: 609 MiB
+[I] [TRT] Loaded engine size: 609 MiB
+[I] [TRT] Loaded engine size: 609 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +1844, GPU +370, now: CPU 7602, GPU 1086 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +1824, GPU +368, now: CPU 7617, GPU 1500 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +1885, GPU +378, now: CPU 7648, GPU 1094 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +1858, GPU +374, now: CPU 7670, GPU 1094 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +320, GPU +58, now: CPU 7922, GPU 1144 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +306, GPU +58, now: CPU 7923, GPU 1558 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +255, GPU +50, now: CPU 7925, GPU 1144 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +277, GPU +50, now: CPU 7925, GPU 1144 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +1, GPU +389, now: CPU 1, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +1, GPU +389, now: CPU 1, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +1, GPU +389, now: CPU 1, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +1, GPU +389, now: CPU 1, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 4880, GPU 4264 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 4880, GPU 4272 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 1, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 5392, GPU 3850 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 5392, GPU 3858 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 1, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 5904, GPU 3850 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 5904, GPU 3858 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 1, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 6416, GPU 3850 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 6416, GPU 3858 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +1, GPU +0, now: CPU 2, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 6928, GPU 7566 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 6928, GPU 7576 (MiB)
+[I] [TRT] Could not set default profile 0 for execution context. Profile index must be set explicitly.
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 2, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 7440, GPU 7152 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 7440, GPU 7162 (MiB)
+[I] [TRT] Could not set default profile 0 for execution context. Profile index must be set explicitly.
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 2, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 7952, GPU 7152 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 7952, GPU 7162 (MiB)
+[I] [TRT] Could not set default profile 0 for execution context. Profile index must be set explicitly.
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 2, GPU 389 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 8464, GPU 7152 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 8464, GPU 7162 (MiB)
+[I] [TRT] Could not set default profile 0 for execution context. Profile index must be set explicitly.
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 2, GPU 389 (MiB)
+================================================
+MLPerf Results Summary
+================================================
+SUT name : BERT SERVER
+Scenario : Offline
+Mode     : PerformanceOnly
+Samples per second: 12395.5
+Result is : VALID
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+
+================================================
+Additional Stats
+================================================
+Min latency (ns)                : 3662057887
+Max latency (ns)                : 724133215817
+Mean latency (ns)               : 441411595694
+50.00 percentile latency (ns)   : 469685807904
+90.00 percentile latency (ns)   : 691259343318
+95.00 percentile latency (ns)   : 710594257475
+97.00 percentile latency (ns)   : 716968193468
+99.00 percentile latency (ns)   : 722139068895
+99.90 percentile latency (ns)   : 723980629197
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 8976000
+target_qps : 13600
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 1
+max_query_count : 0
+qsl_rng_seed : 14646058500348515648
+sample_index_rng_seed : 1207248993894122914
+schedule_rng_seed : 11879132697760422006
+accuracy_log_rng_seed : 0
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 0
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 10833
+
+10 warnings encountered. See detailed log.
+
+No errors encountered during test.
+Verifying performance.
+reference score = 12392.9
+test score = 12395.5
+TEST PASS
+Parsing arguments.
+Performance check pass: True
+TEST05 verification complete
+make[2]: Leaving directory '/work'
+make[1]: Leaving directory '/work'

@@ -1,0 +1,200 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0293cfce9f..2d6a72c46b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -40,6 +40,8 @@ endif()
+ set(CMAKE_CXX_STANDARD 14)
+ set(CMAKE_C_STANDARD 11)
+ 
++# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error,-Wunqualified-std-cast-call")
++
+ if(DEFINED GLIBCXX_USE_CXX11_ABI)
+   if(${GLIBCXX_USE_CXX11_ABI} EQUAL 1)
+     set(CXX_STANDARD_REQUIRED ON)
+@@ -210,7 +212,7 @@ cmake_dependent_option(
+ cmake_dependent_option(
+     USE_EXPERIMENTAL_CUDNN_V8_API "Use experimental cuDNN v8 API" ON
+     "USE_CUDNN" OFF)
+-option(USE_FBGEMM "Use FBGEMM (quantized 8-bit server operators)" ON)
++option(USE_FBGEMM "Use FBGEMM (quantized 8-bit server operators)" OFF)
+ option(USE_KINETO "Use Kineto profiling library" ON)
+ option(USE_CUPTI_SO "Use CUPTI as a shared library" ON)
+ option(USE_FAKELOWP "Use FakeLowp operators" OFF)
+diff --git a/caffe2/CMakeLists.txt b/caffe2/CMakeLists.txt
+index 328210c978..a3f2df66b4 100644
+--- a/caffe2/CMakeLists.txt
++++ b/caffe2/CMakeLists.txt
+@@ -1258,23 +1258,6 @@ endif()
+ if(USE_OPENMP)
+   find_package(OpenMP QUIET)
+ endif()
+-if(USE_OPENMP AND OPENMP_FOUND)
+-  if(MSVC AND OpenMP_CXX_LIBRARIES MATCHES "libiomp5md\\.lib")
+-    set(AT_MKL_MT 1)
+-  else()
+-    set(AT_MKL_MT 0)
+-  endif()
+-  message(STATUS "pytorch is compiling with OpenMP. \n"
+-    "OpenMP CXX_FLAGS: ${OpenMP_CXX_FLAGS}. \n"
+-    "OpenMP libraries: ${OpenMP_CXX_LIBRARIES}.")
+-  if(UNIX)
+-    separate_arguments(OpenMP_CXX_OPTIONS UNIX_COMMAND "${OpenMP_CXX_FLAGS}")
+-  else()
+-    separate_arguments(OpenMP_CXX_OPTIONS WINDOWS_COMMAND "${OpenMP_CXX_FLAGS}")
+-  endif()
+-  target_compile_options(torch_cpu PRIVATE ${OpenMP_CXX_OPTIONS})
+-  target_link_libraries(torch_cpu PRIVATE ${OpenMP_CXX_LIBRARIES})
+-endif()
+ 
+ 
+ if(USE_ROCM)
+@@ -1387,12 +1370,6 @@ if(NOT INTERN_BUILD_MOBILE OR BUILD_CAFFE2_MOBILE)
+   endif()
+ endif()
+ 
+-if(USE_OPENMP AND OPENMP_FOUND)
+-  message(STATUS "Caffe2 is compiling with OpenMP. \n"
+-    "OpenMP CXX_FLAGS: ${OpenMP_CXX_FLAGS}. \n"
+-    "OpenMP libraries: ${OpenMP_CXX_LIBRARIES}.")
+-  target_link_libraries(torch_cpu PRIVATE ${OpenMP_CXX_LIBRARIES})
+-endif()
+ 
+ if($ENV{TH_BINARY_BUILD})
+   if(NOT MSVC AND USE_CUDA AND NOT APPLE)
+@@ -1667,6 +1644,34 @@ endif()
+ 
+ target_link_libraries(torch_cpu PRIVATE flatbuffers)
+ 
++if(USE_OPENMP AND OPENMP_FOUND)
++  if(MSVC AND OpenMP_CXX_LIBRARIES MATCHES "libiomp5md\\.lib")
++    set(AT_MKL_MT 1)
++  else()
++    set(AT_MKL_MT 0)
++  endif()
++
++  message(STATUS "pytorch is compiling with OpenMP. \n"
++    "OpenMP CXX_FLAGS: ${OpenMP_CXX_FLAGS}. \n"
++    "OpenMP libraries: ${OpenMP_CXX_LIBRARIES}.")
++
++  message(STATUS "Caffe2 is compiling with OpenMP. \n"
++    "OpenMP CXX_FLAGS: ${OpenMP_CXX_FLAGS}. \n"
++    "OpenMP libraries: ${OpenMP_CXX_LIBRARIES}.")
++
++  if(UNIX)
++    separate_arguments(OpenMP_CXX_OPTIONS UNIX_COMMAND "${OpenMP_CXX_FLAGS}")
++  else()
++    separate_arguments(OpenMP_CXX_OPTIONS WINDOWS_COMMAND "${OpenMP_CXX_FLAGS}")
++  endif()
++
++  target_compile_options(torch_cpu PRIVATE ${OpenMP_CXX_OPTIONS})
++  # Without -fopenmp, omp library should be behind all linking objects
++  # that have openmp reference
++  target_link_libraries(torch_cpu PRIVATE ${OpenMP_CXX_LIBRARIES})
++endif()
++
++
+ # Note [Global dependencies]
+ # Some libraries (e.g. OpenMPI) like to dlopen plugins after they're initialized,
+ # and they assume that all of their symbols will be available in the global namespace.
+diff --git a/cmake/Dependencies.cmake b/cmake/Dependencies.cmake
+index 44a8bf1211..6b643ee36a 100644
+--- a/cmake/Dependencies.cmake
++++ b/cmake/Dependencies.cmake
+@@ -1211,8 +1211,6 @@ if(USE_OPENMP)
+     else()
+         message(STATUS "Will link against OpenMP libraries: ${OpenMP_CXX_LIBRARIES}")
+     endif()
+-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+   else()
+     message(WARNING "Not compiling with OpenMP. Suppress this warning with -DUSE_OPENMP=OFF")
+     caffe2_update_option(USE_OPENMP OFF)
+diff --git a/cmake/Modules/FindMKL.cmake b/cmake/Modules/FindMKL.cmake
+index 01594a5b66..ea55b4edad 100644
+--- a/cmake/Modules/FindMKL.cmake
++++ b/cmake/Modules/FindMKL.cmake
+@@ -39,8 +39,8 @@ IF (WIN32)
+   ENDIF()
+   SET(DEFAULT_INTEL_MKL_DIR "${INTEL_COMPILER_DIR}/mkl")
+ ELSE (WIN32)
+-  SET(DEFAULT_INTEL_COMPILER_DIR "/opt/intel")
+-  SET(DEFAULT_INTEL_MKL_DIR "/opt/intel/mkl")
++  SET(DEFAULT_INTEL_COMPILER_DIR "")
++  SET(DEFAULT_INTEL_MKL_DIR $ENV{CONDA_PREFIX})
+ ENDIF (WIN32)
+ 
+ # Intel Compiler Suite
+@@ -80,8 +80,8 @@ IF(CMAKE_COMPILER_IS_GNUCC)
+     SET(mklthreads "mkl_tbb_thread")
+     SET(mklrtls "tbb")
+   ELSE()
+-    SET(mklthreads "mkl_gnu_thread" "mkl_intel_thread")
+-    SET(mklrtls "gomp" "iomp5")
++    SET(mklthreads "mkl_intel_thread")
++    SET(mklrtls "iomp5")
+   ENDIF()
+   SET(mklifaces  "intel" "gf")
+ ELSE(CMAKE_COMPILER_IS_GNUCC)
+@@ -133,7 +133,7 @@ IF (EXISTS ${INTEL_MKL_DIR})
+   SET(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH}
+     "${INTEL_MKL_DIR}/include")
+   SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH}
+-    "${INTEL_MKL_DIR}/lib/${mklvers}")
++    "${INTEL_MKL_DIR}/lib")
+   IF (MSVC)
+     SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH}
+       "${INTEL_MKL_DIR}/lib/${iccvers}")
+diff --git a/cmake/Modules/FindOpenMP.cmake b/cmake/Modules/FindOpenMP.cmake
+index 5c1595a292..17ad6f84b2 100644
+--- a/cmake/Modules/FindOpenMP.cmake
++++ b/cmake/Modules/FindOpenMP.cmake
+@@ -247,7 +247,7 @@ function(_OPENMP_GET_FLAGS LANG FLAG_MODE OPENMP_FLAG_VAR OPENMP_LIB_NAMES_VAR)
+     #         - for non-GNU, FindOpenMP.cmake replies on FindMKL.cmake to finish first, but
+     #         - for GNU,     FindMKL.cmake replies on FindOpenMP.cmake to finish first.
+ 
+-    if(NOT "${CMAKE_${LANG}_COMPILER_ID}" STREQUAL "GNU")
++    if("${CMAKE_${LANG}_COMPILER_ID}" STREQUAL "GNU")
+       find_package(MKL QUIET)
+       if(MKL_FOUND AND (NOT "${MKL_OPENMP_LIBRARY}" STREQUAL ""))
+         # If we already link OpenMP via MKL, use that. Otherwise at run-time
+@@ -256,7 +256,7 @@ function(_OPENMP_GET_FLAGS LANG FLAG_MODE OPENMP_FLAG_VAR OPENMP_LIB_NAMES_VAR)
+         set(OpenMP_libomp_LIBRARY "${MKL_OPENMP_LIBRARY}" CACHE STRING "libomp location for OpenMP")
+       else()
+         find_library(OpenMP_libomp_LIBRARY
+-          NAMES omp gomp iomp5
++          NAMES iomp5
+           HINTS ${CMAKE_${LANG}_IMPLICIT_LINK_DIRECTORIES}
+           DOC "libomp location for OpenMP"
+         )
+@@ -352,7 +352,7 @@ function(_OPENMP_GET_FLAGS LANG FLAG_MODE OPENMP_FLAG_VAR OPENMP_LIB_NAMES_VAR)
+       #
+       # Check for separate OpenMP library on AppleClang 7+
+       find_library(OpenMP_libomp_LIBRARY
+-        NAMES omp gomp iomp5
++        NAMES iomp5
+         HINTS ${CMAKE_${LANG}_IMPLICIT_LINK_DIRECTORIES}
+         DOC "libomp location for OpenMP"
+       )
+diff --git a/cmake/public/mkl.cmake b/cmake/public/mkl.cmake
+index 9515a4ae96..07307e01db 100644
+--- a/cmake/public/mkl.cmake
++++ b/cmake/public/mkl.cmake
+@@ -1,4 +1,4 @@
+-find_package(MKL QUIET)
++# find_package(MKL QUIET)
+
+ if(NOT TARGET caffe2::mkl)
+   add_library(caffe2::mkl INTERFACE IMPORTED)
+diff --git a/requirements.txt b/requirements.txt
+index c9f16ce575..08a9eba042 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -6,7 +6,7 @@ numpy
+ psutil
+ pyyaml
+ requests
+-setuptools
++setuptools==65.5.1
+ six
+ types-dataclasses
+ typing_extensions

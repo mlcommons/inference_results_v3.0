@@ -1,0 +1,68 @@
+# Copyright (c) 2023, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+include $(CURDIR)/Makefile.const
+
+
+RUN_ID ?= manual-$(TIMESTAMP)
+ARTIFACT_NAME ?= $(SYSTEM_NAME)_$(RUN_ID)
+
+.PHONY: generate_conf_files
+generate_conf_files:
+	@$(PYTHON3_CMD) -m scripts.create_config_files
+
+
+# Generate a raw results directory in build/full_results from LoadGen logs in build/logs
+.PHONY: update_results
+update_results:
+	@$(PYTHON3_CMD) -m scripts.update_results --output_dir results --result_id $(ARTIFACT_NAME) $(RUN_ARGS)
+
+
+.PHONY: update_compliance
+update_compliance:
+	@$(PYTHON3_CMD) -m scripts.update_results --input_dir build/compliance_logs --output_dir compliance --assume_compliance --result_id $(ARTIFACT_NAME) $(RUN_ARGS)
+
+
+.PHONY: truncate_results
+truncate_results:
+	@echo "WARNING: This script cannot be executed from within the docker container."
+	@echo "It must have access to the project root at ../../"
+	@rm -rf build/full_results
+	@cd ../../ \
+		&& $(PYTHON3_CMD) network/$(SUBMITTER)/build/inference/tools/submission/truncate_accuracy_log.py --input . --backup network/$(SUBMITTER)/build/full_results --submitter $(SUBMITTER)
+	@echo "Full accuracy logs stored in build/full_results/. Truncated results stored in results/."
+
+
+.PHONY: summarize_results
+summarize_results:
+	@$(PYTHON3_CMD) -m scripts.internal.results_analysis.summarize_results $(RUN_ARGS)
+
+
+.PHONY: check_submission_fast
+check_submission_fast:
+	@echo "WARNING: This script cannot be executed from within the docker container."
+	@echo "It must have access to the project root at ../../"
+	@cd ../../ \
+		&& $(PYTHON3_CMD) network/$(SUBMITTER)/build/inference/tools/submission/submission_checker.py --input . --submitter $(SUBMITTER) 2>&1 \
+		| tee network/$(SUBMITTER)/results/submission_checker_log.txt
+
+.PHONY: check_submission_power
+check_submission_power:
+	@cd ../../ \
+		&& $(PYTHON3_CMD) network/$(SUBMITTER)/build/inference/tools/submission/submission_checker.py --more-power-check --input . --submitter $(SUBMITTER) 2>&1 \
+		| tee network/$(SUBMITTER)/results/submission_checker_log.txt
+
+
+.PHONY: check_submission
+check_submission: check_submission_fast check_submission_power

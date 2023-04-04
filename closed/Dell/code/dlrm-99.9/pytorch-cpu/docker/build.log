@@ -1,0 +1,1416 @@
+Building DLRM-99.9 workflow container
+[1/3] STEP 1/4: FROM rockylinux:8.7 AS dev-base
+[1/3] STEP 2/4: RUN --mount=type=cache,id=yum-dev,target=/var/cache/yum 	DEBIAN_FRONTEND=noninteractive dnf install -y 	ca-certificates 	git 	curl 	numactl 	cmake 	sudo 	wget 	procps 	numactl-devel.x86_64 	gcc-toolset-11-gcc 	gcc-toolset-11-gcc-c++ 	&& rm -rf /var/lib/yum/lists
+--> Using cache a2b5aac0b720d20547a25168925621f455d6991a9023aded7f260ac6dfe05174
+--> a2b5aac0b72
+[1/3] STEP 3/4: RUN echo "source /opt/rh/gcc-toolset-11/enable" >> /root/.bashrc && 	echo "source /opt/intel/oneapi/compiler/2022.1.0/env/vars.sh" >> /root/.bashrc
+--> Using cache bf830647d45077f522ccafa9bec31e8b3d71c50282fe6e8eedd0351619965e0d
+--> bf830647d45
+[1/3] STEP 4/4: ENV PATH /opt/conda/bin:$PATH
+--> Using cache 458237ba0f5745211174157d4f41fe05bce968564883a670f777023f955e6f30
+--> 458237ba0f5
+[2/3] STEP 1/3: FROM 458237ba0f5745211174157d4f41fe05bce968564883a670f777023f955e6f30 AS conda
+[2/3] STEP 2/3: ARG PYTHON_VERSION=3.9
+--> Using cache d5ecc21f5b347e1a9fce98a42b85319d2715cc5d0dd3dd03d912bb956114ae8b
+--> d5ecc21f5b3
+[2/3] STEP 3/3: RUN curl -fsSL -v -o ~/miniconda.sh -O  https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh  && 	chmod +x ~/miniconda.sh && 	~/miniconda.sh -b -p /opt/conda && 	rm ~/miniconda.sh && 	/opt/conda/bin/conda install -y python=${PYTHON_VERSION} && 	/opt/conda/bin/conda install -c conda-forge -y cmake libunwind gperftools wheel==0.38.1 setuptools==65.5.1 future==0.18.3 && 	/opt/conda/bin/conda install -y intel-openmp mkl mkl-include numpy --no-update-deps && 	/opt/conda/bin/conda install -y glog && 	/opt/conda/bin/conda install -y pytorch=1.13.1 -c pytorch && 	/opt/conda/bin/conda clean -ya
+--> Using cache b5af1191843c9a2f16bddc2a250356f7c45f6cf562c1d3a3636af3c23f403bca
+--> b5af1191843
+[3/3] STEP 1/10: FROM 458237ba0f5745211174157d4f41fe05bce968564883a670f777023f955e6f30 AS build
+[3/3] STEP 2/10: COPY --from=conda /opt/conda /opt/conda
+--> Using cache e2d3d3a2612774e37dadee9e9575de858950a8b7abd305da1bd15f40be6fe66a
+--> e2d3d3a2612
+[3/3] STEP 3/10: COPY ./l_HPCKit_p_2022.2.0.191.sh l_HPCKit_p_2022.2.0.191.sh
+--> Using cache 87c97dfd918e890fcc32d8f16a2b3ebf4ecaafccca8a7827a466f3dc71cd0304
+--> 87c97dfd918
+[3/3] STEP 4/10: ADD ./oneDNN oneDNN
+--> 545a4badba1
+[3/3] STEP 5/10: ADD ./pytorch-cpu pytorch-cpu
+--> 310a554bda0
+[3/3] STEP 6/10: ENV CONDA_PREFIX /opt/conda
+--> 190b210aa83
+[3/3] STEP 7/10: ENV WORKDIR /opt/workdir/code/dlrm
+--> 6529461cf43
+[3/3] STEP 8/10: RUN --mount=type=cache,target=/opt/ccache 	/bin/bash l_HPCKit_p_2022.2.0.191.sh -a -s --eula accept && 	mkdir -p /data/mlperf_data/dlrm && 	pip install absl-py tqdm numpy && 	pip install -e git+https://github.com/mlperf/logging@1.1.0-rc3#egg=mlperf-logging && 	source /opt/rh/gcc-toolset-11/enable && 	source /opt/intel/oneapi/compiler/2022.1.0/env/vars.sh && 	mkdir -p /opt/workdir/code/dlrm && export WORKDIR=/opt/workdir/code/dlrm && 	cd ${WORKDIR} && 	git clone https://github.com/mlcommons/inference.git && 	cd inference/loadgen && 	mkdir build && cd build && 	CC=icx CXX=icpx cmake .. -DCMAKE_INSTALL_PREFIX=${WORKDIR}/loadgen && 	make -j && make install && 	cd ${WORKDIR} && 	mv /oneDNN ${WORKDIR} && 	cd oneDNN && 	git checkout v2.7 && 	mkdir build && cd build && 	CC=icx CXX=icpx cmake .. -DCMAKE_INSTALL_PREFIX=${WORKDIR}/spronednn && 	make -j && make install && 	cd ${WORKDIR} && 	mv /pytorch-cpu ${WORKDIR} &&   cp ${WORKDIR}/inference/mlperf.conf /opt/workdir/code/dlrm/pytorch-cpu/. && 	cd pytorch-cpu/src && 	git clone https://github.com/rogersce/cnpy.git && 	cd cnpy && 	git checkout 4e8810b1a8637695171ed346ce68f6984e585ef4 && 	cd ${WORKDIR}/pytorch-cpu/src && 	mkdir build && cd build &&	export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:${WORKDIR}/spronednn && 	CC=icx CXX=icpx cmake .. -DLOADGEN_DIR=${WORKDIR}/loadgen -DONEDNN_DIR=${WORKDIR}/spronednn && 	make -j
+Extract l_HPCKit_p_2022.2.0.191 to //l_HPCKit_p_2022.2.0.191...
+[]
+Extract l_HPCKit_p_2022.2.0.191 completed!
+Checking system requirements...
+Done.
+Wait while the installer is preparing...
+Done.
+Launching the installer...
+This machine uses operating system "Unknown". Compatibility issues may occur.
+Installation can continue; however, product functionality may not meet expectations because this product is untested on this operating system. Suggestion: Check the Release Notes for a list of supported operating systems and install this product on a compliant system.
+Missing Software on Machine.
+Intel® oneAPI HPC Toolkit is an add-on for the Intel® oneAPI Base Toolkit. For the full set of developer tools including Intel® oneAPI DPC++ Compiler, Intel® oneAPI libraries, and analyzers, download Intel® oneAPI Base Toolkit here: https://software.intel.com/en-us/oneapi/oneapi-kit
+Intel® Graphics Compute Runtime for OpenCL™ not found.
+You have no relevant GPU driver. If you are going to develop and run GPU-accelerated applications on this system, please check the installation guide for instructions on the GPU drivers here: https://www.intel.com/content/www/us/en/develop/documentation/installation-guide-for-intel-oneapi-toolkits-linux/top/prerequisites/install-intel-gpu-drivers.html
+Otherwise, you can ignore the warning and continue the installation as is: the product can still be used with CPU.
+Start installation flow...
+Installed Location: /opt/intel/oneapi
+Installation has successfully completed
+Log file: /opt/intel/oneapi/logs/installer.install.intel.oneapi.lin.hpckit.product,v=2022.2.0-191.2023.02.27.15.31.41.186159.log
+Remove extracted files: //l_HPCKit_p_2022.2.0.191...
+Collecting absl-py
+  Downloading absl_py-1.4.0-py3-none-any.whl (126 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 126.5/126.5 kB 5.5 MB/s eta 0:00:00
+Requirement already satisfied: tqdm in /opt/conda/lib/python3.9/site-packages (4.64.1)
+Requirement already satisfied: numpy in /opt/conda/lib/python3.9/site-packages (1.19.2)
+Installing collected packages: absl-py
+Successfully installed absl-py-1.4.0
+Obtaining mlperf-logging from git+https://github.com/mlperf/logging@1.1.0-rc3#egg=mlperf-logging
+  Cloning https://github.com/mlperf/logging (to revision 1.1.0-rc3) to /src/mlperf-logging
+  Resolved https://github.com/mlperf/logging to commit 2aeb747fc72584f2fe422e2fc3ec2e7b402796fd
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Collecting pandas
+  Downloading pandas-1.5.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (12.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.2/12.2 MB 100.6 MB/s eta 0:00:00
+Collecting pyyaml
+  Downloading PyYAML-6.0-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl (661 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 661.8/661.8 kB 116.5 MB/s eta 0:00:00
+Requirement already satisfied: numpy in /opt/conda/lib/python3.9/site-packages (from mlperf-logging) (1.19.2)
+Collecting scipy
+  Downloading scipy-1.10.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (34.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 34.5/34.5 MB 84.6 MB/s eta 0:00:00
+Collecting pytz>=2020.1
+  Downloading pytz-2022.7.1-py2.py3-none-any.whl (499 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 499.4/499.4 kB 122.4 MB/s eta 0:00:00
+Collecting python-dateutil>=2.8.1
+  Downloading python_dateutil-2.8.2-py2.py3-none-any.whl (247 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 247.7/247.7 kB 132.3 MB/s eta 0:00:00
+Collecting numpy
+  Downloading numpy-1.24.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (17.3 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 17.3/17.3 MB 97.5 MB/s eta 0:00:00
+Requirement already satisfied: six>=1.5 in /opt/conda/lib/python3.9/site-packages (from python-dateutil>=2.8.1->pandas->mlperf-logging) (1.16.0)
+Installing collected packages: pytz, pyyaml, python-dateutil, numpy, scipy, pandas, mlperf-logging
+  Attempting uninstall: numpy
+    Found existing installation: numpy 1.19.2
+    Uninstalling numpy-1.19.2:
+      Successfully uninstalled numpy-1.19.2
+  Running setup.py develop for mlperf-logging
+Successfully installed mlperf-logging-1.1.0rc3 numpy-1.24.2 pandas-1.5.3 python-dateutil-2.8.2 pytz-2022.7.1 pyyaml-6.0 scipy-1.10.1
+-- The C compiler identification is IntelLLVM 2022.1.0
+-- The CXX compiler identification is IntelLLVM 2022.1.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /opt/intel/oneapi/compiler/2022.1.0/linux/bin/icx - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /opt/intel/oneapi/compiler/2022.1.0/linux/bin/icpx - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Using C++ compiler flags:  -O3 -W -Wall
+-- Using C++ standard: 14
+-- Using static linker flags: 
+-- Using shared linker flags: 
+-- Using output path: /opt/workdir/code/dlrm/inference/loadgen/build
+-- Found PythonInterp: /opt/conda/bin/python (found version "3.9.16") 
+-- Using Python interpreter: /opt/conda/bin/python
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /opt/workdir/code/dlrm/inference/loadgen/build
+[  7%] Building CXX object CMakeFiles/mlperf_loadgen.dir/loadgen.cc.o
+[ 15%] Building CXX object CMakeFiles/mlperf_loadgen.dir/bindings/c_api.cc.o
+[ 23%] Building CXX object CMakeFiles/mlperf_loadgen.dir/test_settings_internal.cc.o
+[ 30%] Building CXX object CMakeFiles/mlperf_loadgen.dir/early_stopping.cc.o
+[ 46%] Building CXX object CMakeFiles/mlperf_loadgen.dir/results.cc.o
+[ 46%] Building CXX object CMakeFiles/mlperf_loadgen.dir/version_generated.cc.o
+[ 53%] Building CXX object CMakeFiles/mlperf_loadgen.dir/issue_query_controller.cc.o
+[ 61%] Building CXX object CMakeFiles/mlperf_loadgen.dir/logging.cc.o
+[ 76%] Building CXX object CMakeFiles/mlperf_loadgen.dir/version.cc.o
+[ 76%] Building CXX object CMakeFiles/mlperf_loadgen.dir/utils.cc.o
+[ 84%] Linking CXX static library libmlperf_loadgen.a
+[ 84%] Built target mlperf_loadgen
+[ 92%] Building CXX object CMakeFiles/benchmark.dir/benchmark/repro.cpp.o
+[100%] Linking CXX executable benchmark
+[100%] Built target benchmark
+Consolidate compiler generated dependencies of target mlperf_loadgen
+[ 84%] Built target mlperf_loadgen
+Consolidate compiler generated dependencies of target benchmark
+[100%] Built target benchmark
+Install the project...
+-- Install configuration: ""
+-- Installing: /opt/workdir/code/dlrm/loadgen/lib/libmlperf_loadgen.a
+-- Installing: /opt/workdir/code/dlrm/loadgen/include
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/benchmark
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/bindings
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/bindings/c_api.h
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/demos
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/demos/lon
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/docs
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/docs/src
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/early_stopping.h
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/issue_query_controller.h
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/loadgen.h
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/logging.h
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/query_dispatch_library.h
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/query_sample.h
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/query_sample_library.h
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/results.h
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/system_under_test.h
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/test_settings.h
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/test_settings_internal.h
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/tests
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/tests/loadgen_test.h
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/tools
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/utils.h
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/version.h
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/build
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/build/CMakeFiles
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/build/CMakeFiles/3.21.3
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/build/CMakeFiles/3.21.3/CompilerIdC
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/build/CMakeFiles/3.21.3/CompilerIdC/tmp
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/build/CMakeFiles/3.21.3/CompilerIdCXX
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/build/CMakeFiles/3.21.3/CompilerIdCXX/tmp
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/build/CMakeFiles/CMakeTmp
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/build/CMakeFiles/mlperf_loadgen.dir
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/build/CMakeFiles/mlperf_loadgen.dir/bindings
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/build/CMakeFiles/benchmark.dir
+-- Installing: /opt/workdir/code/dlrm/loadgen/include/build/CMakeFiles/benchmark.dir/benchmark
+-- CMAKE_BUILD_TYPE is unset, defaulting to Release
+-- The C compiler identification is IntelLLVM 2022.1.0
+-- The CXX compiler identification is IntelLLVM 2022.1.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /opt/intel/oneapi/compiler/2022.1.0/linux/bin/icx - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /opt/intel/oneapi/compiler/2022.1.0/linux/bin/icpx - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- DNNL_TARGET_ARCH: X64
+-- DNNL_LIBRARY_NAME: dnnl
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- Found OpenMP_C: -fiopenmp (found version "5.0") 
+-- Found OpenMP_CXX: -fiopenmp (found version "5.0") 
+-- Found OpenMP: TRUE (found version "5.0")  
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+-- Could NOT find Doxyrest (missing: DOXYREST_EXECUTABLE) 
+-- Found PythonInterp: /opt/conda/bin/python (found suitable version "3.9.16", minimum required is "2.7") 
+-- Could NOT find Sphinx (missing: SPHINX_EXECUTABLE) 
+-- Found Git: /usr/bin/git (found version "2.31.1") 
+-- Enabled workload: TRAINING
+-- Enabled primitives: ALL
+-- Enabled primitive CPU ISA: ALL
+-- Enabled primitive GPU ISA: ALL
+-- Primitive cache is enabled
+-- The ASM compiler identification is IntelLLVM
+-- Found assembler: /opt/intel/oneapi/compiler/2022.1.0/linux/bin/icx
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /opt/workdir/code/dlrm/oneDNN/build
+Scanning dependencies of target dnnl_common
+[  0%] Building CXX object tests/gtests/gtest/CMakeFiles/dnnl_gtest.dir/src/gtest-all.cc.o
+[  0%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/binary.cpp.o
+[  0%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/convolution.cpp.o
+[  0%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_convolution_list.cpp.o
+[  0%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/dnnl_debug.cpp.o
+[  0%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_eltwise_list.cpp.o
+[  1%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_prelu_list.cpp.o
+[  1%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/eltwise.cpp.o
+[  1%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/batch_normalization.cpp.o
+[  2%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_layer_normalization_list.cpp.o
+[  2%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/lrn.cpp.o
+[  2%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/cache_blob_id.cpp.o
+[  2%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_engine.cpp.o
+[  2%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_reduction_list.cpp.o
+[  2%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/fpmath_mode.cpp.o
+[  3%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_softmax_list.cpp.o
+[  3%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/pooling.cpp.o
+[  3%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_shuffle_list.cpp.o
+[  3%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/memory_debug.cpp.o
+[  3%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/inner_product.cpp.o
+[  3%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/gemm_convolution.cpp.o
+[  3%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/primitive_desc_iface.cpp.o
+[  3%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_lrn_list.cpp.o
+[  3%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/primitive_hashing.cpp.o
+[  3%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/primitive_desc.cpp.o
+[  3%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_binary_list.cpp.o
+[  5%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_rnn_list.cpp.o
+[  5%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/primitive_desc_iterator.cpp.o
+[  5%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/gemm.cpp.o
+[  5%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/gemm_inner_product.cpp.o
+[  5%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/convolution_pd.cpp.o
+[  5%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/deconvolution.cpp.o
+[  5%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/concat.cpp.o
+[  5%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/gemm_convolution_utils.cpp.o
+[  5%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_resampling_list.cpp.o
+[  5%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_concat.cpp.o
+[  6%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/broadcast_strategy.cpp.o
+[  6%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/engine.cpp.o
+[  6%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/primitive_exec_types.cpp.o
+[  6%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/prelu.cpp.o
+[  7%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/memory_desc_wrapper.cpp.o
+[  7%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_inner_product_list.cpp.o
+[  7%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/bfloat16.cpp.o
+[  7%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_sum.cpp.o
+[  7%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/memory_storage.cpp.o
+[  7%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/memory_zero_pad.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_deconvolution_list.cpp.o
+[  8%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/experimental.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/gemm_inner_product_utils.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_batch_normalization_utils.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_batch_normalization.cpp.o
+[  8%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/brgemm/brgemm_utils.cpp.o
+[  8%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/matmul.cpp.o
+[  8%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/brgemm/jit_brdgmm_kernel.cpp.o
+[  8%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/brgemm/jit_brgemm_kernel.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ncsp_batch_normalization.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_binary.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/primitive_attr_postops.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_convolution.cpp.o
+[  8%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/memory_tracking.cpp.o
+[  8%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/query.cpp.o
+[  8%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/primitive_iface.cpp.o
+[  8%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/dnnl_debug_autogenerated.cpp.o
+[  8%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/scratchpad_debug.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/bfloat16.cpp.o
+[  8%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/scratchpad.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_deconvolution.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_inner_product.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/gemm_x8s8s32x_convolution_utils.cpp.o
+[  8%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/memory.cpp.o
+[  8%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/cpu_isa_traits.cpp.o
+[  8%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/primitive_attr.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/binary_injector_utils.cpp.o
+[  8%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/ittnotify.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_pooling_list.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/nchw_pooling.cpp.o
+[  8%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/layer_normalization.cpp.o
+[  8%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/stream.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/nhwc_pooling.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/gemm_x8s8s32x_convolution.cpp.o
+[  8%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/float16.cpp.o
+[  8%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/brgemm/brgemm.cpp.o
+[  9%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/reorder.cpp.o
+[  9%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/primitive.cpp.o
+[  9%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/softmax.cpp.o
+[  9%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/cpu_batch_normalization_list.cpp.o
+[  9%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/amx/jit_avx512_core_amx_copy_kern.cpp.o
+[  9%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/primitive_cache.cpp.o
+[  9%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/gemm_x8s8s32x_conv_zp_src_pad_comp.cpp.o
+[  9%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/amx/jit_avx512_core_amx_gemm_kern.cpp.o
+[  9%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/brgemm/jit_brgemm_amx_uker.cpp.o
+[  9%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/reduction.cpp.o
+[ 12%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/cpu_barrier.cpp.o
+[ 12%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/bf16/jit_avx512_core_s16_24x8_copy_bn_kern_autogen.cpp.o
+[ 12%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/sum.cpp.o
+[ 12%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_resampling.cpp.o
+[ 13%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/rnn.cpp.o
+[ 13%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_inner_product_int8.cpp.o
+[ 13%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/amx_tile_configure.cpp.o
+[ 13%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/cpu_reducer.cpp.o
+[ 13%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/shuffle.cpp.o
+[ 13%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/rw_mutex.cpp.o
+[ 13%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_pooling.cpp.o
+[ 13%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/gemm_x8s8s32x_inner_product.cpp.o
+[ 13%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/bf16/jit_avx512_core_gemm_bf16bf16f32_kern.cpp.o
+[ 13%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_softmax.cpp.o
+[ 13%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_layer_normalization.cpp.o
+[ 13%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/platform.cpp.o
+[ 14%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/resampling.cpp.o
+[ 14%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/nspc_batch_normalization.cpp.o
+[ 14%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/serialization.cpp.o
+[ 14%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/bf16/jit_avx512_core_s16_48x8_copy_bt_kern_autogen.cpp.o
+[ 14%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/simple_sum.cpp.o
+[ 14%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx2_f32_copy_an_kern_autogen.cpp.o
+[ 16%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx2_f32_copy_bn_kern_autogen.cpp.o
+[ 16%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx2_f32_copy_at_kern_autogen.cpp.o
+[ 16%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/bf16/jit_avx512_core_s16_24x8_copy_at_kern_autogen.cpp.o
+[ 16%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/bf16/jit_avx512_core_s16_24x8_copy_bt_kern_autogen.cpp.o
+[ 16%] Building C object src/common/CMakeFiles/dnnl_common.dir/ittnotify/ittnotify_static.c.o
+[ 16%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx2_f32_copy_bt_kern_autogen.cpp.o
+[ 16%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx2_kernel_sgemm_kern.cpp.o
+[ 16%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx512_common_gemm_f32.cpp.o
+[ 17%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_lrn.cpp.o
+[ 17%] Building ASM object src/common/CMakeFiles/dnnl_common.dir/ittnotify/ittptmark64.S.o
+[ 17%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_eltwise.cpp.o
+[ 17%] Building C object src/common/CMakeFiles/dnnl_common.dir/ittnotify/jitprofiling.c.o
+[ 17%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_convolution_int8.cpp.o
+[ 17%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx512_core_f32_copy_an_kern_autogen.cpp.o
+[ 17%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/utils.cpp.o
+[ 17%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/bf16/jit_avx512_core_s16_48x8_copy_bn_kern_autogen.cpp.o
+[ 17%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/bf16/jit_avx512_core_s16_24x8_copy_an_kern_autogen.cpp.o
+[ 17%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/bf16/jit_avx512_core_gemv_bf16bf16f32_kern.cpp.o
+[ 17%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx_f32_copy_an_kern_autogen.cpp.o
+[ 17%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_prelu.cpp.o
+[ 18%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx512_core_f32_copy_bn_kern_autogen.cpp.o
+[ 18%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_shuffle.cpp.o
+[ 18%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/simple_layer_normalization.cpp.o
+[ 18%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/bf16/jit_avx512_core_s16_48x8_copy_an_kern_autogen.cpp.o
+[ 18%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx_f32_copy_bn_kern_autogen.cpp.o
+[ 18%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx512_core_f32_copy_at_kern_part1_autogen.cpp.o
+[ 18%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/simple_concat.cpp.o
+[ 18%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx512_core_f32_copy_bt_kern_autogen.cpp.o
+[ 18%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/ref_reduction.cpp.o
+[ 18%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx512_core_gemm_smalln_tn_f32_kern.cpp.o
+[ 18%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/bf16/jit_avx512_core_s16_48x8_copy_at_kern_autogen.cpp.o
+[ 18%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/simple_resampling.cpp.o
+[ 18%] Building CXX object src/common/CMakeFiles/dnnl_common.dir/verbose.cpp.o
+[ 18%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx512_core_f32_copy_at_kern_part2_autogen.cpp.o
+[ 19%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx_gemv_t_f32_kern.cpp.o
+[ 19%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx_f32_copy_bt_kern_autogen.cpp.o
+[ 19%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx_kernel_b0_sgemm_kern_part1_autogen.cpp.o
+[ 19%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx_f32_copy_at_kern_autogen.cpp.o
+[ 19%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx_gemm_f32.cpp.o
+[ 19%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx_kernel_b0_sgemm_kern_part2_autogen.cpp.o
+[ 19%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/zero_point_utils.cpp.o
+[ 20%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/gemm/f32/gemm_utils_f32.cpp.o
+[ 20%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/gemm/f32/ref_gemm_f32.cpp.o
+[ 20%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx_kernel_sgemm_kern_part1_autogen.cpp.o
+[ 20%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/gemm/s8x8s32/simple_gemm_s8s8s32.cpp.o
+[ 20%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/gemm/gemm_pack.cpp.o
+[ 20%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/reorder/cpu_reorder_comp_f32_s8.cpp.o
+[ 20%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_avx_kernel_sgemm_kern_part2_autogen.cpp.o
+[ 20%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/matmul/ref_matmul.cpp.o
+[ 20%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/reorder/cpu_reorder.cpp.o
+[ 20%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_sse41_gemv_n_f32_kern.cpp.o
+[ 20%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/reorder/cpu_reorder_regular_bf16.cpp.o
+[ 20%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/reorder/cpu_reorder_comp_bf16_s8.cpp.o
+[ 20%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_sse41_gemv_t_f32_kern.cpp.o
+[ 20%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/reorder/cpu_reorder_regular_f32_s8.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/reorder/cpu_reorder_comp_s8_s8.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/gemm/gemm.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/reorder/cpu_reorder_regular_f16.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/matmul/cpu_matmul_list.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/reorder/cpu_reorder_regular_f32_f16.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/rnn/cell_gru.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/reorder/cpu_reorder_regular_f32_bf16.cpp.o
+[ 21%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_sse41_f32_copy_an_kern_autogen.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/rnn/ref_postgemm_lstm_projection.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/reorder/cpu_reorder_regular_s8.cpp.o
+[ 21%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_u8_copy_at_kern_autogen.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/reorder/cpu_reorder_regular_s32.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/gemm/s8x8s32/ref_gemm_s8x8s32.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/matmul/ref_matmul_int8.cpp.o
+[ 21%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_u8_copy_bn_kern_autogen.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/matmul/gemm_f32_matmul.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/rnn/ref_postgemm_lstm.cpp.o
+[ 21%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/gemm_info.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/rnn/cell_common.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/rnn/brgemm_cell_common.cpp.o
+[ 21%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/reorder/cpu_reorder_regular_f32_s32.cpp.o
+[ 22%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/rnn/rnn_utils.cpp.o
+[ 23%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/reorder/cpu_reorder_regular_f32_u8.cpp.o
+[ 23%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/reorder/cpu_reorder_regular_f32_f32.cpp.o
+[ 23%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_sse41_f32_copy_bt_kern_autogen.cpp.o
+[ 23%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/matmul/gemm_x8s8s32x_matmul.cpp.o
+[ 23%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/reorder/cpu_reorder_regular_u8.cpp.o
+[ 23%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_gemm_s8u8s32_kern.cpp.o
+[ 23%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_sse41_f32_copy_bn_kern_autogen.cpp.o
+[ 23%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_u8_copy_sum_an_kern_autogen.cpp.o
+[ 24%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/rnn/cell_gru_lbr.cpp.o
+[ 26%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/jit_utils/linux_perf/linux_perf.cpp.o
+[ 26%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_sse41_f32_copy_at_kern_autogen.cpp.o
+[ 26%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/matmul/gemm_bf16_matmul.cpp.o
+[ 26%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/rnn/ref_postgemm_gru.cpp.o
+[ 26%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_u8_copy_bt_kern_autogen.cpp.o
+[ 26%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_u8_copy_sum_bt_kern_autogen.cpp.o
+[ 26%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/jit_utils/jit_utils.cpp.o
+[ 26%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/gemm_driver.cpp.o
+[ 27%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_sse41_kernel_b0_sgemm_kern_autogen.cpp.o
+[ 27%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/gemm_pack.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_u8_copy_sum_at_kern_autogen.cpp.o
+[ 28%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/rnn/ref_postgemm_gru_lbr.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_u8_copy_sum_bn_kern_autogen.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_vnni_u8_copy_bn_kern_autogen.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx512_core_kernel_gemv_s8x8s32_kern.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx512_core_gemv_s8x8s32.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/gemv_driver.cpp.o
+[ 28%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/rnn/ref_postgemm_rnn.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx512_core_u8_copy_at_kern_autogen.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_vnni_u8_copy_bt_kern_autogen.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_vnni_u8_copy_at_kern_autogen.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/f32/jit_sse41_kernel_sgemm_kern_autogen.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_vnni_u8_copy_sum_bt_kern_autogen.cpp.o
+[ 28%] Building CXX object src/cpu/CMakeFiles/dnnl_cpu.dir/rnn/ref_rnn.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx512_core_gemm_s8u8s32_kern.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_vnni_u8_copy_an_kern_autogen.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx512_core_u8_copy_sum_an_kern_autogen.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_vnni_u8_copy_sum_an_kern_autogen.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_u8_copy_an_kern_autogen.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_vnni_u8_copy_sum_bn_kern_autogen.cpp.o
+[ 28%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx512_core_u8_copy_an_kern_autogen.cpp.o
+[ 29%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx2_vnni_u8_copy_sum_at_kern_autogen.cpp.o
+[ 29%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx512_core_u8_copy_sum_at_kern_autogen.cpp.o
+[ 29%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx512_core_u8_copy_sum_bn_kern_autogen.cpp.o
+[ 29%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx512_core_u8_copy_sum_bt_kern_autogen.cpp.o
+[ 29%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_kernel_b0_r_gemm_s8u8s32_kern_autogen.cpp.o
+[ 29%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx512_core_u8_copy_bt_kern_autogen.cpp.o
+[ 29%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_kernel_b_gemm_s8u8s32_kern_autogen.cpp.o
+[ 29%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_kernel_c_gemm_s8u8s32_kern_autogen.cpp.o
+[ 30%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx512_core_u8_copy_bn_kern_autogen.cpp.o
+[ 30%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_kernel_gemm_s8u8s32_kern_autogen.cpp.o
+[ 30%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_kernel_b0_c_gemm_s8u8s32_kern_autogen.cpp.o
+[ 30%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_kernel_r_gemm_s8u8s32_kern_autogen.cpp.o
+[ 30%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_kernel_b0_b_gemm_s8u8s32_kern_autogen.cpp.o
+[ 31%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_kernel_b0_gemm_s8u8s32_kern_autogen.cpp.o
+[ 31%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_u8_copy_bn_kern_autogen.cpp.o
+[ 31%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_u8_copy_an_kern_autogen.cpp.o
+[ 32%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_u8_copy_at_kern_autogen.cpp.o
+[ 32%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_u8_copy_bt_kern_autogen.cpp.o
+[ 32%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_u8_copy_sum_at_kern_autogen.cpp.o
+[ 32%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_u8_copy_sum_bn_kern_autogen.cpp.o
+[ 32%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_u8_copy_sum_bt_kern_autogen.cpp.o
+[ 32%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_kernel_b0_b_gemm_s8u8s32_kern_autogen.cpp.o
+[ 32%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_kernel_b_gemm_s8u8s32_kern_autogen.cpp.o
+[ 32%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_kernel_gemm_s8u8s32_kern_autogen.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_kernel_b0_c_gemm_s8u8s32_kern_autogen.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_u8_copy_an_kern_autogen.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_u8_copy_bn_kern_autogen.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_u8_copy_sum_at_kern_autogen.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_u8_copy_sum_an_kern_autogen.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm_bf16_convolution.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_u8_copy_sum_bn_kern_autogen.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_kernel_b0_r_gemm_s8u8s32_kern_autogen.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_kernel_c_gemm_s8u8s32_kern_autogen.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/injectors/jit_uni_binary_injector.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx2_1x1_conv_kernel_f32.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx2_1x1_convolution.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_u8_copy_sum_bt_kern_autogen.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/injectors/jit_uni_postops_injector.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_u8_copy_bt_kern_autogen.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_kernel_r_gemm_s8u8s32_kern_autogen.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/ip_convolution.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_avx_u8_copy_sum_an_kern_autogen.cpp.o
+[ 33%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx2_convolution.cpp.o
+[ 34%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx2_conv_kernel_f32.cpp.o
+[ 34%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_common_1x1_convolution.cpp.o
+[ 35%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_common_1x1_conv_kernel.cpp.o
+[ 35%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_common_resampling.cpp.o
+[ 35%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_u8_copy_at_kern_autogen.cpp.o
+[ 36%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_bf16_dw_conv_kernel.cpp.o
+[ 36%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_bf16_convolution.cpp.o
+[ 36%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_bf16_conv_kernel.cpp.o
+[ 37%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_amx_1x1_convolution.cpp.o
+[ 37%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_bf16_1x1_convolution.cpp.o
+[ 37%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_amx_convolution.cpp.o
+[ 37%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_bf16_1x1_conv_kernel.cpp.o
+[ 38%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/injectors/jit_uni_eltwise_injector.cpp.o
+[ 38%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm_bf16_inner_product.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_u8s8s32x_wino_convolution.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_bf16cvt.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/gemm/s8x8s32/jit_sse41_kernel_b0_gemm_s8u8s32_kern_autogen.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_f32_wino_conv_4x3.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_common_convolution.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_amx_1x1_conv_kernel.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_common_conv_kernel.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_amx_deconvolution.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_f32_wino_conv_4x3_kernel.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/injectors/injector_utils.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_amx_conv_kernel.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_brdgmm_dw_conv.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_f32_wino_conv_2x3.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_x8s8s32x_deconvolution.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_brgemm_conv_trans_kernel.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_fp16cvt.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_brgemm_conv_bwd_w.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_brgemm_conv_utils.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_brgemm_conv_bwd.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_bf16_sum.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_x8s8s32x_convolution.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_x8s8s32x_1x1_conv_kernel.cpp.o
+[ 39%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_x8s8s32x_conv_kernel.cpp.o
+[ 40%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_brgemm_conv.cpp.o
+[ 40%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_brgemm_1x1_conv.cpp.o
+[ 40%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_avx512_core_x8s8s32x_1x1_convolution.cpp.o
+[ 40%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_gemm_inner_product_utils.cpp.o
+[ 40%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_brgemm_conv_comp_pad_kernel.cpp.o
+[ 40%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_brgemm_inner_product.cpp.o
+[ 41%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_brgemm_transpose_utils.cpp.o
+[ 41%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_brgemm_inner_product_utils.cpp.o
+[ 41%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_gemm_x8s8s32x_conv_zp_src_pad_comp.cpp.o
+[ 41%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_sse41_convolution.cpp.o
+[ 41%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_gemm_x8s8s32x_convolution_utils.cpp.o
+[ 41%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_batch_normalization_s8.cpp.o
+[ 41%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_binary.cpp.o
+[ 41%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_sse41_1x1_convolution.cpp.o
+[ 41%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_batch_normalization.cpp.o
+[ 41%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_sse41_1x1_conv_kernel_f32.cpp.o
+[ 41%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_dw_conv_kernel_f32.cpp.o
+[ 42%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_transpose_utils.cpp.o
+[ 42%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_eltwise.cpp.o
+[ 42%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_eltwise_int.cpp.o
+[ 42%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_sse41_conv_kernel_f32.cpp.o
+[ 42%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_dw_conv_kernel_utils.cpp.o
+[ 42%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_binary_kernel.cpp.o
+[ 43%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_dw_convolution.cpp.o
+[ 43%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_deconv_zp_pad_str_kernel.cpp.o
+[ 44%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_reduction.cpp.o
+[ 44%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_reduction_kernel.cpp.o
+[ 44%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_reorder.cpp.o
+[ 44%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_tbb_batch_normalization.cpp.o
+[ 44%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_x8s8s32x_1x1_convolution.cpp.o
+[ 44%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_i8i8_pooling.cpp.o
+[ 45%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_x8s8s32x_1x1_conv_kernel.cpp.o
+[ 45%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_x8s8s32x_convolution.cpp.o
+[ 45%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/lrn/jit_avx512_common_lrn_bwd_base.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/lrn/jit_avx512_common_lrn_bwd_nhwc.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/lrn/jit_avx512_common_lrn_fwd_base.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/lrn/jit_avx512_common_lrn_bwd_blocked.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_softmax.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_x8s8s32x_deconvolution.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_pooling.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/matmul/brgemm_matmul.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/lrn/jit_avx512_common_lrn_fwd_nhwc.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/lrn/jit_uni_lrn.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_pool_kernel.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_reorder_utils.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/matmul/brgemm_matmul_copy_utils.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_resampling.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_x8s8s32x_conv_kernel.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_layer_normalization.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/lrn/jit_uni_lrn_kernel.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/jit_uni_resampling_kernel.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/prelu/jit_prelu_forward.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/rnn/brgemm_cell_common_reorders.cpp.o
+[ 46%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/rnn/brgemm_cell_common_utils.cpp.o
+[ 47%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/matmul/brgemm_matmul_utils.cpp.o
+[ 47%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/prelu/jit_prelu_base_kernel.cpp.o
+[ 47%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/rnn/jit_gates_reduction.cpp.o
+[ 47%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/prelu/jit_prelu_backward.cpp.o
+[ 48%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/prelu/jit_uni_prelu_forward_kernel.cpp.o
+[ 48%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/rnn/brgemm_cell_common_bwd.cpp.o
+[ 48%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/shuffle/jit_uni_shuffle_kernel.cpp.o
+[ 48%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/prelu/jit_prelu_reduction_kernel.cpp.o
+[ 48%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/prelu/jit_uni_prelu_backward_kernel.cpp.o
+[ 48%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/rnn/brgemm_cell_common_fwd.cpp.o
+[ 48%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/prelu/jit_prelu_utils.cpp.o
+[ 48%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/lrn/jit_avx512_common_lrn.cpp.o
+[ 48%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/shuffle/jit_uni_shuffle.cpp.o
+[ 48%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/rnn/jit_diff_weights_peephole.cpp.o
+[ 48%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/lrn/jit_avx512_common_lrn_fwd_blocked.cpp.o
+[ 48%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/rnn/jit_brgemm_transpose_single_row.cpp.o
+[ 49%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/rnn/rnn_brgemm_utils.cpp.o
+[ 49%] Building CXX object src/cpu/x64/CMakeFiles/dnnl_cpu_x64.dir/utils/jit_io_helper.cpp.o
+[ 49%] Linking CXX static library libdnnl_gtest.a
+[ 49%] Built target dnnl_gtest
+[ 49%] Built target dnnl_common
+[ 49%] Built target dnnl_cpu
+[ 49%] Built target dnnl_cpu_x64
+[ 49%] Linking CXX shared library libdnnl.so
+[ 49%] Built target dnnl
+[ 49%] Generating test_c_symbols.c
+[ 49%] Building CXX object examples/CMakeFiles/primitives-shuffle-cpp.dir/primitives/shuffle.cpp.o
+[ 49%] Building C object examples/CMakeFiles/cpu-cnn-training-f32-c.dir/cpu_cnn_training_f32.c.o
+[ 49%] Building CXX object examples/CMakeFiles/memory-format-propagation-cpp.dir/memory_format_propagation.cpp.o
+[ 49%] Building CXX object examples/CMakeFiles/tutorials-matmul-inference-int8-matmul-cpp.dir/tutorials/matmul/inference_int8_matmul.cpp.o
+[ 50%] Building CXX object examples/CMakeFiles/cnn-training-f32-cpp.dir/cnn_training_f32.cpp.o
+[ 51%] Building CXX object examples/CMakeFiles/cpu-tutorials-matmul-matmul-quantization-cpp.dir/tutorials/matmul/cpu_matmul_quantization.cpp.o
+[ 51%] Building CXX object examples/CMakeFiles/cpu-tutorials-matmul-sgemm-and-matmul-cpp.dir/tutorials/matmul/cpu_sgemm_and_matmul.cpp.o
+[ 52%] Building CXX object examples/CMakeFiles/matmul-perf-cpp.dir/matmul_perf.cpp.o
+[ 52%] Building CXX object examples/CMakeFiles/cpu-rnn-inference-int8-cpp.dir/cpu_rnn_inference_int8.cpp.o
+[ 52%] Building CXX object examples/CMakeFiles/primitives-concat-cpp.dir/primitives/concat.cpp.o
+[ 53%] Building CXX object examples/CMakeFiles/primitives-augru-cpp.dir/primitives/augru.cpp.o
+[ 53%] Building CXX object examples/CMakeFiles/cnn-inference-int8-cpp.dir/cnn_inference_int8.cpp.o
+[ 53%] Building CXX object examples/CMakeFiles/primitives-softmax-cpp.dir/primitives/softmax.cpp.o
+[ 53%] Building CXX object examples/CMakeFiles/cpu-rnn-inference-f32-cpp.dir/cpu_rnn_inference_f32.cpp.o
+[ 53%] Building CXX object examples/CMakeFiles/primitives-lstm-cpp.dir/primitives/lstm.cpp.o
+[ 53%] Building CXX object examples/CMakeFiles/rnn-training-f32-cpp.dir/rnn_training_f32.cpp.o
+[ 53%] Building CXX object examples/CMakeFiles/primitives-reorder-cpp.dir/primitives/reorder.cpp.o
+[ 53%] Building CXX object examples/CMakeFiles/primitives-sum-cpp.dir/primitives/sum.cpp.o
+[ 53%] Building CXX object examples/CMakeFiles/primitives-reduction-cpp.dir/primitives/reduction.cpp.o
+[ 53%] Building CXX object tests/gtests/CMakeFiles/test_inner_product_forward.dir/test_inner_product_forward.cpp.o
+[ 53%] Building CXX object examples/CMakeFiles/cnn-training-bf16-cpp.dir/cnn_training_bf16.cpp.o
+[ 53%] Building CXX object examples/CMakeFiles/primitives-matmul-cpp.dir/primitives/matmul.cpp.o
+[ 54%] Building CXX object examples/CMakeFiles/performance-profiling-cpp.dir/performance_profiling.cpp.o
+[ 54%] Building CXX object examples/CMakeFiles/primitives-resampling-cpp.dir/primitives/resampling.cpp.o
+[ 54%] Building CXX object tests/gtests/CMakeFiles/test_iface_runtime_attr.dir/main.cpp.o
+[ 54%] Building CXX object examples/CMakeFiles/cnn-inference-f32-cpp.dir/cnn_inference_f32.cpp.o
+[ 54%] Building CXX object tests/gtests/CMakeFiles/test_iface_binary_bcast.dir/main.cpp.o
+[ 55%] Building CXX object examples/CMakeFiles/primitives-lrn-cpp.dir/primitives/lrn.cpp.o
+[ 55%] Building CXX object examples/CMakeFiles/primitives-convolution-cpp.dir/primitives/convolution.cpp.o
+[ 55%] Building CXX object tests/gtests/CMakeFiles/test_inner_product_forward.dir/main.cpp.o
+[ 55%] Building CXX object examples/CMakeFiles/primitives-eltwise-cpp.dir/primitives/eltwise.cpp.o
+[ 55%] Building CXX object examples/CMakeFiles/getting-started-cpp.dir/getting_started.cpp.o
+[ 56%] Building C object tests/CMakeFiles/api-c.dir/api.c.o
+[ 56%] Building CXX object examples/CMakeFiles/primitives-logsoftmax-cpp.dir/primitives/logsoftmax.cpp.o
+[ 56%] Building CXX object examples/CMakeFiles/primitives-layer-normalization-cpp.dir/primitives/layer_normalization.cpp.o
+[ 56%] Building CXX object examples/CMakeFiles/bnorm-u8-via-binary-postops-cpp.dir/bnorm_u8_via_binary_postops.cpp.o
+[ 56%] Building CXX object tests/gtests/CMakeFiles/test_iface_wino_convolution.dir/main.cpp.o
+[ 56%] Building CXX object tests/gtests/CMakeFiles/test_iface_runtime_dims.dir/main.cpp.o
+[ 57%] Building CXX object tests/gtests/CMakeFiles/test_iface_runtime_dims.dir/test_iface_runtime_dims.cpp.o
+[ 58%] Building CXX object examples/CMakeFiles/primitives-pooling-cpp.dir/primitives/pooling.cpp.o
+[ 58%] Building CXX object tests/gtests/CMakeFiles/test_batch_normalization_s8.dir/main.cpp.o
+[ 58%] Building CXX object tests/gtests/CMakeFiles/test_convolution_forward_u8s8fp.dir/main.cpp.o
+[ 58%] Building CXX object tests/gtests/CMakeFiles/test_convolution_eltwise_forward_f32.dir/test_convolution_eltwise_forward_f32.cpp.o
+[ 58%] Building CXX object tests/gtests/CMakeFiles/test_deconvolution.dir/test_deconvolution.cpp.o
+[ 58%] Building CXX object tests/gtests/CMakeFiles/test_iface_attr.dir/main.cpp.o
+[ 58%] Building CXX object tests/gtests/CMakeFiles/test_deconvolution.dir/main.cpp.o
+[ 58%] Building CXX object tests/gtests/CMakeFiles/test_batch_normalization_f32.dir/main.cpp.o
+[ 58%] Building CXX object tests/gtests/CMakeFiles/test_cross_engine_reorder.dir/main.cpp.o
+[ 58%] Building CXX object tests/gtests/CMakeFiles/test_iface_handle.dir/test_iface_handle.cpp.o
+[ 58%] Building C object examples/CMakeFiles/cnn-inference-f32-c.dir/cnn_inference_f32.c.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_iface_runtime_attr.dir/test_iface_runtime_attr.cpp.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_iface_pd.dir/test_iface_pd.cpp.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_iface_binary_bcast.dir/test_iface_binary_bcast.cpp.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_gemm_u8s8s32.dir/test_gemm_u8s8s32.cpp.o
+[ 59%] Building CXX object examples/CMakeFiles/primitives-binary-cpp.dir/primitives/binary.cpp.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_reorder.dir/main.cpp.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_isa_mask.dir/main.cpp.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_iface_pd.dir/main.cpp.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_inner_product_backward_weights.dir/test_inner_product_backward_weights.cpp.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_isa_mask.dir/test_isa_mask.cpp.o
+[ 59%] Building CXX object examples/CMakeFiles/primitives-prelu-cpp.dir/primitives/prelu.cpp.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_convolution_eltwise_forward_f32.dir/main.cpp.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_iface_wino_convolution.dir/test_iface_wino_convolution.cpp.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_convolution_forward_u8s8fp.dir/test_convolution_forward_u8s8fp.cpp.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_iface_attr.dir/test_iface_attr.cpp.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_iface_primitive_cache.dir/test_iface_primitive_cache.cpp.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_isa_hints.dir/main.cpp.o
+[ 59%] Building CXX object tests/gtests/CMakeFiles/test_convolution_eltwise_forward_x8s8f32s32.dir/main.cpp.o
+[ 60%] Building CXX object tests/gtests/CMakeFiles/test_convolution_backward_weights_f32.dir/test_convolution_backward_weights_f32.cpp.o
+[ 60%] Building CXX object tests/gtests/CMakeFiles/test_concat.dir/test_concat.cpp.o
+[ 60%] Building CXX object tests/gtests/CMakeFiles/test_gemm_u8s8s32.dir/main.cpp.o
+[ 61%] Building CXX object tests/gtests/CMakeFiles/test_inner_product_backward_weights.dir/main.cpp.o
+[ 61%] Building CXX object tests/gtests/CMakeFiles/test_iface_weights_format.dir/main.cpp.o
+[ 61%] Building CXX object tests/gtests/CMakeFiles/test_iface_handle.dir/main.cpp.o
+[ 61%] Building CXX object tests/gtests/CMakeFiles/test_cross_engine_reorder.dir/test_cross_engine_reorder.cpp.o
+[ 61%] Building CXX object tests/gtests/CMakeFiles/test_batch_normalization_f32.dir/test_batch_normalization_f32.cpp.o
+[ 61%] Building CXX object tests/gtests/CMakeFiles/test_convolution_backward_data_f32.dir/test_convolution_backward_data_f32.cpp.o
+[ 61%] Building CXX object tests/gtests/CMakeFiles/test_concurrency.dir/test_concurrency.cpp.o
+[ 61%] Building CXX object tests/gtests/CMakeFiles/test_iface_primitive_cache.dir/main.cpp.o
+[ 61%] Building CXX object tests/gtests/CMakeFiles/test_convolution_format_any.dir/test_convolution_format_any.cpp.o
+[ 61%] Building CXX object tests/gtests/CMakeFiles/test_concurrency.dir/main.cpp.o
+[ 61%] Building CXX object tests/gtests/CMakeFiles/test_layer_normalization_v2.dir/main.cpp.o
+[ 63%] Building CXX object tests/gtests/CMakeFiles/test_convolution_backward_weights_f32.dir/main.cpp.o
+[ 63%] Building CXX object tests/gtests/CMakeFiles/test_primitive_cache_mt.dir/main.cpp.o
+[ 63%] Building CXX object tests/gtests/CMakeFiles/test_convolution_format_any.dir/main.cpp.o
+[ 63%] Building CXX object tests/gtests/CMakeFiles/test_iface_pd_iter.dir/test_iface_pd_iter.cpp.o
+[ 64%] Building CXX object tests/gtests/CMakeFiles/test_isa_hints.dir/test_isa_hints.cpp.o
+[ 64%] Building CXX object tests/gtests/CMakeFiles/test_shuffle.dir/test_shuffle.cpp.o
+[ 64%] Building CXX object tests/gtests/CMakeFiles/test_softmax_v2.dir/main.cpp.o
+[ 64%] Building CXX object tests/gtests/CMakeFiles/test_reorder.dir/test_reorder.cpp.o
+[ 64%] Building CXX object tests/gtests/CMakeFiles/test_batch_normalization_s8.dir/test_batch_normalization_s8.cpp.o
+[ 64%] Building CXX object tests/gtests/CMakeFiles/test_concat.dir/main.cpp.o
+[ 64%] Building CXX object tests/gtests/CMakeFiles/test_convolution_backward_data_f32.dir/main.cpp.o
+[ 64%] Building CXX object tests/gtests/CMakeFiles/test_primitive_cache_mt.dir/test_primitive_cache_mt.cpp.o
+[ 64%] Building CXX object tests/gtests/CMakeFiles/test_iface_weights_format.dir/test_iface_weights_format.cpp.o
+[ 65%] Building CXX object tests/gtests/CMakeFiles/test_layer_normalization_v2.dir/test_layer_normalization_v2.cpp.o
+[ 65%] Building CXX object examples/CMakeFiles/primitives-batch-normalization-cpp.dir/primitives/batch_normalization.cpp.o
+[ 65%] Building CXX object examples/CMakeFiles/primitives-inner-product-cpp.dir/primitives/inner_product.cpp.o
+[ 65%] Building CXX object tests/gtests/CMakeFiles/test_shuffle.dir/main.cpp.o
+[ 65%] Building CXX object tests/gtests/CMakeFiles/test_pooling_backward.dir/main.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_rnn_forward.dir/main.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_lrn_forward.dir/main.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_lrn_backward.dir/main.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_convolution_forward_u8s8s32.dir/main.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_logsoftmax.dir/main.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_convolution_forward_f32.dir/main.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_logsoftmax.dir/test_logsoftmax.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_gemm_f32.dir/test_gemm_f32.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_gemm_bf16bf16f32.dir/test_gemm_bf16bf16f32.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_layer_normalization.dir/main.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_softmax_v2.dir/test_softmax_v2.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_lrn_forward.dir/test_lrn_forward.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_gemm_f32.dir/main.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_matmul.dir/main.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_iface_pd_iter.dir/main.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_convolution_forward_u8s8s32.dir/test_convolution_forward_u8s8s32.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_persistent_cache_api.dir/main.cpp.o
+[ 66%] Building CXX object tests/gtests/CMakeFiles/test_lrn_backward.dir/test_lrn_backward.cpp.o
+[ 67%] Building CXX object tests/gtests/CMakeFiles/test_persistent_cache_api.dir/test_persistent_cache_api.cpp.o
+[ 67%] Building CXX object tests/gtests/CMakeFiles/test_pooling_backward.dir/test_pooling_backward.cpp.o
+[ 68%] Building CXX object tests/gtests/CMakeFiles/test_matmul.dir/test_matmul.cpp.o
+[ 68%] Building CXX object tests/gtests/CMakeFiles/test_rnn_forward.dir/test_rnn_forward.cpp.o
+[ 68%] Building CXX object tests/gtests/CMakeFiles/test_layer_normalization.dir/test_layer_normalization.cpp.o
+[ 69%] Building CXX object tests/gtests/CMakeFiles/test_convolution_forward_f32.dir/test_convolution_forward_f32.cpp.o
+[ 69%] Building CXX object tests/gtests/CMakeFiles/test_convolution_eltwise_forward_x8s8f32s32.dir/test_convolution_eltwise_forward_x8s8f32s32.cpp.o
+[ 70%] Building CXX object tests/gtests/CMakeFiles/test_gemm_f16f16f32.dir/main.cpp.o
+[ 70%] Building CXX object tests/gtests/CMakeFiles/test_gemm_bf16bf16f32.dir/main.cpp.o
+[ 70%] Building CXX object tests/gtests/CMakeFiles/test_gemm_f16f16f32.dir/test_gemm_f16f16f32.cpp.o
+[ 70%] Building CXX object tests/gtests/CMakeFiles/test_gemm_bf16bf16bf16.dir/main.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_gemm_bf16bf16bf16.dir/test_gemm_bf16bf16bf16.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_gemm_f16.dir/test_gemm_f16.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_binary.dir/test_binary.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_binary.dir/main.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_gemm_f16.dir/main.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_sum.dir/main.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_eltwise.dir/main.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_resampling.dir/main.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_resampling.dir/test_resampling.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_sum.dir/test_sum.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_inner_product_backward_data.dir/test_inner_product_backward_data.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_inner_product_backward_data.dir/main.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_eltwise.dir/test_eltwise.cpp.o
+[ 71%] Building CXX object tests/gtests/internals/CMakeFiles/test_internals.dir/test_bcast_strategy.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_softmax.dir/test_softmax.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_reduction.dir/main.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_global_scratchpad.dir/test_global_scratchpad.cpp.o
+[ 71%] Building CXX object tests/gtests/internals/CMakeFiles/test_internals.dir/test_bfloat16.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_global_scratchpad.dir/main.cpp.o
+[ 71%] Building CXX object tests/gtests/internals/CMakeFiles/test_internals.dir/test_comparison_operators.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_isa_iface.dir/test_isa_iface.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_pooling_forward.dir/test_pooling_forward.cpp.o
+[ 71%] Building CXX object tests/gtests/internals/CMakeFiles/test_internals.dir/test_dnnl_threading.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_isa_iface.dir/main.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_pooling_forward.dir/main.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_gemm_s8u8s32.dir/test_gemm_s8u8s32.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_softmax.dir/main.cpp.o
+[ 71%] Building CXX object tests/gtests/regression/CMakeFiles/test_regression.dir/test_binary_stride.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_reduction.dir/test_reduction.cpp.o
+[ 71%] Building CXX object tests/gtests/internals/CMakeFiles/test_internals_env_vars_dnnl.dir/__/main.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_gemm_s8s8s32.dir/test_gemm_s8s8s32.cpp.o
+[ 71%] Building CXX object tests/gtests/CMakeFiles/test_gemm_s8u8s32.dir/main.cpp.o
+[ 71%] Building CXX object tests/gtests/regression/CMakeFiles/test_regression.dir/__/main.cpp.o
+[ 72%] Building CXX object tests/gtests/internals/CMakeFiles/test_internals.dir/test_brgemm.cpp.o
+[ 72%] Building CXX object tests/gtests/internals/CMakeFiles/test_internals.dir/__/main.cpp.o
+[ 72%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/binary/binary.cpp.o
+[ 72%] Building CXX object tests/gtests/CMakeFiles/test_gemm_s8s8s32.dir/main.cpp.o
+[ 72%] Building CXX object tests/gtests/internals/CMakeFiles/test_internals_env_vars_onednn.dir/test_env_vars_onednn.cpp.o
+[ 72%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/binary/binary_aux.cpp.o
+[ 72%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/bnorm/bnorm.cpp.o
+[ 72%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/bnorm/bnorm_aux.cpp.o
+[ 72%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/bnorm/ref_bnorm.cpp.o
+[ 73%] Building CXX object tests/gtests/internals/CMakeFiles/test_internals_env_vars_onednn.dir/__/main.cpp.o
+[ 73%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/common.cpp.o
+[ 73%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/binary/ref_binary.cpp.o
+[ 73%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/conv/cfg.cpp.o
+[ 73%] Building CXX object tests/noexcept/CMakeFiles/noexcept-cpp.dir/main.cpp.o
+[ 73%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/binary/bench_binary.cpp.o
+[ 73%] Building CXX object tests/gtests/internals/CMakeFiles/test_internals_env_vars_dnnl.dir/test_env_vars_dnnl.cpp.o
+[ 73%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/benchdnn.cpp.o
+[ 73%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/conv/conv_aux.cpp.o
+[ 74%] Building CXX object tests/gtests/CMakeFiles/test_gemm_u8u8s32.dir/test_gemm_u8u8s32.cpp.o
+[ 74%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/bnorm/bench_bnorm.cpp.o
+[ 74%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/conv/ref_conv.cpp.o
+[ 74%] Building C object tests/CMakeFiles/test_c_symbols-c.dir/test_c_symbols.c.o
+[ 74%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/brgemm/bench_brgemm.cpp.o
+[ 74%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/deconv/deconv.cpp.o
+[ 74%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/conv/conv_dw_fusion.cpp.o
+[ 74%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/deconv/cfg.cpp.o
+[ 74%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/brgemm/brgemm_aux.cpp.o
+[ 74%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/brgemm/brgemm.cpp.o
+[ 74%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/dnnl_memory.cpp.o
+[ 74%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/conv/bench_conv.cpp.o
+[ 74%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/concat/bench_concat.cpp.o
+[ 74%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/concat/concat.cpp.o
+[ 77%] Building CXX object tests/gtests/CMakeFiles/test_gemm_u8u8s32.dir/main.cpp.o
+[ 77%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/deconv/deconv_aux.cpp.o
+[ 77%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/brgemm/ref_brgemm.cpp.o
+[ 77%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/eltwise/ref_eltwise.cpp.o
+[ 77%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/concat/concat_aux.cpp.o
+[ 77%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/brgemm/cfg.cpp.o
+[ 77%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/eltwise/eltwise_aux.cpp.o
+[ 78%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/deconv/ref_deconv.cpp.o
+[ 79%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/eltwise/eltwise.cpp.o
+[ 79%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/ip/cfg.cpp.o
+[ 79%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/conv/conv.cpp.o
+[ 79%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/dnn_types.cpp.o
+[ 79%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/conv/ref_wino.cpp.o
+[ 79%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/ip/ip.cpp.o
+[ 79%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/concat/ref_concat.cpp.o
+[ 79%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/deconv/ref_wino.cpp.o
+[ 79%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/dnnl_debug_autogenerated.cpp.o
+[ 79%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/ip/bench_ip.cpp.o
+[ 79%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/deconv/bench_deconv.cpp.o
+[ 79%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/lnorm/ref_lnorm.cpp.o
+[ 79%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/eltwise/bench_eltwise.cpp.o
+[ 79%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/matmul/bench_matmul.cpp.o
+[ 80%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/lrn/ref_lrn.cpp.o
+[ 80%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/lrn/bench_lrn.cpp.o
+[ 80%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/dnnl_common.cpp.o
+[ 80%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/matmul/matmul_aux.cpp.o
+[ 80%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/ip/ip_aux.cpp.o
+[ 80%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/lnorm/lnorm_aux.cpp.o
+[ 81%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/matmul/cfg.cpp.o
+[ 81%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/ip/ref_ip.cpp.o
+[ 81%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/lnorm/lnorm.cpp.o
+[ 81%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/lrn/lrn.cpp.o
+[ 81%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/lrn/lrn_aux.cpp.o
+[ 81%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/pool/cfg.cpp.o
+[ 81%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/lnorm/bench_lnorm.cpp.o
+[ 81%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/pool/pool_aux.cpp.o
+[ 81%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/pool/ref_pool.cpp.o
+[ 81%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/pool/bench_pool.cpp.o
+[ 81%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/prelu/bench_prelu.cpp.o
+[ 82%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/pool/pool.cpp.o
+[ 82%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/matmul/ref_matmul.cpp.o
+[ 82%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/prelu/prelu.cpp.o
+[ 82%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/prelu/ref_prelu.cpp.o
+[ 82%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/matmul/matmul.cpp.o
+[ 82%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/reorder/bench_reorder.cpp.o
+[ 82%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/reduction/bench_reduction.cpp.o
+[ 82%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/prelu/prelu_aux.cpp.o
+[ 82%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/reduction/reduction_aux.cpp.o
+[ 83%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/reduction/reduction.cpp.o
+[ 83%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/reorder/reorder_aux.cpp.o
+[ 83%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/reduction/ref_reduction.cpp.o
+[ 83%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/resampling/resampling.cpp.o
+[ 83%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/reorder/cfg.cpp.o
+[ 83%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/reorder/ref_reorder.cpp.o
+[ 83%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/reorder/reorder.cpp.o
+[ 83%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/rnn/ref_rnn_bwd.cpp.o
+[ 84%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/resampling/ref_resampling.cpp.o
+[ 84%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/resampling/bench_resampling.cpp.o
+[ 84%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/self/common.cpp.o
+[ 84%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/rnn/lbr_gru_cell.cpp.o
+[ 85%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/self/bnorm.cpp.o
+[ 85%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/rnn/gru_cell.cpp.o
+[ 85%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/self/conv.cpp.o
+[ 85%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/self/memory.cpp.o
+[ 85%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/rnn/ref_rnn_fwd.cpp.o
+[ 85%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/rnn/rnn.cpp.o
+[ 85%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/resampling/resampling_aux.cpp.o
+[ 85%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/self/res.cpp.o
+[ 85%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/rnn/rnn_cell.cpp.o
+[ 86%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/rnn/lstm_cell.cpp.o
+[ 86%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/softmax/softmax_aux.cpp.o
+[ 86%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/shuffle/shuffle_aux.cpp.o
+[ 86%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/softmax/ref_softmax.cpp.o
+[ 86%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/rnn/rnn_aux.cpp.o
+[ 86%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/rnn/rnn_utils.cpp.o
+[ 86%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/softmax/bench_softmax.cpp.o
+[ 86%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/self/self.cpp.o
+[ 86%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/rnn/bench_rnn.cpp.o
+[ 87%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/rnn/cfg.cpp.o
+[ 87%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/shuffle/shuffle.cpp.o
+[ 87%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/shuffle/ref_shuffle.cpp.o
+[ 87%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/shuffle/bench_shuffle.cpp.o
+[ 87%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/softmax/softmax.cpp.o
+[ 87%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/utils/dims.cpp.o
+[ 87%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/utils/compare.cpp.o
+[ 88%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/utils/timer.cpp.o
+[ 88%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/utils/perf_report.cpp.o
+[ 88%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/zeropad/zeropad.cpp.o
+[ 88%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/zeropad/bench_zeropad.cpp.o
+[ 88%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/sum/ref_sum.cpp.o
+[ 88%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/sum/bench_sum.cpp.o
+[ 88%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/zeropad/zeropad_aux.cpp.o
+[ 88%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/sum/sum_aux.cpp.o
+[ 89%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/utils/dnnl_query.cpp.o
+[ 89%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/sum/sum.cpp.o
+[ 89%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/utils/parallel.cpp.o
+[ 89%] Building CXX object tests/benchdnn/CMakeFiles/benchdnn.dir/utils/parser.cpp.o
+[ 89%] Linking C executable cpu-cnn-training-f32-c
+[ 90%] Linking C executable cnn-inference-f32-c
+[ 90%] Linking C executable api-c
+[ 90%] Linking CXX executable primitives-shuffle-cpp
+[ 91%] Linking CXX executable primitives-reorder-cpp
+[ 91%] Linking CXX executable primitives-concat-cpp
+[ 91%] Linking CXX executable getting-started-cpp
+[ 91%] Linking CXX executable primitives-augru-cpp
+[ 91%] Linking CXX executable primitives-logsoftmax-cpp
+[ 91%] Linking CXX executable cpu-tutorials-matmul-matmul-quantization-cpp
+[ 91%] Linking CXX executable primitives-lstm-cpp
+[ 91%] Built target cpu-cnn-training-f32-c
+[ 91%] Linking CXX executable cpu-tutorials-matmul-sgemm-and-matmul-cpp
+[ 91%] Linking C executable test_c_symbols-c
+[ 91%] Linking CXX executable primitives-layer-normalization-cpp
+[ 91%] Linking CXX executable primitives-prelu-cpp
+[ 91%] Built target api-c
+[ 91%] Linking CXX executable primitives-softmax-cpp
+[ 91%] Built target primitives-reorder-cpp
+[ 91%] Built target primitives-shuffle-cpp
+[ 91%] Linking CXX executable primitives-pooling-cpp
+[ 91%] Linking CXX executable primitives-resampling-cpp
+[ 91%] Linking CXX executable primitives-batch-normalization-cpp
+[ 91%] Linking CXX executable primitives-binary-cpp
+[ 91%] Linking CXX executable primitives-reduction-cpp
+[ 91%] Built target getting-started-cpp
+[ 92%] Linking CXX executable primitives-sum-cpp
+[ 92%] Linking CXX executable memory-format-propagation-cpp
+[ 92%] Built target cpu-tutorials-matmul-matmul-quantization-cpp
+[ 92%] Linking CXX executable cnn-inference-int8-cpp
+[ 92%] Built target primitives-logsoftmax-cpp
+[ 92%] Built target cpu-tutorials-matmul-sgemm-and-matmul-cpp
+[ 92%] Built target primitives-lstm-cpp
+[ 92%] Built target cnn-inference-f32-c
+[ 92%] Built target primitives-concat-cpp
+[ 92%] Built target primitives-augru-cpp
+[ 92%] Built target test_c_symbols-c
+[ 92%] Built target primitives-prelu-cpp
+[ 92%] Built target primitives-layer-normalization-cpp
+[ 92%] Linking CXX executable primitives-eltwise-cpp
+[ 92%] Linking CXX executable bnorm-u8-via-binary-postops-cpp
+[ 92%] Linking CXX executable matmul-perf-cpp
+[ 92%] Linking CXX executable primitives-matmul-cpp
+[ 92%] Linking CXX executable primitives-lrn-cpp
+[ 93%] Linking CXX executable tutorials-matmul-inference-int8-matmul-cpp
+[ 93%] Linking CXX executable noexcept-cpp
+[ 93%] Built target primitives-softmax-cpp
+[ 93%] Built target primitives-batch-normalization-cpp
+[ 93%] Built target primitives-resampling-cpp
+[ 93%] Linking CXX executable primitives-inner-product-cpp
+[ 93%] Linking CXX executable performance-profiling-cpp
+[ 93%] Built target primitives-pooling-cpp
+[ 93%] Built target primitives-sum-cpp
+[ 93%] Built target memory-format-propagation-cpp
+[ 93%] Built target primitives-reduction-cpp
+[ 93%] Built target primitives-binary-cpp
+[ 93%] Built target noexcept-cpp
+[ 93%] Built target cnn-inference-int8-cpp
+[ 93%] Built target tutorials-matmul-inference-int8-matmul-cpp
+[ 93%] Built target primitives-lrn-cpp
+[ 93%] Linking CXX executable test_iface_primitive_cache
+[ 93%] Built target primitives-eltwise-cpp
+[ 93%] Built target bnorm-u8-via-binary-postops-cpp
+[ 93%] Built target matmul-perf-cpp
+[ 93%] Built target primitives-matmul-cpp
+[ 93%] Built target primitives-inner-product-cpp
+[ 93%] Built target performance-profiling-cpp
+[ 93%] Linking CXX executable test_iface_pd
+[ 93%] Built target test_iface_primitive_cache
+[ 94%] Linking CXX executable test_iface_weights_format
+[ 94%] Built target test_iface_pd
+[ 94%] Linking CXX executable primitives-convolution-cpp
+[ 94%] Linking CXX executable test_internals_env_vars_dnnl
+[ 94%] Linking CXX executable test_iface_handle
+[ 94%] Linking CXX executable test_global_scratchpad
+[ 94%] Built target test_iface_weights_format
+[ 94%] Built target primitives-convolution-cpp
+[ 94%] Built target test_internals_env_vars_dnnl
+[ 94%] Built target test_iface_handle
+[ 94%] Linking CXX executable test_internals_env_vars_onednn
+[ 94%] Built target test_global_scratchpad
+[ 94%] Linking CXX executable test_iface_pd_iter
+[ 94%] Linking CXX executable test_persistent_cache_api
+[ 95%] Linking CXX executable test_isa_iface
+[ 95%] Linking CXX executable test_isa_hints
+[ 95%] Built target test_internals_env_vars_onednn
+[ 95%] Built target test_iface_pd_iter
+[ 95%] Linking CXX executable test_isa_mask
+[ 95%] Linking CXX executable test_primitive_cache_mt
+[ 95%] Linking CXX executable test_iface_runtime_dims
+[ 95%] Built target test_persistent_cache_api
+[ 95%] Built target test_isa_iface
+[ 95%] Built target test_isa_hints
+[ 95%] Linking CXX executable cnn-training-f32-cpp
+[ 96%] Linking CXX executable test_regression
+[ 96%] Built target test_primitive_cache_mt
+[ 96%] Built target test_isa_mask
+[ 96%] Built target test_iface_runtime_dims
+[ 96%] Built target cnn-training-f32-cpp
+[ 96%] Linking CXX executable cpu-rnn-inference-int8-cpp
+[ 96%] Linking CXX executable rnn-training-f32-cpp
+[ 96%] Built target test_regression
+[ 96%] Linking CXX executable test_concurrency
+[ 96%] Linking CXX executable cpu-rnn-inference-f32-cpp
+[ 96%] Built target cpu-rnn-inference-int8-cpp
+[ 96%] Built target rnn-training-f32-cpp
+[ 97%] Linking CXX executable test_cross_engine_reorder
+[ 97%] Built target cpu-rnn-inference-f32-cpp
+[ 97%] Linking CXX executable test_convolution_format_any
+[ 97%] Built target test_concurrency
+[ 97%] Linking CXX executable test_iface_binary_bcast
+[ 97%] Built target test_cross_engine_reorder
+[ 97%] Built target test_convolution_format_any
+[ 97%] Linking CXX executable test_inner_product_backward_weights
+[ 97%] Built target test_iface_binary_bcast
+[ 97%] Built target test_inner_product_backward_weights
+[ 97%] Linking CXX executable test_iface_wino_convolution
+[ 97%] Linking CXX executable cnn-training-bf16-cpp
+[ 97%] Linking CXX executable test_convolution_forward_u8s8fp
+[ 97%] Linking CXX executable test_inner_product_forward
+[ 97%] Built target test_iface_wino_convolution
+[ 97%] Built target cnn-training-bf16-cpp
+[ 97%] Built target test_inner_product_forward
+[ 97%] Built target test_convolution_forward_u8s8fp
+[ 97%] Linking CXX executable benchdnn
+[ 97%] Linking CXX executable test_convolution_forward_u8s8s32
+[ 97%] Linking CXX executable test_inner_product_backward_data
+[ 97%] Built target benchdnn
+[ 97%] Built target test_convolution_forward_u8s8s32
+[ 97%] Built target test_inner_product_backward_data
+[ 97%] Linking CXX executable test_resampling
+[ 97%] Linking CXX executable test_gemm_bf16bf16bf16
+[ 97%] Linking CXX executable test_iface_runtime_attr
+[ 98%] Linking CXX executable test_batch_normalization_s8
+[ 98%] Linking CXX executable test_layer_normalization_v2
+[ 98%] Built target test_resampling
+[ 98%] Built target test_gemm_bf16bf16bf16
+[ 98%] Built target test_iface_runtime_attr
+[ 98%] Built target test_batch_normalization_s8
+[ 98%] Linking CXX executable test_deconvolution
+[ 98%] Linking CXX executable test_batch_normalization_f32
+[ 98%] Built target test_layer_normalization_v2
+[ 98%] Built target test_deconvolution
+[ 98%] Built target test_batch_normalization_f32
+[ 98%] Linking CXX executable test_gemm_f16f16f32
+[ 98%] Linking CXX executable test_layer_normalization
+[ 98%] Built target test_gemm_f16f16f32
+[ 98%] Built target test_layer_normalization
+[ 98%] Linking CXX executable test_matmul
+[ 98%] Built target test_matmul
+[ 98%] Linking CXX executable test_pooling_backward
+[ 98%] Linking CXX executable test_gemm_f16
+[ 98%] Built target test_pooling_backward
+[ 98%] Linking CXX executable test_internals
+[ 98%] Built target test_gemm_f16
+[ 98%] Linking CXX executable cnn-inference-f32-cpp
+[ 98%] Built target test_internals
+[ 98%] Built target cnn-inference-f32-cpp
+[ 98%] Linking CXX executable test_lrn_backward
+[ 98%] Linking CXX executable test_softmax_v2
+[ 98%] Linking CXX executable test_gemm_f32
+[ 99%] Linking CXX executable test_iface_attr
+[ 99%] Built target test_softmax_v2
+[ 99%] Built target test_lrn_backward
+[ 99%] Built target test_gemm_f32
+[ 99%] Linking CXX executable test_gemm_bf16bf16f32
+[ 99%] Built target test_iface_attr
+[ 99%] Built target test_gemm_bf16bf16f32
+[ 99%] Linking CXX executable test_convolution_eltwise_forward_x8s8f32s32
+[ 99%] Built target test_convolution_eltwise_forward_x8s8f32s32
+[ 99%] Linking CXX executable test_lrn_forward
+[ 99%] Built target test_lrn_forward
+[ 99%] Linking CXX executable test_convolution_eltwise_forward_f32
+[ 99%] Linking CXX executable test_reduction
+[ 99%] Built target test_convolution_eltwise_forward_f32
+[ 99%] Built target test_reduction
+[ 99%] Linking CXX executable test_convolution_backward_weights_f32
+[ 99%] Linking CXX executable test_gemm_u8s8s32
+[ 99%] Linking CXX executable test_gemm_s8u8s32
+[ 99%] Built target test_convolution_backward_weights_f32
+[ 99%] Linking CXX executable test_convolution_backward_data_f32
+[ 99%] Built target test_gemm_u8s8s32
+[ 99%] Built target test_gemm_s8u8s32
+[ 99%] Linking CXX executable test_softmax
+[ 99%] Built target test_convolution_backward_data_f32
+[ 99%] Built target test_softmax
+[ 99%] Linking CXX executable test_convolution_forward_f32
+[ 99%] Linking CXX executable test_gemm_u8u8s32
+[100%] Linking CXX executable test_gemm_s8s8s32
+[100%] Built target test_convolution_forward_f32
+[100%] Linking CXX executable test_logsoftmax
+[100%] Built target test_gemm_u8u8s32
+[100%] Built target test_gemm_s8s8s32
+[100%] Built target test_logsoftmax
+[100%] Linking CXX executable test_reorder
+[100%] Built target test_reorder
+[100%] Linking CXX executable test_shuffle
+[100%] Built target test_shuffle
+[100%] Linking CXX executable test_rnn_forward
+[100%] Linking CXX executable test_concat
+[100%] Built target test_rnn_forward
+[100%] Linking CXX executable test_pooling_forward
+[100%] Built target test_concat
+[100%] Built target test_pooling_forward
+[100%] Linking CXX executable test_sum
+[100%] Built target test_sum
+[100%] Linking CXX executable test_binary
+[100%] Built target test_binary
+[100%] Linking CXX executable test_eltwise
+[100%] Built target test_eltwise
+Consolidate compiler generated dependencies of target dnnl_cpu_x64
+[ 29%] Built target dnnl_cpu_x64
+Consolidate compiler generated dependencies of target dnnl_common
+[ 36%] Built target dnnl_common
+Consolidate compiler generated dependencies of target dnnl_cpu
+[ 49%] Built target dnnl_cpu
+[ 49%] Built target dnnl
+Consolidate compiler generated dependencies of target tutorials-matmul-inference-int8-matmul-cpp
+[ 50%] Built target tutorials-matmul-inference-int8-matmul-cpp
+Consolidate compiler generated dependencies of target rnn-training-f32-cpp
+[ 50%] Built target rnn-training-f32-cpp
+Consolidate compiler generated dependencies of target primitives-sum-cpp
+[ 51%] Built target primitives-sum-cpp
+Consolidate compiler generated dependencies of target primitives-softmax-cpp
+[ 51%] Built target primitives-softmax-cpp
+Consolidate compiler generated dependencies of target primitives-shuffle-cpp
+[ 51%] Built target primitives-shuffle-cpp
+Consolidate compiler generated dependencies of target performance-profiling-cpp
+[ 51%] Built target performance-profiling-cpp
+Consolidate compiler generated dependencies of target cpu-rnn-inference-int8-cpp
+[ 51%] Built target cpu-rnn-inference-int8-cpp
+Consolidate compiler generated dependencies of target cpu-rnn-inference-f32-cpp
+[ 51%] Built target cpu-rnn-inference-f32-cpp
+Consolidate compiler generated dependencies of target cnn-training-f32-cpp
+[ 52%] Built target cnn-training-f32-cpp
+Consolidate compiler generated dependencies of target matmul-perf-cpp
+[ 53%] Built target matmul-perf-cpp
+Consolidate compiler generated dependencies of target getting-started-cpp
+[ 53%] Built target getting-started-cpp
+Consolidate compiler generated dependencies of target primitives-binary-cpp
+[ 53%] Built target primitives-binary-cpp
+Consolidate compiler generated dependencies of target cpu-cnn-training-f32-c
+[ 53%] Built target cpu-cnn-training-f32-c
+Consolidate compiler generated dependencies of target memory-format-propagation-cpp
+[ 53%] Built target memory-format-propagation-cpp
+Consolidate compiler generated dependencies of target cnn-inference-f32-cpp
+[ 53%] Built target cnn-inference-f32-cpp
+Consolidate compiler generated dependencies of target cpu-tutorials-matmul-matmul-quantization-cpp
+[ 54%] Built target cpu-tutorials-matmul-matmul-quantization-cpp
+Consolidate compiler generated dependencies of target cnn-inference-f32-c
+[ 55%] Built target cnn-inference-f32-c
+Consolidate compiler generated dependencies of target bnorm-u8-via-binary-postops-cpp
+[ 55%] Built target bnorm-u8-via-binary-postops-cpp
+Consolidate compiler generated dependencies of target primitives-augru-cpp
+[ 56%] Built target primitives-augru-cpp
+Consolidate compiler generated dependencies of target primitives-batch-normalization-cpp
+[ 56%] Built target primitives-batch-normalization-cpp
+Consolidate compiler generated dependencies of target cpu-tutorials-matmul-sgemm-and-matmul-cpp
+[ 56%] Built target cpu-tutorials-matmul-sgemm-and-matmul-cpp
+Consolidate compiler generated dependencies of target cnn-training-bf16-cpp
+[ 56%] Built target cnn-training-bf16-cpp
+Consolidate compiler generated dependencies of target primitives-concat-cpp
+[ 56%] Built target primitives-concat-cpp
+Consolidate compiler generated dependencies of target primitives-layer-normalization-cpp
+[ 56%] Built target primitives-layer-normalization-cpp
+Consolidate compiler generated dependencies of target primitives-resampling-cpp
+[ 56%] Built target primitives-resampling-cpp
+Consolidate compiler generated dependencies of target primitives-convolution-cpp
+[ 57%] Built target primitives-convolution-cpp
+Consolidate compiler generated dependencies of target primitives-logsoftmax-cpp
+[ 58%] Built target primitives-logsoftmax-cpp
+Consolidate compiler generated dependencies of target primitives-eltwise-cpp
+[ 58%] Built target primitives-eltwise-cpp
+Consolidate compiler generated dependencies of target primitives-lrn-cpp
+[ 58%] Built target primitives-lrn-cpp
+Consolidate compiler generated dependencies of target cnn-inference-int8-cpp
+[ 58%] Built target cnn-inference-int8-cpp
+Consolidate compiler generated dependencies of target primitives-reduction-cpp
+[ 58%] Built target primitives-reduction-cpp
+Consolidate compiler generated dependencies of target primitives-lstm-cpp
+[ 58%] Built target primitives-lstm-cpp
+Consolidate compiler generated dependencies of target primitives-matmul-cpp
+[ 58%] Built target primitives-matmul-cpp
+Consolidate compiler generated dependencies of target primitives-inner-product-cpp
+[ 58%] Built target primitives-inner-product-cpp
+Consolidate compiler generated dependencies of target primitives-pooling-cpp
+[ 59%] Built target primitives-pooling-cpp
+Consolidate compiler generated dependencies of target primitives-prelu-cpp
+[ 59%] Built target primitives-prelu-cpp
+Consolidate compiler generated dependencies of target primitives-reorder-cpp
+[ 60%] Built target primitives-reorder-cpp
+Consolidate compiler generated dependencies of target test_c_symbols-c
+[ 60%] Built target test_c_symbols-c
+Consolidate compiler generated dependencies of target api-c
+[ 60%] Built target api-c
+Consolidate compiler generated dependencies of target dnnl_gtest
+[ 60%] Built target dnnl_gtest
+Consolidate compiler generated dependencies of target test_isa_mask
+[ 60%] Built target test_isa_mask
+Consolidate compiler generated dependencies of target test_inner_product_forward
+[ 60%] Built target test_inner_product_forward
+Consolidate compiler generated dependencies of target test_gemm_f32
+[ 60%] Built target test_gemm_f32
+Consolidate compiler generated dependencies of target test_iface_runtime_attr
+[ 61%] Built target test_iface_runtime_attr
+Consolidate compiler generated dependencies of target test_iface_runtime_dims
+[ 61%] Built target test_iface_runtime_dims
+Consolidate compiler generated dependencies of target test_iface_handle
+[ 61%] Built target test_iface_handle
+Consolidate compiler generated dependencies of target test_iface_binary_bcast
+[ 61%] Built target test_iface_binary_bcast
+Consolidate compiler generated dependencies of target test_iface_wino_convolution
+[ 61%] Built target test_iface_wino_convolution
+Consolidate compiler generated dependencies of target test_iface_pd
+[ 62%] Built target test_iface_pd
+Consolidate compiler generated dependencies of target test_convolution_forward_u8s8fp
+[ 63%] Built target test_convolution_forward_u8s8fp
+Consolidate compiler generated dependencies of target test_cross_engine_reorder
+[ 64%] Built target test_cross_engine_reorder
+Consolidate compiler generated dependencies of target test_convolution_eltwise_forward_f32
+[ 64%] Built target test_convolution_eltwise_forward_f32
+Consolidate compiler generated dependencies of target test_reorder
+[ 64%] Built target test_reorder
+Consolidate compiler generated dependencies of target test_gemm_u8s8s32
+[ 64%] Built target test_gemm_u8s8s32
+Consolidate compiler generated dependencies of target test_inner_product_backward_weights
+[ 65%] Built target test_inner_product_backward_weights
+Consolidate compiler generated dependencies of target test_iface_primitive_cache
+[ 65%] Built target test_iface_primitive_cache
+Consolidate compiler generated dependencies of target test_batch_normalization_s8
+[ 66%] Built target test_batch_normalization_s8
+Consolidate compiler generated dependencies of target test_iface_attr
+[ 67%] Built target test_iface_attr
+Consolidate compiler generated dependencies of target test_shuffle
+[ 67%] Built target test_shuffle
+Consolidate compiler generated dependencies of target test_batch_normalization_f32
+[ 67%] Built target test_batch_normalization_f32
+Consolidate compiler generated dependencies of target test_isa_hints
+[ 67%] Built target test_isa_hints
+Consolidate compiler generated dependencies of target test_concurrency
+[ 67%] Built target test_concurrency
+Consolidate compiler generated dependencies of target test_deconvolution
+[ 67%] Built target test_deconvolution
+Consolidate compiler generated dependencies of target test_convolution_backward_weights_f32
+[ 68%] Built target test_convolution_backward_weights_f32
+Consolidate compiler generated dependencies of target test_convolution_backward_data_f32
+[ 68%] Built target test_convolution_backward_data_f32
+Consolidate compiler generated dependencies of target test_concat
+[ 69%] Built target test_concat
+Consolidate compiler generated dependencies of target test_softmax_v2
+[ 70%] Built target test_softmax_v2
+Consolidate compiler generated dependencies of target test_layer_normalization
+[ 70%] Built target test_layer_normalization
+Consolidate compiler generated dependencies of target test_iface_weights_format
+[ 71%] Built target test_iface_weights_format
+Consolidate compiler generated dependencies of target test_convolution_eltwise_forward_x8s8f32s32
+[ 72%] Built target test_convolution_eltwise_forward_x8s8f32s32
+Consolidate compiler generated dependencies of target test_convolution_forward_u8s8s32
+[ 72%] Built target test_convolution_forward_u8s8s32
+Consolidate compiler generated dependencies of target test_primitive_cache_mt
+[ 73%] Built target test_primitive_cache_mt
+Consolidate compiler generated dependencies of target test_iface_pd_iter
+[ 73%] Built target test_iface_pd_iter
+Consolidate compiler generated dependencies of target test_layer_normalization_v2
+[ 74%] Built target test_layer_normalization_v2
+Consolidate compiler generated dependencies of target test_convolution_format_any
+[ 74%] Built target test_convolution_format_any
+Consolidate compiler generated dependencies of target test_rnn_forward
+[ 75%] Built target test_rnn_forward
+Consolidate compiler generated dependencies of target test_logsoftmax
+[ 75%] Built target test_logsoftmax
+Consolidate compiler generated dependencies of target test_lrn_backward
+[ 75%] Built target test_lrn_backward
+Consolidate compiler generated dependencies of target test_gemm_bf16bf16f32
+[ 75%] Built target test_gemm_bf16bf16f32
+Consolidate compiler generated dependencies of target test_pooling_backward
+[ 75%] Built target test_pooling_backward
+Consolidate compiler generated dependencies of target test_lrn_forward
+[ 76%] Built target test_lrn_forward
+Consolidate compiler generated dependencies of target test_matmul
+[ 76%] Built target test_matmul
+Consolidate compiler generated dependencies of target test_convolution_forward_f32
+[ 76%] Built target test_convolution_forward_f32
+Consolidate compiler generated dependencies of target test_gemm_f16f16f32
+[ 77%] Built target test_gemm_f16f16f32
+Consolidate compiler generated dependencies of target test_persistent_cache_api
+[ 78%] Built target test_persistent_cache_api
+Consolidate compiler generated dependencies of target test_inner_product_backward_data
+[ 78%] Built target test_inner_product_backward_data
+Consolidate compiler generated dependencies of target test_sum
+[ 78%] Built target test_sum
+Consolidate compiler generated dependencies of target test_gemm_bf16bf16bf16
+[ 79%] Built target test_gemm_bf16bf16bf16
+Consolidate compiler generated dependencies of target test_pooling_forward
+[ 79%] Built target test_pooling_forward
+Consolidate compiler generated dependencies of target test_reduction
+[ 79%] Built target test_reduction
+Consolidate compiler generated dependencies of target test_resampling
+[ 79%] Built target test_resampling
+Consolidate compiler generated dependencies of target test_binary
+[ 79%] Built target test_binary
+Consolidate compiler generated dependencies of target test_softmax
+[ 79%] Built target test_softmax
+Consolidate compiler generated dependencies of target test_isa_iface
+[ 80%] Built target test_isa_iface
+Consolidate compiler generated dependencies of target test_gemm_f16
+[ 80%] Built target test_gemm_f16
+Consolidate compiler generated dependencies of target test_gemm_s8s8s32
+[ 81%] Built target test_gemm_s8s8s32
+Consolidate compiler generated dependencies of target test_gemm_s8u8s32
+[ 81%] Built target test_gemm_s8u8s32
+Consolidate compiler generated dependencies of target test_eltwise
+[ 81%] Built target test_eltwise
+Consolidate compiler generated dependencies of target test_global_scratchpad
+[ 81%] Built target test_global_scratchpad
+Consolidate compiler generated dependencies of target test_gemm_u8u8s32
+[ 82%] Built target test_gemm_u8u8s32
+Consolidate compiler generated dependencies of target test_internals
+[ 83%] Built target test_internals
+Consolidate compiler generated dependencies of target test_internals_env_vars_onednn
+[ 84%] Built target test_internals_env_vars_onednn
+Consolidate compiler generated dependencies of target test_internals_env_vars_dnnl
+[ 84%] Built target test_internals_env_vars_dnnl
+Consolidate compiler generated dependencies of target test_regression
+[ 85%] Built target test_regression
+Consolidate compiler generated dependencies of target benchdnn
+[100%] Built target benchdnn
+Consolidate compiler generated dependencies of target noexcept-cpp
+[100%] Built target noexcept-cpp
+Install the project...
+-- Install configuration: "Release"
+-- Installing: /opt/workdir/code/dlrm/spronednn/lib64/libdnnl.so.2.7
+-- Installing: /opt/workdir/code/dlrm/spronednn/lib64/libdnnl.so.2
+-- Installing: /opt/workdir/code/dlrm/spronednn/lib64/libdnnl.so
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/dnnl.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/dnnl.hpp
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/dnnl_config.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/dnnl_debug.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/dnnl_ocl.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/dnnl_ocl.hpp
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/dnnl_sycl.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/dnnl_sycl.hpp
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/dnnl_sycl_types.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/dnnl_threadpool.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/dnnl_threadpool.hpp
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/dnnl_threadpool_iface.hpp
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/dnnl_types.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/dnnl_version.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/oneapi/dnnl/dnnl_config.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/oneapi/dnnl/dnnl_version.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/oneapi/dnnl/dnnl.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/oneapi/dnnl/dnnl.hpp
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/oneapi/dnnl/dnnl_debug.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/oneapi/dnnl/dnnl_ocl.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/oneapi/dnnl/dnnl_ocl.hpp
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/oneapi/dnnl/dnnl_ocl_types.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/oneapi/dnnl/dnnl_sycl.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/oneapi/dnnl/dnnl_sycl.hpp
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/oneapi/dnnl/dnnl_sycl_types.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/oneapi/dnnl/dnnl_threadpool.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/oneapi/dnnl/dnnl_threadpool.hpp
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/oneapi/dnnl/dnnl_threadpool_iface.hpp
+-- Installing: /opt/workdir/code/dlrm/spronednn/include/oneapi/dnnl/dnnl_types.h
+-- Installing: /opt/workdir/code/dlrm/spronednn/lib64/cmake/dnnl/dnnl-config.cmake
+-- Installing: /opt/workdir/code/dlrm/spronednn/lib64/cmake/dnnl/dnnl-config-version.cmake
+-- Installing: /opt/workdir/code/dlrm/spronednn/lib64/cmake/dnnl/dnnl-targets.cmake
+-- Installing: /opt/workdir/code/dlrm/spronednn/lib64/cmake/dnnl/dnnl-targets-release.cmake
+-- Installing: /opt/workdir/code/dlrm/spronednn/share/doc/dnnl/LICENSE
+-- Installing: /opt/workdir/code/dlrm/spronednn/share/doc/dnnl/THIRD-PARTY-PROGRAMS
+-- Installing: /opt/workdir/code/dlrm/spronednn/share/doc/dnnl/README
+-- The C compiler identification is IntelLLVM 2022.1.0
+-- The CXX compiler identification is IntelLLVM 2022.1.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /opt/intel/oneapi/compiler/2022.1.0/linux/bin/icx - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /opt/intel/oneapi/compiler/2022.1.0/linux/bin/icpx - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found OpenMP_C: -fiopenmp (found version "5.0") 
+-- Found OpenMP_CXX: -fiopenmp (found version "5.0") 
+-- Found OpenMP: TRUE (found version "5.0")  
+-- Found ZLIB: /opt/conda/lib/libz.so (found version "1.2.13") 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /opt/workdir/code/dlrm/pytorch-cpu/src/build
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /opt/workdir/code/dlrm/pytorch-cpu/src/build
+[ 15%] Building CXX object cnpy/CMakeFiles/cnpy-static.dir/cnpy.cpp.o
+[ 15%] Building CXX object cnpy/CMakeFiles/cnpy.dir/cnpy.cpp.o
+[ 23%] Linking CXX shared library libcnpy.so
+[ 30%] Linking CXX static library libcnpy.a
+[ 30%] Built target cnpy-static
+[ 30%] Built target cnpy
+[ 38%] Building CXX object CMakeFiles/dlrminf.dir/harness/dlrm_core.cpp.o
+[ 46%] Building CXX object cnpy/CMakeFiles/example1.dir/example1.cpp.o
+[ 69%] Building CXX object CMakeFiles/dlrminf.dir/harness/dlrm_server.cpp.o
+[ 69%] Building CXX object CMakeFiles/dlrminf.dir/harness/kmp_launcher.cpp.o
+[ 69%] Building CXX object CMakeFiles/dlrminf.dir/harness/dlrm_main.cpp.o
+[ 84%] Building CXX object CMakeFiles/dlrminf.dir/harness/util.cpp.o
+[ 84%] Building CXX object CMakeFiles/dlrminf.dir/harness/dlrm_proc.cpp.o
+[ 92%] Linking CXX executable example1
+[ 92%] Built target example1
+[100%] Linking CXX executable dlrminf
+[100%] Built target dlrminf
+--> b452476547c
+[3/3] STEP 9/10: WORKDIR /opt/workdir
+--> d3cbc7274e5
+[3/3] STEP 10/10: ENV CONDA_PREFIX "/opt/conda"
+[3/3] COMMIT mlperf_inference_dlrm:3.0
+--> 4fcfa24b990
+[Warning] one or more build args were not consumed: [SOCKS_PROXY socks_proxy]
+Successfully tagged localhost/mlperf_inference_dlrm:3.0
+4fcfa24b9909d5d6a2d6c83d7a622ced4568e46b46abc5e3316074b701c6e95f

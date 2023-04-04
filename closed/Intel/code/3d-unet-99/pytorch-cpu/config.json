@@ -1,0 +1,19 @@
+{
+    "import_path": ".",
+
+    "backend-params": {
+        "model_path": "unet3d_jit_model.pt",
+        "calibration_file": "calibration_result.json"
+    },
+
+    "dataset-params": {
+         "data_path": "build/preprocessed_data",
+         "performance_count": 16,
+         "total_sample_count": 43
+    },
+    
+    "enqueue-params": {
+     "batch_size": 1
+    }
+    
+}

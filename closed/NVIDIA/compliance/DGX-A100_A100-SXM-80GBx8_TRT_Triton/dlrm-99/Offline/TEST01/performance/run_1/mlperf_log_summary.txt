@@ -1,0 +1,51 @@
+================================================
+MLPerf Results Summary
+================================================
+SUT name : DLRM_Triton_Server
+Scenario : Offline
+Mode     : PerformanceOnly
+Samples per second: 2.41084e+06
+Result is : VALID
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+
+================================================
+Additional Stats
+================================================
+Min latency (ns)                : 8738011929
+Max latency (ns)                : 657031302016
+Mean latency (ns)               : 6540931673
+50.00 percentile latency (ns)   : 332563929715
+90.00 percentile latency (ns)   : 592172087147
+95.00 percentile latency (ns)   : 624628753524
+97.00 percentile latency (ns)   : 637599760523
+99.00 percentile latency (ns)   : 650553750922
+99.90 percentile latency (ns)   : 656383788291
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 1584000000
+target_qps : 2.4e+06
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 1
+max_query_count : 0
+qsl_rng_seed : 10003631887983097364
+sample_index_rng_seed : 17183018601990103738
+schedule_rng_seed : 12134888396634371638
+accuracy_log_rng_seed : 720381539243781796
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 4096
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 204800
+
+9 warnings encountered. See detailed log.
+
+No errors encountered during test.

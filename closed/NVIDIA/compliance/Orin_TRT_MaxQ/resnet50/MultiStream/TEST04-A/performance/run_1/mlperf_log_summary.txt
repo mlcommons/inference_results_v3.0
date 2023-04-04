@@ -1,0 +1,59 @@
+================================================
+MLPerf Results Summary
+================================================
+SUT name : LWIS_Server
+Scenario : MultiStream
+Mode     : PerformanceOnly
+99th percentile latency (ns) : 3125293
+Result is : INVALID
+  Min duration satisfied : NO
+  Min queries satisfied : NO
+  Early stopping satisfied: NO
+Recommendations:
+ * Decrease the expected latency so the loadgen pre-generates more queries.
+ * The test exited early, before enough queries were issued.
+   See the detailed log for why this may have occurred.
+Early Stopping Result:
+ * Only processed 256 queries.
+ * Need to process at least 662 queries for early stopping.
+
+================================================
+Additional Stats
+================================================
+Per-query latency:  
+Min latency (ns)                : 3075309
+Max latency (ns)                : 3568051
+Mean latency (ns)               : 3100396
+50.00 percentile latency (ns)   : 3096557
+90.00 percentile latency (ns)   : 3107277
+95.00 percentile latency (ns)   : 3115597
+97.00 percentile latency (ns)   : 3118637
+99.00 percentile latency (ns)   : 3125293
+99.90 percentile latency (ns)   : 3568051
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 8
+target_qps : 348.432
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 270336
+max_query_count : 0
+qsl_rng_seed : 6655344265603136530
+sample_index_rng_seed : 15863379492028895792
+schedule_rng_seed : 12662793979680847247
+accuracy_log_rng_seed : 0
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 0
+print_timestamps : 0
+performance_issue_unique : 1
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 2048
+
+1 warning encountered. See detailed log.
+
+1 ERROR encountered. See detailed log.

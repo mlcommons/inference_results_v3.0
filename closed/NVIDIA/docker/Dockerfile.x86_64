@@ -1,0 +1,122 @@
+# Copyright (c) 2023, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE} as base
+
+# Explicitly use bash instead of sh ('echo' behaves differently on some shells)
+SHELL ["/bin/bash", "-c"]
+
+ARG CUDA_VER=12.0
+ARG USE_CPU=0
+ARG USE_NIGHTLY=1
+ARG USE_NGC=0
+
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
+ENV TZ=ETC/UTC
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install core packages
+# MLPINF-1247 - Some partners in China are reporting DNS issues with Apt, specifically with cuda-repo. Remove the .list.
+RUN rm /etc/apt/sources.list.d/cuda.list \
+ && apt update \
+ && apt install -y --no-install-recommends build-essential autoconf libtool git \
+        ccache curl wget pkg-config sudo ca-certificates automake libssl-dev \
+        bc python3-dev python3-pip google-perftools gdb libglib2.0-dev clang sshfs libre2-dev \
+        libboost-dev libnuma-dev numactl sysstat sshpass ntpdate less vim iputils-ping \
+ && apt install --only-upgrade libksba8 \
+ && apt remove -y cmake \
+ && apt remove -y libgflags-dev \
+ && apt remove -y libprotobuf-dev \
+ && apt -y autoremove
+RUN apt install -y --no-install-recommends pkg-config zip g++ zlib1g-dev unzip
+RUN apt install -y --no-install-recommends libarchive-dev
+RUN apt install -y --no-install-recommends rsync
+
+# Install cudnn and TRT if not using NGC base container
+
+# Install cudnn 8.8.0 GA
+ARG CUDNN_DEB_URL=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/
+RUN if [[ ${USE_NGC} = 0 ]]; then \
+ cd /tmp \
+ && install_deb_pkg() { wget $CUDNN_DEB_URL/$1 -O $1 && dpkg -i $1 && rm $1; } \
+ && install_deb_pkg libcudnn8_8.8.0.121-1+cuda12.0_amd64.deb \
+ && install_deb_pkg libcudnn8-dev_8.8.0.121-1+cuda12.0_amd64.deb \
+ && unset -f install_deb_pkg; fi
+
+# With latest Ubuntu:20.04 container, there will be no 'python' or 'pip' even if we have installed 'python3' and
+# 'python3-pip'. So add softlink to avoid wheel installation failure.
+RUN ln -sf /usr/bin/python3 /usr/bin/python
+RUN ln -sf /usr/bin/pip3 /usr/bin/pip
+
+# Install dependencies needed for RNN-T preprocessing
+RUN apt install -y sox
+
+# Needed by official RNNT accuracy script
+RUN apt install -y --no-install-recommends libsndfile1-dev
+
+# Needed by Triton
+RUN apt install -y rapidjson-dev
+RUN apt install -y libb64-dev
+RUN apt install -y libgtest-dev
+
+COPY requirements.x86_64.1.txt requirements.x86_64.2.txt /tmp
+WORKDIR /tmp
+
+# Set up basic setuptools for pip install commands.
+RUN python3 -m pip install --upgrade pip \
+ && python3 -m pip install --upgrade setuptools wheel virtualenv
+
+# Break requirements into two lists because some of them require that other packages be fully installed first.
+RUN python3 -m pip install -r requirements.x86_64.1.txt \
+ && python3 -m pip install -r requirements.x86_64.2.txt
+
+# install gflags
+# -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON -DBUILD_gflags_LIB=ON .. \
+RUN git clone -b v2.2.1 https://github.com/gflags/gflags.git \
+ && cd gflags \
+ && mkdir build && cd build \
+ && cmake -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON -DBUILD_gflags_LIB=ON .. \
+ && make -j \
+ && make install \
+ && cd /tmp && rm -rf gflags
+
+# install glog
+RUN git clone -b v0.3.5 https://github.com/google/glog.git \
+ && cd glog \
+ && cmake -H. -Bbuild -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON \
+ && cmake --build build \
+ && cmake --build build --target install \
+ && cd /tmp && rm -rf glog
+
+# Install CUB, needed by NMS OPT plugin
+RUN wget https://github.com/NVlabs/cub/archive/1.8.0.zip -O cub-1.8.0.zip \
+ && unzip cub-1.8.0.zip \
+ && mv cub-1.8.0/cub /usr/include/x86_64-linux-gnu/ \
+ && rm -rf cub-1.8.0.zip cub-1.8.0
+
+# Install libjemalloc2
+RUN echo 'deb http://archive.ubuntu.com/ubuntu focal main restricted universe multiverse' | tee -a /etc/apt/sources.list.d/focal.list \
+  && echo 'Package: *\nPin: release a=focal\nPin-Priority: -10\n' | tee -a /etc/apt/preferences.d/focal.pref \
+  && apt update \
+  && apt install --no-install-recommends -t focal -y libjemalloc2 libtcmalloc-minimal4
+
+# Update GLIBC version needed for Triton TF-CPU backend
+RUN if [ ${USE_CPU} = 1 ]; then \
+ apt update && apt upgrade -y libstdc++6; fi
+ENV USE_CPU=${USE_CPU}
+
+WORKDIR /work

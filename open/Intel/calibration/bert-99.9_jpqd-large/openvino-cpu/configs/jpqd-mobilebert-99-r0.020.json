@@ -1,0 +1,68 @@
+[
+    {
+        "algorithm": "movement_sparsity",
+        "params": {
+            "warmup_start_epoch": 3,
+            "warmup_end_epoch": 10,
+            "importance_regularization_factor": 0.020,
+            "enable_structured_masking": true
+        },
+        "sparse_structure_by_scopes": [
+            {
+                "mode": "block",
+                "sparse_factors": [16, 16],
+                "target_scopes": "{re}.*MobileBertAttention.*"
+            },
+            {
+                "mode": "per_dim",
+                "axis": 0,
+                "target_scopes": "{re}.*MobileBertIntermediate.*"
+            },
+            {
+                "mode": "per_dim",
+                "axis": 1,
+                "target_scopes": "{re}.*MobileBertOutput.*"
+            },
+            {
+                "mode": "per_dim",
+                "axis": 1,
+                "target_scopes": "{re}.*FFNOutput.*"
+            }
+        ],
+        "ignored_scopes": [
+            "{re}.*MobileBertEmbeddings.*",
+            "{re}.*Bottleneck.*",
+            "{re}.*OutputBottleneck.*",
+            "{re}.*qa_outputs.*"
+        ],
+    },
+    {
+        "algorithm": "quantization",
+        "preset": "mixed",
+        "overflow_fix": "disable",
+        "initializer": {
+            "range": {
+                "num_init_samples": 128,
+                "type": "percentile",
+                "params": {
+                    "min_percentile": 0.01,
+                    "max_percentile": 99.99
+                }
+            },
+            "batchnorm_adaptation": {
+                "num_bn_adaptation_samples": 16
+            }
+        },
+        "scope_overrides": {
+            "activations": {
+                "{re}.*matmul_0": {
+                    "mode": "symmetric"
+                }
+            }
+        },
+        "ignored_scopes": [
+            "{re}.*__add___[0-1]",
+            "{re}.*__truediv__*",
+        ],
+    }
+]

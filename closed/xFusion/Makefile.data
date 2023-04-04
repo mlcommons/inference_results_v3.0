@@ -1,0 +1,38 @@
+# Copyright (c) 2023, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# This Makefile includes the targets for setting up the datasets and models for MLPerf Inference workloads.
+
+
+include $(CURDIR)/Makefile.const
+
+BENCHMARKS ?= resnet50 retinanet bert dlrm rnnt 3d-unet
+
+.PHONY: download_model
+download_model: link_dirs
+	$(foreach _benchmark,$(BENCHMARKS),bash code/$(_benchmark)/tensorrt/download_model.sh &&) \
+		echo "Finished downloading all the models!"
+
+
+.PHONY: download_data
+download_data: link_dirs
+	@$(foreach _benchmark,$(BENCHMARKS),bash code/$(_benchmark)/tensorrt/download_data.sh &&) \
+		echo "Finished downloading all the datasets!"
+
+
+.PHONY: preprocess_data
+preprocess_data: link_dirs
+	@$(foreach _benchmark,$(BENCHMARKS),$(PYTHON3_CMD) -m code.$(_benchmark).tensorrt.preprocess_data --data_dir=$(DATA_DIR) --preprocessed_data_dir=$(PREPROCESSED_DATA_DIR) &&) \
+		echo "Finished preprocessing all the datasets!"
+

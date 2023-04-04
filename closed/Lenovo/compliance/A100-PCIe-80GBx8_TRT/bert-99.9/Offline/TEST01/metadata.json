@@ -1,0 +1,18 @@
+{
+    "audit_success": true,
+    "audit_test": "TEST01",
+    "benchmark_full": "bert-99.9",
+    "benchmark_short": "bert",
+    "config_name": "A100-PCIe-80GBx8_TRT-custom_k_99_9_MaxP-Offline",
+    "detected_system": "SystemConfiguration(host_cpu_conf=CPUConfiguration(layout={CPU(name=\"Intel(R) Xeon(R) Platinum 8360Y CPU @ 2.40GHz\", architecture=CPUArchitecture.x86_64, core_count=36, threads_per_core=2): 2}), host_mem_conf=MemoryConfiguration(host_memory_capacity=Memory(quantity=1.056478224, byte_suffix=ByteSuffix.TB), comparison_tolerance=0.05), accelerator_conf=AcceleratorConfiguration(layout={GPU(name=\"NVIDIA A100 80GB PCIe\", accelerator_type=AcceleratorType.Discrete, vram=Memory(quantity=80.0, byte_suffix=ByteSuffix.GiB), max_power_limit=300.0, pci_id=\"0x20B510DE\", compute_sm=80): 8}), numa_conf=NUMAConfiguration(numa_nodes={0: NUMANode(index=0, cpus=[Interval(start=0, end=35), Interval(start=72, end=107)], gpus=[0, 1, 2, 3]), 1: NUMANode(index=1, cpus=[Interval(start=36, end=71), Interval(start=108, end=143)], gpus=[4, 5, 6, 7])}, num_numa_nodes=2), system_id=\"A100-PCIe-80GBx8\")",
+    "early_stopping_met": true,
+    "result_samples_per_second": 13395.1,
+    "result_validity": "VALID",
+    "satisfies_query_constraint": false,
+    "scenario": "Offline",
+    "scenario_key": "result_samples_per_second",
+    "summary_string": "result_samples_per_second: 13395.1, Result is VALID",
+    "system_name": "A100-PCIe-80GBx8_TRT",
+    "tensorrt_version": "8.6.0",
+    "test_mode": "PerformanceOnly"
+}

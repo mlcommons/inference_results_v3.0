@@ -1,0 +1,129 @@
+# Copyright (c) 2023, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Stores constants and variables used by our Makefile
+
+# Change to name of submitter. Used as the closed/[submitter] and open/[submitter] directory names.
+SUBMITTER ?= Inspur
+
+
+# System variables / values
+SHELL := /bin/bash
+ARCH := $(shell uname -p)
+UNAME := $(shell whoami)
+UID := $(shell id -u `whoami`)
+HOSTNAME := $(shell hostname)
+GROUPNAME := $(shell id -gn `whoami`)
+GROUPID := $(shell id -g `whoami`)
+TIMESTAMP := $(shell date +'%Y.%m.%d-%H.%M.%S')
+ifndef HOST_HOSTNAME
+    HOST_HOSTNAME := $(HOSTNAME)
+endif
+HOST_HOSTNAME_SHORT := $(firstword $(subst ., , $(HOST_HOSTNAME)))
+HOSTNAME_SHORT := $(firstword $(subst ., , $(HOSTNAME)))
+PYTHON3_CMD := $(shell if ! python3 --version | grep 3.8 &> /dev/null; then echo python3.8; else echo python3; fi)
+SYSTEM_NAME ?= $(shell $(PYTHON3_CMD) -m scripts.get_system_id 2> /dev/null)
+# Intranet returns zero, public network returns non zero
+EXTERNAL_USER ?= $(shell bash $(PROJECT_ROOT)/scripts/check_intranet.sh)
+
+# Architecture / SW stack variables
+USE_CPU ?= 0
+USE_INFERENTIA ?= 0
+TARGET_X86_64 := 0
+TARGET_AARCH64 := 0
+IS_SOC := 0
+SOC_SM := 0
+ifeq ($(ARCH), x86_64)
+    TARGET_X86_64 = 1
+endif
+ifeq ($(ARCH), aarch64)
+    TARGET_AARCH64 = 1
+    # Find occurrence of Xavier in the system name
+    ifneq (,$(findstring Xavier,$(SYSTEM_NAME)))
+    	IS_SOC = 1
+    	SOC_SM = 72
+    endif
+    ifneq (,$(findstring Orin,$(SYSTEM_NAME)))
+    	IS_SOC = 1
+    	SOC_SM = 87
+    endif
+endif
+IS_HOPPER := 0  # TODO: Use nvidia-smi to check if on Hopper for now.
+ifneq ($(IS_SOC), 1)
+	NVSI_ARCH ?= $(shell nvidia-smi -q | grep -m 1 Architecture | cut -d: -f2 | sed 's/^ *//g')
+endif
+
+ifeq ($(NVSI_ARCH), Hopper)
+    IS_HOPPER = 1
+endif
+
+
+# Power constants
+# Wehther to run PTD on windows or Linux
+USE_WIN_PTD ?= 0
+
+
+# Project constants
+PROJECT_ROOT := $(shell pwd)
+BUILD_DIR    := $(PROJECT_ROOT)/build
+
+# DATA_DIR is the actual location of data in the user-specified MLPERF_SCRATCH_PATH location.
+# On the other hand, DATA_DIR_LINK is the location which our scripts assume the data to be located in. In the
+# "link_dirs" target, we create a symbolic from DATA_DIR_LINK to DATA_DIR. The same applies to PREPROCESSED_DATA_DIR and
+# MODEL_DIR as well.
+DATA_DIR_LINK := $(BUILD_DIR)/data
+PREPROCESSED_DATA_DIR_LINK := $(BUILD_DIR)/preprocessed_data
+MODEL_DIR_LINK := $(BUILD_DIR)/models
+DATA_DIR ?= $(MLPERF_SCRATCH_PATH)/data
+PREPROCESSED_DATA_DIR ?= $(MLPERF_SCRATCH_PATH)/preprocessed_data
+MODEL_DIR ?= $(MLPERF_SCRATCH_PATH)/models
+export DATA_DIR
+export PREPROCESSED_DATA_DIR
+export MODEL_DIR
+# Please run `export MLPERF_SCRATCH_PATH=<path>` to set your scratch space path.
+ifneq ($(wildcard /home/mlperf_inference_data),)
+    MLPERF_SCRATCH_PATH ?= /home/mlperf_inference_data
+endif
+
+# Specify default dir for harness output logs.
+export LOG_DIR ?= $(BUILD_DIR)/logs/$(TIMESTAMP)
+export POWER_LOGS_DIR ?= $(BUILD_DIR)/power_logs/$(TIMESTAMP)
+
+# NVIDIA GPU settings
+# Default NVIDIA_VISIBLE_DEVICES should use 'all'.
+NVIDIA_VISIBLE_DEVICES ?= all
+
+ALLOWED_MIG_CONFS := OFF 1 2 3 ALL
+MIG_CONF ?= OFF
+ifeq ($(filter $(MIG_CONF),$(ALLOWED_MIG_CONFS)),)
+    $(warning MIG_CONF was not set to a valid value. Default to OFF to be safe.)
+    MIG_CONF := OFF
+endif
+
+# Driver and cuda version check for x86 and aarch64 non-soc system
+SKIP_DRIVER_CHECK ?= 0
+MIN_DRIVER_VER := 515
+ifeq ($(IS_SOC)$(USE_CPU)$(USE_INFERENTIA)$(SKIP_DRIVER_CHECK), 0000)
+    DRIVER_VER_MAJOR ?= $(shell nvidia-smi | /bin/grep -Eo 'Driver Version: [+-]?[0-9]+' | awk -F ' ' '{print $$NF}')
+    # Check driver version and launch the appropriate container.
+    ifeq ($(shell if [ $(DRIVER_VER_MAJOR) -ge $(MIN_DRIVER_VER) ]; then echo true; else echo false; fi), true)
+        CUDA_VER := 12.0
+        DRIVER_VER_MAJOR := $(MIN_DRIVER_VER)
+    else
+        $(error MLPerf Inference v3.0 code requires NVIDIA Driver Version >= $(MIN_DRIVER_VER).xx)
+    endif # Driver check
+else
+    CUDA_VER := 12.0
+    DRIVER_VER_MAJOR := 525
+endif

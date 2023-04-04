@@ -1,0 +1,37 @@
+client 2023-03-03 11:14:34,838 [INFO] Creating output directory '/home/arjun/phoenix_results_closed/valid_results/phoenix_Amd_Am5-reference-gpu-onnxruntime-v1.14.0-default_config/retinanet/singlestream/performance/tmp_power'
+client 2023-03-03 11:14:34,858 [INFO] Sending command to the server: 'mlcommons/power client v3'
+client 2023-03-03 11:14:34,860 [INFO] Got response: 'mlcommons/power server v3'
+client 2023-03-03 11:14:34,860 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-03-03 11:14:34,887 [INFO] NTP:offset = -0.002 s, delay = 0.013 s 
+client 2023-03-03 11:14:34,887 [INFO] Sending command to the server: 'time'
+client 2023-03-03 11:14:34,889 [INFO] Got response: '1677842074.888584'
+client 2023-03-03 11:14:34,889 [INFO] The time difference between the client and the server is within range -1.052 ms..1.302 ms
+client 2023-03-03 11:14:34,889 [INFO] Sending command to the server: 'new,,b725662b-9888-456b-aebb-29d57521311d'
+client 2023-03-03 11:14:34,892 [INFO] Got response: 'OK 2023-03-03_11-14-34,621ffa0c-41e9-4b7e-8ae0-ecb2953e6c64'
+client 2023-03-03 11:14:34,892 [INFO] Session id is '2023-03-03_11-14-34'
+client 2023-03-03 11:14:34,892 [INFO] Sources: {"sources": {"__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "client.py": "33ca4f26368777ac06e01f9567b714a4b8063886", "lib/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/client.py": "4c2b78fb4849a7e5b584ef792d82aaed20b17f57", "lib/common.py": "624d0c0acc7c39aaff3674f0b99d6a09da53d1dc", "lib/external/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/external/ntplib.py": "4da8f970656505a40483206ef2b5d3dd5e81711d", "lib/server.py": "cda0cdfaee9bfa1249c64a7dd4f89b7bf1b279f0", "lib/source_hashes.py": "60a2e02193209e8d392803326208d5466342da18", "lib/summary.py": "aa92f0a3f975eecd44d3c0cd0236342ccc9f941d", "lib/time_sync.py": "3210db56eb0ff0df57bf4293dc4d4b03fffd46f1", "server.py": "c3f90f2f7eeb4db30727556d0c815ebc89b3d28b", "tests/unit/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "tests/unit/test_server.py": "99ae15aef722f2000ee6ed1ae1523637bf1ae42b", "tests/unit/test_source_hashes.py": "00468a2907583c593e6574a1f6b404e4651c221a"}, "modules": {"ptd_client_server.lib.client": "lib/client.py", "ptd_client_server.lib.common": "lib/common.py", "ptd_client_server.lib.external.ntplib": "lib/external/ntplib.py", "ptd_client_server.lib.source_hashes": "lib/source_hashes.py", "ptd_client_server.lib.summary": "lib/summary.py", "ptd_client_server.lib.time_sync": "lib/time_sync.py"}}
+client 2023-03-03 11:14:34,893 [INFO] Running workload in ranging mode
+client 2023-03-03 11:14:34,893 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-03-03 11:14:34,907 [INFO] NTP:offset = -0.002 s, delay = 0.013 s 
+client 2023-03-03 11:14:34,907 [INFO] Sending command to the server: 'time'
+client 2023-03-03 11:14:34,909 [INFO] Got response: '1677842074.908377'
+client 2023-03-03 11:14:34,909 [INFO] The time difference between the client and the server is within range -1.188 ms..1.409 ms
+client 2023-03-03 11:14:34,909 [INFO] Sending command to the server: 'session,2023-03-03_11-14-34,start,ranging'
+client 2023-03-03 11:15:03,044 [INFO] Got response: 'OK'
+client 2023-03-03 11:15:03,044 [INFO] Running the workload 'cd "/home/arjun/CM/repos/local/cache/e15bfdcfabe545b8/inference/vision/classification_and_detection" && OUTPUT_DIR="/home/arjun/phoenix_results_closed/valid_results/phoenix_Amd_Am5-reference-gpu-onnxruntime-v1.14.0-default_config/retinanet/singlestream/performance/run_1" ./run_local.sh onnxruntime retinanet gpu --scenario SingleStream --max-batchsize 1 --mlperf_conf "/home/arjun/CM/repos/local/cache/e15bfdcfabe545b8/inference/mlperf.conf" --threads 32 --user_conf "/home/arjun/CM/repos/octoml@ck/cm-mlops/script/generate-mlperf-inference-user-conf/tmp/6934bd5468294ef9bfd949c65b21cda4.conf" --use_preprocessed_dataset --cache_dir /home/arjun/CM/repos/local/cache/e8e546aaf8c44d86 --dataset-list /home/arjun/CM/repos/local/cache/e8e546aaf8c44d86/annotations/openimages-mlperf.json'
+client 2023-03-03 11:25:56,468 [INFO] Sending command to the server: 'session,2023-03-03_11-14-34,stop,ranging'
+client 2023-03-03 11:26:07,050 [INFO] Got response: 'OK'
+client 2023-03-03 11:26:07,053 [INFO] Copying loadgen logs from '/home/arjun/phoenix_results_closed/valid_results/phoenix_Amd_Am5-reference-gpu-onnxruntime-v1.14.0-default_config/retinanet/singlestream/performance/run_1' to '/home/arjun/phoenix_results_closed/valid_results/phoenix_Amd_Am5-reference-gpu-onnxruntime-v1.14.0-default_config/retinanet/singlestream/performance/tmp_power/ranging'
+client 2023-03-03 11:26:07,053 [INFO] Running workload in testing mode
+client 2023-03-03 11:26:07,053 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-03-03 11:26:07,068 [INFO] NTP:offset = -0.001 s, delay = 0.014 s 
+client 2023-03-03 11:26:07,068 [INFO] Sending command to the server: 'time'
+client 2023-03-03 11:26:07,070 [INFO] Got response: '1677842767.0703208'
+client 2023-03-03 11:26:07,070 [INFO] The time difference between the client and the server is within range -1.444 ms..0.200 ms
+client 2023-03-03 11:26:07,070 [INFO] Sending command to the server: 'session,2023-03-03_11-14-34,start,testing'
+client 2023-03-03 11:26:20,092 [INFO] Got response: 'OK'
+client 2023-03-03 11:26:20,092 [INFO] Running the workload 'cd "/home/arjun/CM/repos/local/cache/e15bfdcfabe545b8/inference/vision/classification_and_detection" && OUTPUT_DIR="/home/arjun/phoenix_results_closed/valid_results/phoenix_Amd_Am5-reference-gpu-onnxruntime-v1.14.0-default_config/retinanet/singlestream/performance/run_1" ./run_local.sh onnxruntime retinanet gpu --scenario SingleStream --max-batchsize 1 --mlperf_conf "/home/arjun/CM/repos/local/cache/e15bfdcfabe545b8/inference/mlperf.conf" --threads 32 --user_conf "/home/arjun/CM/repos/octoml@ck/cm-mlops/script/generate-mlperf-inference-user-conf/tmp/6934bd5468294ef9bfd949c65b21cda4.conf" --use_preprocessed_dataset --cache_dir /home/arjun/CM/repos/local/cache/e8e546aaf8c44d86 --dataset-list /home/arjun/CM/repos/local/cache/e8e546aaf8c44d86/annotations/openimages-mlperf.json'
+client 2023-03-03 11:37:11,275 [INFO] Sending command to the server: 'session,2023-03-03_11-14-34,stop,testing'
+client 2023-03-03 11:37:21,515 [INFO] Got response: 'OK'
+client 2023-03-03 11:37:21,516 [INFO] Copying loadgen logs from '/home/arjun/phoenix_results_closed/valid_results/phoenix_Amd_Am5-reference-gpu-onnxruntime-v1.14.0-default_config/retinanet/singlestream/performance/run_1' to '/home/arjun/phoenix_results_closed/valid_results/phoenix_Amd_Am5-reference-gpu-onnxruntime-v1.14.0-default_config/retinanet/singlestream/performance/tmp_power/run_1'
+client 2023-03-03 11:37:21,516 [INFO] Done runs

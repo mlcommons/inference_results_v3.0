@@ -1,0 +1,134 @@
+# Copyright (c) 2023, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+SHELL ["/bin/bash", "-c"]
+
+ARG CUDA_VER=12.0
+ARG USE_NIGHTLY=1
+# Install core packages
+RUN apt update \
+ && apt install -y --no-install-recommends build-essential autoconf libtool git \
+        ccache curl wget pkg-config sudo ca-certificates automake libssl-dev \
+        bc python3-dev python3-pip google-perftools gdb libglib2.0-dev clang sshfs libre2-dev \
+        libboost-dev libnuma-dev numactl sysstat sshpass ntpdate less vim iputils-ping \
+ && apt remove -y cmake \
+ && apt remove -y libgflags-dev \
+ && apt remove -y libprotobuf-dev \
+ && apt -y autoremove
+RUN apt install -y --no-install-recommends pkg-config zip g++ zlib1g-dev unzip
+RUN apt install -y --no-install-recommends rsync
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cmake
+
+# For pillow
+RUN apt-get install -y --no-install-recommends libjpeg-dev zlib1g-dev
+
+# Install dependencies needed for RNN-T preprocessing
+RUN apt-get update && apt-get install -y sox llvm llvm-dev
+
+# Needed by official RNNT accuracy script
+RUN apt install -y --no-install-recommends libsndfile1-dev
+
+# Needed by Triton
+RUN apt install -y rapidjson-dev
+RUN apt install -y libb64-dev
+RUN apt install -y libgtest-dev
+
+# For onnx
+RUN apt-get install -y --no-install-recommends protobuf-compiler libprotoc-dev
+
+# For h5py
+RUN apt-get install -y libhdf5-serial-dev hdf5-tools
+
+COPY requirements.aarch64.1.txt requirements.aarch64.2.txt /tmp
+WORKDIR /tmp
+
+# Set up basic setuptools for pip install commands.
+RUN python3 -m pip install --upgrade pip \
+ && python3 -m pip install --upgrade setuptools wheel virtualenv Cython==0.29.23
+
+# Break requirements into two lists because some of them require that other packages be fully installed first.
+RUN python3 -m pip install -r requirements.aarch64.1.txt \
+ && python3 -m pip install -r requirements.aarch64.2.txt
+
+# Install HuggingFace Transformers
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y \
+ && export PATH=$HOME/.cargo/bin:$PATH \
+ && python3 -m pip install transformers==4.6.0
+
+# install gflags
+# -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON -DBUILD_gflags_LIB=ON .. \
+RUN git clone -b v2.2.1 https://github.com/gflags/gflags.git \
+ && cd gflags \
+ && mkdir build && cd build \
+ && cmake -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON -DBUILD_gflags_LIB=ON .. \
+ && make -j \
+ && make install \
+ && cd /tmp && rm -rf gflags
+
+# install glog
+RUN git clone -b v0.3.5 https://github.com/google/glog.git \
+ && cd glog \
+ && cmake -H. -Bbuild -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON \
+ && cmake --build build \
+ && cmake --build build --target install \
+ && cd /tmp && rm -rf glog
+
+# Install CUB, needed by NMS OPT plugin
+RUN wget https://github.com/NVlabs/cub/archive/1.8.0.zip -O cub-1.8.0.zip \
+ && unzip cub-1.8.0.zip \
+ && mv cub-1.8.0/cub /usr/include/aarch64-linux-gnu/ \
+ && rm -rf cub-1.8.0.zip cub-1.8.0
+
+# Install libjemalloc2
+RUN echo 'deb [arch=aarch64] http://archive.ubuntu.com/ubuntu focal main restricted universe multiverse' | tee -a /etc/apt/sources.list.d/focal.list \
+  && echo 'Package: *\nPin: release a=focal\nPin-Priority: -10\n' | tee -a /etc/apt/preferences.d/focal.pref \
+  && apt update \
+  && apt install --no-install-recommends -t focal -y libjemalloc2 libtcmalloc-minimal4
+
+# For now, install cudnn 8.8.0 from URM
+ARG CUDNN_URM_URL=https://urm.nvidia.com/artifactory/hw-cudnn-generic/CUDNN/v8.8_cuda_12.0/8.8.0.95/cudnn-linux-sbsa-8.8.0.95.tar.gz
+RUN cd /tmp \
+  && rm -rf /usr/lib/aarch64-gnu/libcudnn* \
+  && wget $CUDNN_URM_URL -O cudnn.tar \
+  && tar -xf cudnn.tar \
+  && cp -r cudnn/lib64/* /usr/lib/aarch64-linux-gnu/ \
+  && cp -r cudnn/include/* /usr/include/ \
+  && rm -rf cudnn.tar
+
+# Remove the default TRT installation in the cudnn container
+RUN rm -rf /usr/local/lib/python3.8/dist-packages/tensorrt/
+
+# Install public version if USE_NIGHTLY is 0
+# ARG TRT_DEB_URL=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/
+RUN if [ $USE_NIGHTLY = 0 ]; then \
+    cd /tmp \
+    && wget https://developer.download.nvidia.com/compute/machine-learning/tensorrt/8.4.0/local_repos/nv-tensorrt-repo-ubuntu2004-cuda11.6-trt8.4.0.6-ea-20220212_1-1_arm64.deb \
+    && sudo dpkg -i nv-tensorrt-repo-ubuntu2004-cuda11.6-trt8.4.0.6-ea-20220212_1-1_arm64.deb \
+    && sudo apt-key add /var/nv-tensorrt-repo-ubuntu2004-cuda11.6-trt8.4.0.6-ea-20220212/7fa2af80.pub \
+    && sudo apt update \
+    && sudo apt install -y libnvinfer8 libnvinfer-dev libnvinfer-plugin8 libnvinfer-plugin-dev libnvparsers8 \
+                libnvparsers-dev libnvonnxparsers8 libnvonnxparsers-dev libnvonnxparsers-dev python3-libnvinfer-dev \
+    && rm nv-tensorrt*.deb; fi
+
+
+# With latest Ubuntu:20.04 container, there will be no 'python' or 'pip' even if we have installed 'python3' and
+# 'python3-pip'. So add softlink to avoid wheel installation failure.
+RUN ln -sf /usr/bin/python3 /usr/bin/python
+RUN ln -sf /usr/bin/pip3 /usr/bin/pip
+
+WORKDIR /work

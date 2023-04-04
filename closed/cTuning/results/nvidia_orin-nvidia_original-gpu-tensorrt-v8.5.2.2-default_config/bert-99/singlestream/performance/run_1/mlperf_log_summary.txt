@@ -1,0 +1,59 @@
+================================================
+MLPerf Results Summary
+================================================
+SUT name : BERT SERVER
+Scenario : SingleStream
+Mode     : PerformanceOnly
+90th percentile latency (ns) : 7789395
+Result is : VALID
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+Early Stopping Result:
+ * Processed at least 64 queries (91599).
+ * Would discard 8947 highest latency queries.
+ * Early stopping 90th percentile estimate: 7795544
+ * Early stopping 99th percentile estimate: 8529798
+
+================================================
+Additional Stats
+================================================
+QPS w/ loadgen overhead         : 152.66
+QPS w/o loadgen overhead        : 153.19
+
+Min latency (ns)                : 5043477
+Max latency (ns)                : 73621743
+Mean latency (ns)               : 6527793
+50.00 percentile latency (ns)   : 6165294
+90.00 percentile latency (ns)   : 7789395
+95.00 percentile latency (ns)   : 8308803
+97.00 percentile latency (ns)   : 8468547
+99.00 percentile latency (ns)   : 8527783
+99.90 percentile latency (ns)   : 8776844
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 1
+target_qps : 128.205
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 1024
+max_query_count : 0
+qsl_rng_seed : 10003631887983097364
+sample_index_rng_seed : 17183018601990103738
+schedule_rng_seed : 12134888396634371638
+accuracy_log_rng_seed : 0
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 0
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 10833
+
+No warnings encountered during test.
+
+No errors encountered during test.

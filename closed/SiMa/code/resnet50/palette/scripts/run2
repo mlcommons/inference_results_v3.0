@@ -1,0 +1,191 @@
+#!/usr/bin/python3
+import sys, os
+import argparse
+from string import Template
+import subprocess
+import time 
+
+print()
+print("RUNNING COMMAND: ")
+print()
+print()
+print(" ".join(sys.argv))
+print()
+print()
+
+GST_COMMAND='gst-launch-1.0 --gst-plugin-path=$libs '
+GST_PLUGIN_SEPARATOR= ' ! '
+
+MLPERFFILTER_PLUGIN='''ml_filter in-dims=\"$in_dims\" out-dims=\"$out_dims\" mlperf-run-type=$mlperf_run_type 
+mlperf-scenario=$mlperf_scenario toy-mode=\"$toy_mode\" 
+inpath=\"$inpath\" config=\"$process_config\"'''
+
+MLPERFSRC_PLUGIN='''mlperfsrc2 dims=\"$in_dims\" mlperf-run-type=\"$mlperf_run_type\" 
+mlperf-scenario=\"$mlperf_scenario\" toy-mode=\"$toy_mode\" inpath=\"$inpath\"'''
+
+MLPERFSINK_PLUGIN='mlperfsink'
+
+PROCESS2_PLUGIN='''process2 config=\"$process_config\"'''
+
+process_default_json_file = 'resnet50_v15'
+
+gstlaunch_tmpl = Template(GST_COMMAND)
+mlperfsrc_tmpl = Template(MLPERFSRC_PLUGIN)
+mlfilter_tmpl = Template(MLPERFFILTER_PLUGIN)
+process_tmpl = Template(PROCESS2_PLUGIN)
+
+def run_mlart_init (batchsize, env):
+    _set = ''
+    infer = ''
+    if batchsize == '1':
+        _set='mla-rt -vv -d /lib/firmware/mla_driver.bin ./ResNet50v1p5-batch1-db98ab79-v1p5-use-mla/ResNet50v1p5-batch1-db98ab79-v1p5-use-mla-set_cache.lm'
+        infer='mla-rt -d /lib/firmware/mla_driver.bin ./ResNet50v1p5-batch1-db98ab79-v1p5-use-mla/ResNet50v1p5-batch1-db98ab79-v1p5-use-mla-infer.lm'
+    elif batchsize == '8':
+        _set='mla-rt -v -v -d /lib/firmware/mla_driver.bin ./ResNet50v1p5-batch8-f356253e-l2cacheB-async/ResNet50v1p5-batch8-f356253e-set_l2cacheB_async.lm'
+        infer='mla-rt -d /lib/firmware/mla_driver.bin ./ResNet50v1p5-batch8-f356253e-l2cacheB-async/ResNet50v1p5-batch8-f356253e-infer_l2cacheB_async.lm'
+    elif batchsize == '24':
+        _set='mla-rt -v -v -d /lib/firmware/mla_driver.bin ./ResNet50v1p5-batch24-cf6a56d2-v1p5-h2/ResNet50v1p5-batch24-cf6a56d2-v1p5-h2-set_cache.lm'
+        infer='mla-rt -d /lib/firmware/mla_driver.bin ./ResNet50v1p5-batch24-cf6a56d2-v1p5-h2/ResNet50v1p5-batch24-cf6a56d2-v1p5-h2-infer.lm'
+    else:
+        raise Exception("Unsupported batch type")
+
+    cmd = _set + ' ; ' + infer
+    print(cmd)
+    process = subprocess.run(cmd.strip().replace('\n',''), shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True, env=env)
+    output = process.stdout
+    f = open('run_mlart.log', 'w+')
+    f.write(output)
+    return
+
+def mlperf_create_lm (batchsize):
+    try:
+        os.remove("run.lm")
+    except FileNotFoundError:
+       print("File is not present in the system.")
+    # resnet50_v1_b1_ac_opt_MLA_0.lm  resnet50_v1_b8_ac_opt_MLA_0.lm
+    # infer = './models_march1/resnet50_v1_b' + batchsize + '_ac_opt_MLA_0_dcmp.lm'
+    infer = './models_march2/resnet50_v1_b' + batchsize + '_ac_opt_MLA_0.lm'
+    os.symlink(infer, 'run.lm')
+    
+def mlperf_get_scenario(batchsize) -> int:
+    if batchsize == '1':
+        return 0
+    elif batchsize == '8':
+        return 1
+    else:
+        return 2
+    
+def mlperf_get_process_config(batchsize) -> str:
+    if batchsize == '1':
+        return process_default_json_file + '1.config'
+    elif batchsize == '8':
+        return process_default_json_file + '8.config'
+    else:
+        return process_default_json_file + '24.config'
+    
+parser = argparse.ArgumentParser(
+    prog='MLPerf Runner',
+    description='MLPerf pipeline string creator and runner')
+
+parser.add_argument('-t', '--ptype', help='Two types of pipeline, to run inplace pass 0, to run src sink pass 1',
+                    default='0')
+parser.add_argument('-i', '--indims', help='Input tensor dimension N:C:H:W format')
+parser.add_argument('-o', '--outdims', help='Output tensor dimesnsion N:Size format')
+parser.add_argument('-m', '--toymode', help='Run in toy mode ? true or false', default='true')
+parser.add_argument('-b', '--batchsize', help='Batch size 1, 8, 24 Default to bs=1',
+                    default='1')
+parser.add_argument('-r', '--runtype', help='Accuracy or performance eval',
+                    default='0')
+parser.add_argument('-d', '--datapath', help='Path where the input data is available',
+                    default='/mnt/mlperf_sr/mlperf_resnet50_toy1000_dataset.dat')
+parser.add_argument('-c', '--config', help='JSON config to run the process plugin')
+parser.add_argument('-l', '--libpath', help='The gstreamer plugin and other support library path',
+                    default='/mnt/mlperf_v2/libs3')
+parser.add_argument('-v', '--verbose', help='Gstreamer log level setting',
+                    default='0')
+parser.add_argument('-s', '--scenario', help='mlperf Scenario',
+                    default='0')
+
+args = parser.parse_args()
+
+
+mlperf_env = os.environ.copy()
+mlperf_env["LD_LIBRARY_PATH"] = args.libpath
+mlperf_env["MLA_OCM"] = "max"
+mlperf_env["GST_DEBUG"] = args.verbose
+
+# run_mlart_init(args.batchsize, mlperf_env)
+mlperf_create_lm(args.batchsize)
+
+in_dims = []
+out_dims = []
+
+# Input dimensions
+in_dims = args.indims.split(':')
+
+if args.batchsize:
+    if in_dims[0] != args.batchsize:
+        raise TypeError("Batchsize argument does'nt match in dimension")
+
+scenario = args.scenario
+
+gstlaunch = gstlaunch_tmpl.substitute(libs = args.libpath)
+gst_string = ''
+
+# Output Dimensions
+if args.ptype == '1':
+    mlperfsrc = mlperfsrc_tmpl.substitute(in_dims = args.indims,
+                                          mlperf_run_type = args.runtype,
+                                          mlperf_scenario = scenario,
+                                          toy_mode=args.toymode,
+                                          inpath=args.datapath)
+    mlperfsink = MLPERFSINK_PLUGIN
+
+    if args.config:
+        process = process_tmpl.substitute(process_config = args.config)
+    else:
+        config_file = mlperf_get_process_config(args.batchsize)
+        process = process_tmpl.substitute(process_config = config_file)
+
+    gst_string += gstlaunch + mlperfsrc + \
+        GST_PLUGIN_SEPARATOR + process + \
+        GST_PLUGIN_SEPARATOR + mlperfsink
+
+else:
+    out_dims = args.outdims.split(':')
+    if out_dims[0] != args.batchsize:
+        raise TypeError('Batchsize argument does not match in out dimension')
+
+    config_file = ''
+    if not args.config:
+        config_file = mlperf_get_process_config(args.batchsize)
+    else:
+        config_file = args.config
+        
+    mlfilter = mlfilter_tmpl.substitute(in_dims = args.indims,
+                                        out_dims = args.outdims,
+                                        mlperf_run_type = args.runtype,
+                                        mlperf_scenario = scenario,
+                                        toy_mode=args.toymode,
+                                        inpath=args.datapath,
+                                        process_config = config_file)
+
+
+    gst_string += gstlaunch + 'fakesrc' + \
+        GST_PLUGIN_SEPARATOR + mlfilter + \
+        GST_PLUGIN_SEPARATOR + 'fakesink'
+
+print(gst_string.strip().replace("\n",''))
+
+#process = subprocess.Popen(gst_string, env=gst_env)
+process = subprocess.run(gst_string.strip().replace('\n', ''), shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True, env=mlperf_env)
+output = process.stdout
+run_log_file = 'run.log' + time.strftime("%Y%m%d-%H%M%S")
+f = open(run_log_file , 'w+')
+f.write(output)
+print('Logs are available at run.log')
+sz = os.path.getsize('mlperf_log_summary.txt')
+if sz == 0:
+    print('Test has failed please check logs')
+else:
+    print('Results available at mlperf_log_summary.txt')

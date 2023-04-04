@@ -1,0 +1,12 @@
+make[1]: Entering directory '/work'
+TEST01 trial 1
+make[2]: Entering directory '/work'
+[03/03/2023-18:34:33] [TRT] [I] Loaded engine size: 608 MiB
+[03/03/2023-18:34:33] [TRT] [W] Using an engine plan file across different models of devices is not recommended and is likely to affect performance or even cause errors.
+[03/03/2023-18:34:35] [TRT] [I] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +1447, GPU +370, now: CPU 3067, GPU 1087 (MiB)
+[03/03/2023-18:34:35] [TRT] [I] [MemUsageChange] Init cuDNN: CPU +206, GPU +58, now: CPU 3273, GPU 1145 (MiB)
+[03/03/2023-18:34:35] [TRT] [I] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +97, now: CPU 0, GPU 97 (MiB)
+[03/03/2023-18:34:35] [TRT] [I] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2664, GPU 1137 (MiB)
+[03/03/2023-18:34:35] [TRT] [I] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 2664, GPU 1145 (MiB)
+[03/03/2023-18:34:35] [TRT] [I] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +169, now: CPU 0, GPU 266 (MiB)
+[03/03/2023-18:34:35] [TRT] [W] CUDA lazy loading is not enabled. Enabling it can significantly reduce device memory usage and speed up TensorRT initialization. See "Lazy Loading" section of CUDA documentation https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#lazy-loading

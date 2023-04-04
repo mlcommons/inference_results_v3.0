@@ -1,0 +1,37 @@
+client 2023-02-22 17:45:16,311 [INFO] Creating output directory '/home/arjun/orin_results/valid_results/arjun_orin-nvidia_original-gpu-tensorrt-v8.5.2.2-default_config/resnet50/multistream/performance/tmp_power'
+client 2023-02-22 17:45:16,339 [INFO] Sending command to the server: 'mlcommons/power client v3'
+client 2023-02-22 17:45:16,348 [INFO] Got response: 'mlcommons/power server v3'
+client 2023-02-22 17:45:16,348 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-02-22 17:45:16,389 [INFO] NTP:offset = 0.004 s, delay = 0.014 s 
+client 2023-02-22 17:45:16,389 [INFO] Sending command to the server: 'time'
+client 2023-02-22 17:45:16,395 [INFO] Got response: '1677087916.3975909'
+client 2023-02-22 17:45:16,395 [INFO] The time difference between the client and the server is within range -7.857 ms..-2.341 ms
+client 2023-02-22 17:45:16,395 [INFO] Sending command to the server: 'new,,a1845ead-f9fe-48d0-9a16-196ac8c6cf2e'
+client 2023-02-22 17:45:16,400 [INFO] Got response: 'OK 2023-02-22_17-45-16,81e5e805-4c10-4515-98df-390d7b48967b'
+client 2023-02-22 17:45:16,400 [INFO] Session id is '2023-02-22_17-45-16'
+client 2023-02-22 17:45:16,400 [INFO] Sources: {"sources": {"__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "client.py": "33ca4f26368777ac06e01f9567b714a4b8063886", "lib/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/client.py": "4c2b78fb4849a7e5b584ef792d82aaed20b17f57", "lib/common.py": "624d0c0acc7c39aaff3674f0b99d6a09da53d1dc", "lib/external/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/external/ntplib.py": "4da8f970656505a40483206ef2b5d3dd5e81711d", "lib/server.py": "cda0cdfaee9bfa1249c64a7dd4f89b7bf1b279f0", "lib/source_hashes.py": "60a2e02193209e8d392803326208d5466342da18", "lib/summary.py": "aa92f0a3f975eecd44d3c0cd0236342ccc9f941d", "lib/time_sync.py": "3210db56eb0ff0df57bf4293dc4d4b03fffd46f1", "server.py": "c3f90f2f7eeb4db30727556d0c815ebc89b3d28b", "tests/unit/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "tests/unit/test_server.py": "99ae15aef722f2000ee6ed1ae1523637bf1ae42b", "tests/unit/test_source_hashes.py": "00468a2907583c593e6574a1f6b404e4651c221a"}, "modules": {"ptd_client_server.lib.client": "lib/client.py", "ptd_client_server.lib.common": "lib/common.py", "ptd_client_server.lib.external.ntplib": "lib/external/ntplib.py", "ptd_client_server.lib.source_hashes": "lib/source_hashes.py", "ptd_client_server.lib.summary": "lib/summary.py", "ptd_client_server.lib.time_sync": "lib/time_sync.py"}}
+client 2023-02-22 17:45:16,401 [INFO] Running workload in ranging mode
+client 2023-02-22 17:45:16,401 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-02-22 17:45:16,421 [INFO] NTP:offset = 0.004 s, delay = 0.018 s 
+client 2023-02-22 17:45:16,421 [INFO] Sending command to the server: 'time'
+client 2023-02-22 17:45:16,425 [INFO] Got response: '1677087916.429268'
+client 2023-02-22 17:45:16,425 [INFO] The time difference between the client and the server is within range -7.506 ms..-3.846 ms
+client 2023-02-22 17:45:16,425 [INFO] Sending command to the server: 'session,2023-02-22_17-45-16,start,ranging'
+client 2023-02-22 17:45:44,555 [INFO] Got response: 'OK'
+client 2023-02-22 17:45:44,556 [INFO] Running the workload 'make preprocess_data BENCHMARKS="resnet50" && make run_harness RUN_ARGS=" --benchmarks=resnet50 --scenarios=multistream --test_mode=PerformanceOnly --multi_stream_expected_latency_ns=3000000"'
+client 2023-02-22 17:57:23,024 [INFO] Sending command to the server: 'session,2023-02-22_17-45-16,stop,ranging'
+client 2023-02-22 17:57:33,184 [INFO] Got response: 'OK'
+client 2023-02-22 17:57:33,211 [INFO] Copying loadgen logs from '/home/arjun/orin_results/valid_results/arjun_orin-nvidia_original-gpu-tensorrt-v8.5.2.2-default_config/resnet50/multistream/performance/run_1' to '/home/arjun/orin_results/valid_results/arjun_orin-nvidia_original-gpu-tensorrt-v8.5.2.2-default_config/resnet50/multistream/performance/tmp_power/ranging'
+client 2023-02-22 17:57:33,213 [INFO] Running workload in testing mode
+client 2023-02-22 17:57:33,213 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-02-22 17:57:33,235 [INFO] NTP:offset = 0.006 s, delay = 0.017 s 
+client 2023-02-22 17:57:33,235 [INFO] Sending command to the server: 'time'
+client 2023-02-22 17:57:33,238 [INFO] Got response: '1677088653.2432456'
+client 2023-02-22 17:57:33,238 [INFO] The time difference between the client and the server is within range -7.494 ms..-4.366 ms
+client 2023-02-22 17:57:33,239 [INFO] Sending command to the server: 'session,2023-02-22_17-45-16,start,testing'
+client 2023-02-22 17:57:46,576 [INFO] Got response: 'OK'
+client 2023-02-22 17:57:46,577 [INFO] Running the workload 'make preprocess_data BENCHMARKS="resnet50" && make run_harness RUN_ARGS=" --benchmarks=resnet50 --scenarios=multistream --test_mode=PerformanceOnly --multi_stream_expected_latency_ns=3000000"'
+client 2023-02-22 18:09:28,708 [INFO] Sending command to the server: 'session,2023-02-22_17-45-16,stop,testing'
+client 2023-02-22 18:09:38,837 [INFO] Got response: 'OK'
+client 2023-02-22 18:09:38,841 [INFO] Copying loadgen logs from '/home/arjun/orin_results/valid_results/arjun_orin-nvidia_original-gpu-tensorrt-v8.5.2.2-default_config/resnet50/multistream/performance/run_1' to '/home/arjun/orin_results/valid_results/arjun_orin-nvidia_original-gpu-tensorrt-v8.5.2.2-default_config/resnet50/multistream/performance/tmp_power/run_1'
+client 2023-02-22 18:09:38,843 [INFO] Done runs

@@ -1,0 +1,213 @@
+# Copyright (c) 2023, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+SHELL ["/bin/bash", "-c"]
+
+ARG CUDA_VER=11.4
+ARG USE_NIGHTLY=1
+ARG EXTERNAL_USER=0
+
+# Set python 3.8 as default
+RUN ln -sf /usr/bin/python3 /usr/bin/python
+RUN ln -sf /usr/bin/pip3 /usr/bin/pip
+
+# Install core packages
+RUN apt update \
+    && apt install -y --no-install-recommends build-essential autoconf libtool git \
+        ccache curl wget pkg-config sudo ca-certificates automake libssl-dev \
+        bc python3-dev python3-pip google-perftools gdb libglib2.0-dev clang sshfs libre2-dev \
+        libboost-dev libnuma-dev numactl sysstat sshpass ntpdate less vim iputils-ping \
+    && apt remove -y cmake \
+    && apt remove -y libgflags-dev \
+    && apt remove -y libgflags-dev \
+    && apt remove -y libprotobuf-dev \
+    && apt -y autoremove
+RUN apt install -y --no-install-recommends pkg-config zip g++ zlib1g-dev unzip rapidjson-dev
+RUN apt install -y --no-install-recommends rsync
+
+# install CUDA 11.4 (takes ~10 mins)
+# If build failed at these step, most likely docker ran out of space on the file system
+# use 'docker system prune' to remove dangle images/caches
+# use '--all' flag will purge all
+WORKDIR /tmp
+RUN wget -nv http://cuda-repo/release-candidates/kitpicks/cuda-r11-4-tegra/11.4.14/011/local_installers/cuda-repo-l4t-11-4-local_11.4.14-1_arm64.deb \
+    && echo "de33f286f2c1ebaf4c27b624c6854e585ff7aebaa44c15a95aa3cb9405e8c8f1  cuda-repo-l4t-11-4-local_11.4.14-1_arm64.deb" | sha256sum --check \
+    && dpkg -i ./cuda-repo-l4t-11-4-local_11.4.14-1_arm64.deb \
+    && rm cuda*.deb
+
+RUN cp /var/cuda-repo-l4t-11-4-local/cuda-82DB0B48-keyring.gpg /usr/share/keyrings/ \
+    && apt update \
+    && apt install -y cuda-toolkit-*
+
+# install cudnn 8.5 (takes ~4 mins)
+RUN wget -nv http://cuda-repo/release-candidates/kitpicks/cudnn-v8-5-tegra/8.5.0.96/001/local_installers/cudnn-local-tegra-repo-ubuntu2004-8.5.0.96_1.0-1_arm64.deb \
+    && echo "059821695ccfa1fe8b335592b9e62765fe81d72a2525c33fbe010eaf61595c41  cudnn-local-tegra-repo-ubuntu2004-8.5.0.96_1.0-1_arm64.deb" | sha256sum --check \
+    && dpkg -i ./cudnn-local-tegra-repo-ubuntu2004-8.5.0.96_1.0-1_arm64.deb \
+    && rm cudnn*.deb
+
+RUN cp /var/cudnn-local-tegra-repo-ubuntu2004-8.5.0.96/*-keyring.gpg /usr/share/keyrings/ \
+    && apt update \
+    && apt install -y libcudnn8*
+
+# install TRT 8.5 (takes ~8 mins)
+ARG TRT_DEB_URL=http://cuda-repo/release-candidates/Libraries/TensorRT/v8.5/8.5.2.1-6ebd8d1c/11.4-r470/l4t-aarch64/deb/
+ARG TRT_MAJOR_VER=8
+ARG TRT_MINOR_VER=5
+ARG TRT_PATCH_VER=2
+ARG TRT_VER=${TRT_MAJOR_VER}.${TRT_MINOR_VER}.${TRT_PATCH_VER}
+RUN install_deb_pkg() { wget -nv $TRT_DEB_URL/$1 -O $1 && dpkg -i $1 && rm $1; } \
+    && install_deb_pkg libnvinfer${TRT_MAJOR_VER}_${TRT_VER}-1+cuda${CUDA_VER}_arm64.deb \
+    && install_deb_pkg libnvinfer-dev_${TRT_VER}-1+cuda${CUDA_VER}_arm64.deb \
+    && install_deb_pkg libnvinfer-plugin${TRT_MAJOR_VER}_${TRT_VER}-1+cuda${CUDA_VER}_arm64.deb \
+    && install_deb_pkg libnvinfer-plugin-dev_${TRT_VER}-1+cuda${CUDA_VER}_arm64.deb \
+    && install_deb_pkg libnvparsers${TRT_MAJOR_VER}_${TRT_VER}-1+cuda${CUDA_VER}_arm64.deb \
+    && install_deb_pkg libnvparsers-dev_${TRT_VER}-1+cuda${CUDA_VER}_arm64.deb \
+    && install_deb_pkg libnvonnxparsers${TRT_MAJOR_VER}_${TRT_VER}-1+cuda${CUDA_VER}_arm64.deb \
+    && install_deb_pkg libnvonnxparsers-dev_${TRT_VER}-1+cuda${CUDA_VER}_arm64.deb \
+    && install_deb_pkg python3-libnvinfer_${TRT_VER}-1+cuda${CUDA_VER}_arm64.deb \
+    && install_deb_pkg python3-libnvinfer-dev_${TRT_VER}-1+cuda${CUDA_VER}_arm64.deb \
+    && install_deb_pkg graphsurgeon-tf_${TRT_VER}-1+cuda${CUDA_VER}_arm64.deb \
+    && install_deb_pkg uff-converter-tf_${TRT_VER}-1+cuda${CUDA_VER}_arm64.deb \
+    && install_deb_pkg libnvinfer-bin_${TRT_VER}-1+cuda${CUDA_VER}_arm64.deb \
+    && unset -f install_deb_pkg
+
+# Install TRT nightly (takes ~8 mins)
+# ARG TRT_NIGHTLY_URL=https://urm.nvidia.com/artifactory/sw-tensorrt-generic/cicd/rel-8.5/LR_EveryKDays/18/trt_build_aarch64_l4t_cuda${CUDA_VER}_release_optimized.tar
+# RUN cd /tmp \
+#     && wget ${TRT_NIGHTLY_URL} --user tensorrt-read-only --password "Tensorrt@123" -O TRT.tar \
+#     && tar -xf TRT.tar \
+#     && cd source/install/aarch64-gnu \
+#     && mkdir trt \
+#     && tar -xvzf cuda-${CUDA_VER}/release_tarfile/TensorRT-*.*.aarch64-gnu.cuda-${CUDA_VER}.cudnn*.tar.gz -C trt --strip-components 1 \
+#     && tar -xvzf TensorRT-*.*.aarch64-gnu.cuda-${CUDA_VER}.internal.tar.gz -C trt --strip-components 1 \
+#     && cp -rv trt/lib/* /usr/lib/aarch64-linux-gnu/ \
+#     && cp -rv trt/include/* /usr/include/aarch64-linux-gnu/ \
+#     && cp -rv trt/bin/* /usr/bin/ \
+#     && python3 -m pip install trt/uff/*.whl trt/graphsurgeon/*.whl trt/python/tensorrt-*-cp38-none-linux_aarch64.whl \
+#     && cd ../../.. \
+#     && rm -rf source \
+#     && rm -f TRT.tar
+
+# For pytorch
+RUN apt install -y libopenmpi-dev
+
+# matplotlib dependencies
+RUN apt install -y libfreetype6-dev libpng-dev  \
+    && apt install -y libatlas3-base libopenblas-base \
+    && apt install -y git-lfs && git-lfs install
+
+# cmake (takes ~7 minutes)
+RUN apt remove -y cmake \
+    && rm -rf cmake-* \
+    && wget -nv https://cmake.org/files/v3.18/cmake-3.18.4.tar.gz \
+    && tar -xf cmake-3.18.4.tar.gz \
+    && pushd cmake-3.18.4 && ./configure && make -j$(nproc) install \
+    && ln -s /usr/local/bin/cmake /usr/bin/cmake \
+    && popd \
+    && rm -rf cmake-*
+
+# Setup environment variables for pycuda
+ENV CUDA_ROOT=/usr/local/cuda
+ENV CUDA_INC_DIR=${CUDA_ROOT}/include
+ENV PATH=${CUDA_ROOT}/bin:/usr/bin:${PATH}
+ENV CPATH=${CUDA_ROOT}/include:${CPATH}
+ENV LIBRARY_PATH=${CUDA_ROOT}/lib64:${LIBRARY_PATH}
+ENV LD_LIBRARY_PATH=${CUDA_ROOT}/lib64:${LD_LIBRARY_PATH}
+
+# Setup python basic dependencies (takes ~5 min)
+RUN python3 -m pip install --upgrade setuptools wheel virtualenv \
+    && python3 -m pip install Cython==0.29.23 \
+    && python3 -m pip install numpy==1.18.5 \
+    && python3 -m pip uninstall -y pycuda && python3 -m pip install pycuda==2021.1 \
+    && rm -rf /usr/lib/python3/dist-packages/yaml /usr/lib/python3/dist-packages/PyYAML*
+
+# Install required dependencies (takes ~5 min)
+# Pre-built wheels from https://github.com/nvzhihanj/mlperf-aarch64-wheel
+COPY requirements.orin.txt /tmp
+WORKDIR /tmp
+RUN python3 -m pip install -r requirements.orin.txt
+
+# Install internally prebuilt dependencies
+RUN if [ $EXTERNAL_USER = 0 ]; then \
+    git clone -b main https://gitlab-master.nvidia.com/yihengz/mlperf-internal-wheels.git --depth 1 \
+    && python3 -m pip install mlperf-internal-wheels/orin/* \
+    && rm -rf mlperf-internal-wheels; fi
+
+# Install cub
+RUN rm -rf cub-1.8.0.zip cub-1.8.0 /usr/include/aarch64-linux-gnu/cub \
+    && wget -nv https://github.com/NVlabs/cub/archive/1.8.0.zip -O cub-1.8.0.zip \
+    && unzip cub-1.8.0.zip \
+    && mv cub-1.8.0/cub /usr/include/aarch64-linux-gnu/ \
+    && rm -rf cub-1.8.0.zip cub-1.8.0
+
+# Install gflags && glog
+RUN apt install -y libgoogle-glog-dev libgflags-dev
+
+# Install ONNX graph surgeon, needed for 3D-Unet ONNX preprocessing.
+WORKDIR /tmp
+RUN apt install -y libprotobuf-dev \
+    && rm -rf TensorRT \
+    && git clone https://github.com/NVIDIA/TensorRT.git \
+    && pushd TensorRT \
+    && git checkout release/8.0 \
+    && cd tools/onnx-graphsurgeon \
+    && make build \
+    && python3 -m pip install --no-deps -t /usr/local/lib/python3.8/dist-packages --force-reinstall dist/*.whl \
+    && popd \
+    && rm -rf TensorRT
+
+# Install opencv for Triton dependencies
+RUN apt update && apt install -y --allow-downgrades libopencv-dev
+
+# Install NiBabel for 3D-UNet accuracy check (takes ~1 min)
+RUN python3 -m pip install https://github.com/nipy/nibabel/archive/refs/tags/3.2.2.zip
+
+# For public users, build prebuilt dependencies from source
+# DALI v1.15
+# building from scratch takes ~45 minutes
+RUN if [ $EXTERNAL_USER != 0 ]; then \
+    rm -rf protobuf-cpp-3.11.1.tar.gz \
+    && wget https://github.com/protocolbuffers/protobuf/releases/download/v3.11.1/protobuf-cpp-3.11.1.tar.gz \
+    && tar -xzf protobuf-cpp-3.11.1.tar.gz \
+    && rm protobuf-cpp-3.11.1.tar.gz \
+    && cd protobuf-3.11.1 \
+    && ./configure CXXFLAGS="-fPIC" --prefix=/usr/local --disable-shared \
+    && make -j$(nproc) \
+    && make install \
+    && ldconfig \
+    && cd /tmp \
+    && rm -rf protobuf-3.11.1 \
+    && cd /usr/local \
+    && rm -rf DALI \
+    && git clone -b release_v1.15 --recursive https://github.com/NVIDIA/DALI \
+    && cd DALI \
+    && git cherry-pick 99a2bbc9cf11ce104934c5800d4c478da8a993ec \
+    && mkdir build \
+    && cd build \
+    && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc -DCUDA_TARGET_ARCHS="87" \
+       -DBUILD_PYTHON=ON -DBUILD_TEST=OFF -DBUILD_BENCHMARK=OFF -DBUILD_NVTX=OFF -DBUILD_LMDB=OFF -DBUILD_LIBTIFF=OFF -DBUILD_LIBSND=OFF \
+       -DBUILD_LIBSND=OFF -DBUILD_LIBTAR=OFF -DBUILD_FFTS=ON -DBUILD_NVOF=OFF -DBUILD_NVDEC=OFF -DBUILD_NVJPEG=OFF -DBUILD_NVML=OFF\
+       -DVERBOSE_LOGS=OFF -DWERROR=OFF -DBUILD_WITH_ASAN=OFF -DProtobuf_PROTOC_EXECUTABLE=/usr/local/bin/protoc .. \
+    && make -j$(nproc) \
+    && make install \
+    && python3 -m pip install dali/python/ \
+    && mv /usr/local/DALI/build/dali/python/nvidia/dali /tmp/dali \
+    && rm -rf /usr/local/DALI \
+    && mkdir -p /usr/local/DALI/build/dali/python/nvidia/ \
+    && mv /tmp/dali /usr/local/DALI/build/dali/python/nvidia/; fi
+
+WORKDIR /work

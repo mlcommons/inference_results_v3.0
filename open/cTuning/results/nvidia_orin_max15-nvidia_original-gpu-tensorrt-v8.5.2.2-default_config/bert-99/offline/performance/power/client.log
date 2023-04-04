@@ -1,0 +1,37 @@
+client 2023-03-03 21:21:46,228 [INFO] Creating output directory '/home/arjun/orin_max15/valid_results/arjun_orin-nvidia_original-gpu-tensorrt-v8.5.2.2-default_config/bert-99/offline/performance/tmp_power'
+client 2023-03-03 21:21:46,293 [INFO] Sending command to the server: 'mlcommons/power client v3'
+client 2023-03-03 21:21:46,298 [INFO] Got response: 'mlcommons/power server v3'
+client 2023-03-03 21:21:46,298 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-03-03 21:21:46,336 [INFO] NTP:offset = 0.043 s, delay = 0.022 s 
+client 2023-03-03 21:21:46,337 [INFO] Sending command to the server: 'time'
+client 2023-03-03 21:21:46,346 [INFO] Got response: '1677878506.3824594'
+client 2023-03-03 21:21:46,346 [INFO] The time difference between the client and the server is within range -45.172 ms..-36.263 ms
+client 2023-03-03 21:21:46,346 [INFO] Sending command to the server: 'new,,c98a12de-063d-4b11-9400-3252e7cc8c94'
+client 2023-03-03 21:21:46,352 [INFO] Got response: 'OK 2023-03-03_21-21-46,da78cf05-3363-43df-8e8b-634bb1b36fc6'
+client 2023-03-03 21:21:46,352 [INFO] Session id is '2023-03-03_21-21-46'
+client 2023-03-03 21:21:46,352 [INFO] Sources: {"sources": {"__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "client.py": "33ca4f26368777ac06e01f9567b714a4b8063886", "lib/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/client.py": "4c2b78fb4849a7e5b584ef792d82aaed20b17f57", "lib/common.py": "624d0c0acc7c39aaff3674f0b99d6a09da53d1dc", "lib/external/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/external/ntplib.py": "4da8f970656505a40483206ef2b5d3dd5e81711d", "lib/server.py": "cda0cdfaee9bfa1249c64a7dd4f89b7bf1b279f0", "lib/source_hashes.py": "60a2e02193209e8d392803326208d5466342da18", "lib/summary.py": "aa92f0a3f975eecd44d3c0cd0236342ccc9f941d", "lib/time_sync.py": "3210db56eb0ff0df57bf4293dc4d4b03fffd46f1", "server.py": "c3f90f2f7eeb4db30727556d0c815ebc89b3d28b", "tests/unit/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "tests/unit/test_server.py": "99ae15aef722f2000ee6ed1ae1523637bf1ae42b", "tests/unit/test_source_hashes.py": "00468a2907583c593e6574a1f6b404e4651c221a"}, "modules": {"ptd_client_server.lib.client": "lib/client.py", "ptd_client_server.lib.common": "lib/common.py", "ptd_client_server.lib.external.ntplib": "lib/external/ntplib.py", "ptd_client_server.lib.source_hashes": "lib/source_hashes.py", "ptd_client_server.lib.summary": "lib/summary.py", "ptd_client_server.lib.time_sync": "lib/time_sync.py"}}
+client 2023-03-03 21:21:46,353 [INFO] Running workload in ranging mode
+client 2023-03-03 21:21:46,353 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-03-03 21:21:46,376 [INFO] NTP:offset = 0.041 s, delay = 0.020 s 
+client 2023-03-03 21:21:46,376 [INFO] Sending command to the server: 'time'
+client 2023-03-03 21:21:46,379 [INFO] Got response: '1677878506.4169936'
+client 2023-03-03 21:21:46,379 [INFO] The time difference between the client and the server is within range -40.720 ms..-37.183 ms
+client 2023-03-03 21:21:46,380 [INFO] Sending command to the server: 'session,2023-03-03_21-21-46,start,ranging'
+client 2023-03-03 21:22:14,498 [INFO] Got response: 'OK'
+client 2023-03-03 21:22:14,499 [INFO] Running the workload 'make preprocess_data BENCHMARKS="bert" && make run_harness RUN_ARGS=" --benchmarks=bert --scenarios=offline --test_mode=PerformanceOnly --offline_expected_qps=60"'
+client 2023-03-03 21:35:06,163 [INFO] Sending command to the server: 'session,2023-03-03_21-21-46,stop,ranging'
+client 2023-03-03 21:35:16,823 [INFO] Got response: 'OK'
+client 2023-03-03 21:35:16,850 [INFO] Copying loadgen logs from '/home/arjun/orin_max15/valid_results/arjun_orin-nvidia_original-gpu-tensorrt-v8.5.2.2-default_config/bert-99/offline/performance/run_1' to '/home/arjun/orin_max15/valid_results/arjun_orin-nvidia_original-gpu-tensorrt-v8.5.2.2-default_config/bert-99/offline/performance/tmp_power/ranging'
+client 2023-03-03 21:35:16,852 [INFO] Running workload in testing mode
+client 2023-03-03 21:35:16,853 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-03-03 21:35:16,879 [INFO] NTP:offset = 0.020 s, delay = 0.021 s 
+client 2023-03-03 21:35:16,879 [INFO] Sending command to the server: 'time'
+client 2023-03-03 21:35:16,884 [INFO] Got response: '1677879316.8955543'
+client 2023-03-03 21:35:16,884 [INFO] The time difference between the client and the server is within range -15.706 ms..-10.983 ms
+client 2023-03-03 21:35:16,884 [INFO] Sending command to the server: 'session,2023-03-03_21-21-46,start,testing'
+client 2023-03-03 21:35:29,909 [INFO] Got response: 'OK'
+client 2023-03-03 21:35:29,910 [INFO] Running the workload 'make preprocess_data BENCHMARKS="bert" && make run_harness RUN_ARGS=" --benchmarks=bert --scenarios=offline --test_mode=PerformanceOnly --offline_expected_qps=60"'
+client 2023-03-03 21:48:22,663 [INFO] Sending command to the server: 'session,2023-03-03_21-21-46,stop,testing'
+client 2023-03-03 21:48:32,888 [INFO] Got response: 'OK'
+client 2023-03-03 21:48:32,893 [INFO] Copying loadgen logs from '/home/arjun/orin_max15/valid_results/arjun_orin-nvidia_original-gpu-tensorrt-v8.5.2.2-default_config/bert-99/offline/performance/run_1' to '/home/arjun/orin_max15/valid_results/arjun_orin-nvidia_original-gpu-tensorrt-v8.5.2.2-default_config/bert-99/offline/performance/tmp_power/run_1'
+client 2023-03-03 21:48:32,895 [INFO] Done runs

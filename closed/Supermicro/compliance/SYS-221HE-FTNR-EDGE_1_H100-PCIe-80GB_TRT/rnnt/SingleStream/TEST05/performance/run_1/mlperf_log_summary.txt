@@ -1,0 +1,59 @@
+================================================
+MLPerf Results Summary
+================================================
+SUT name : RNNT SERVER
+Scenario : SingleStream
+Mode     : PerformanceOnly
+90th percentile latency (ns) : 51143930
+Result is : VALID
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+Early Stopping Result:
+ * Processed at least 64 queries (18421).
+ * Would discard 1746 highest latency queries.
+ * Early stopping 90th percentile estimate: 51740780
+ * Early stopping 99th percentile estimate: 67849914
+
+================================================
+Additional Stats
+================================================
+QPS w/ loadgen overhead         : 30.70
+QPS w/o loadgen overhead        : 30.71
+
+Min latency (ns)                : 11021964
+Max latency (ns)                : 75381879
+Mean latency (ns)               : 32563023
+50.00 percentile latency (ns)   : 30082429
+90.00 percentile latency (ns)   : 51143930
+95.00 percentile latency (ns)   : 61879851
+97.00 percentile latency (ns)   : 63768169
+99.00 percentile latency (ns)   : 67406714
+99.90 percentile latency (ns)   : 71422420
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 1
+target_qps : 125
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 1024
+max_query_count : 0
+qsl_rng_seed : 14646058500348515648
+sample_index_rng_seed : 1207248993894122914
+schedule_rng_seed : 11879132697760422006
+accuracy_log_rng_seed : 0
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 0
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 2513
+
+2 warnings encountered. See detailed log.
+
+No errors encountered during test.

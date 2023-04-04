@@ -1,0 +1,51 @@
+================================================
+MLPerf Results Summary
+================================================
+SUT name : Concurrent_Triton_Server
+Scenario : Offline
+Mode     : PerformanceOnly
+Samples per second: 81405.6
+Result is : VALID
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+
+================================================
+Additional Stats
+================================================
+Min latency (ns)                : 931060480
+Max latency (ns)                : 649301449087
+Mean latency (ns)               : 338218033809
+50.00 percentile latency (ns)   : 338140300659
+90.00 percentile latency (ns)   : 587059007860
+95.00 percentile latency (ns)   : 618222209572
+97.00 percentile latency (ns)   : 630655445138
+99.00 percentile latency (ns)   : 643085384390
+99.90 percentile latency (ns)   : 648676421832
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 52856760
+target_qps : 80086
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 1
+max_query_count : 0
+qsl_rng_seed : 10003631887983097364
+sample_index_rng_seed : 17183018601990103738
+schedule_rng_seed : 12134888396634371638
+accuracy_log_rng_seed : 720381539243781796
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 4096
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 2048
+
+5 warnings encountered. See detailed log.
+
+No errors encountered during test.

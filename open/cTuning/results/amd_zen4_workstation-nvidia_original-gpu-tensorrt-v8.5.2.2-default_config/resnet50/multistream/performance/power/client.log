@@ -1,0 +1,37 @@
+client 2023-03-02 09:35:14,298 [INFO] Creating output directory '/home/arjun/phoenix_results_closed/valid_results/phoenix_Amd_Am5-nvidia_original-gpu-tensorrt-vdefault-default_config/resnet50/multistream/performance/tmp_power'
+client 2023-03-02 09:35:14,329 [INFO] Sending command to the server: 'mlcommons/power client v3'
+client 2023-03-02 09:35:14,331 [INFO] Got response: 'mlcommons/power server v3'
+client 2023-03-02 09:35:14,331 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-03-02 09:35:14,348 [INFO] NTP:offset = -0.005 s, delay = 0.016 s 
+client 2023-03-02 09:35:14,348 [INFO] Sending command to the server: 'time'
+client 2023-03-02 09:35:14,352 [INFO] Got response: '1677749714.347495'
+client 2023-03-02 09:35:14,352 [INFO] The time difference between the client and the server is within range 1.064 ms..5.174 ms
+client 2023-03-02 09:35:14,352 [INFO] Sending command to the server: 'new,,e7e8f167-0def-44bb-b062-4efffa38febc'
+client 2023-03-02 09:35:14,359 [INFO] Got response: 'OK 2023-03-02_09-35-14,9779db2f-a412-48f4-92c0-a214a6ff3a7f'
+client 2023-03-02 09:35:14,359 [INFO] Session id is '2023-03-02_09-35-14'
+client 2023-03-02 09:35:14,359 [INFO] Sources: {"sources": {"__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "client.py": "33ca4f26368777ac06e01f9567b714a4b8063886", "lib/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/client.py": "4c2b78fb4849a7e5b584ef792d82aaed20b17f57", "lib/common.py": "624d0c0acc7c39aaff3674f0b99d6a09da53d1dc", "lib/external/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/external/ntplib.py": "4da8f970656505a40483206ef2b5d3dd5e81711d", "lib/server.py": "cda0cdfaee9bfa1249c64a7dd4f89b7bf1b279f0", "lib/source_hashes.py": "60a2e02193209e8d392803326208d5466342da18", "lib/summary.py": "aa92f0a3f975eecd44d3c0cd0236342ccc9f941d", "lib/time_sync.py": "3210db56eb0ff0df57bf4293dc4d4b03fffd46f1", "server.py": "c3f90f2f7eeb4db30727556d0c815ebc89b3d28b", "tests/unit/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "tests/unit/test_server.py": "99ae15aef722f2000ee6ed1ae1523637bf1ae42b", "tests/unit/test_source_hashes.py": "00468a2907583c593e6574a1f6b404e4651c221a"}, "modules": {"ptd_client_server.lib.client": "lib/client.py", "ptd_client_server.lib.common": "lib/common.py", "ptd_client_server.lib.external.ntplib": "lib/external/ntplib.py", "ptd_client_server.lib.source_hashes": "lib/source_hashes.py", "ptd_client_server.lib.summary": "lib/summary.py", "ptd_client_server.lib.time_sync": "lib/time_sync.py"}}
+client 2023-03-02 09:35:14,359 [INFO] Running workload in ranging mode
+client 2023-03-02 09:35:14,359 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-03-02 09:35:14,377 [INFO] NTP:offset = -0.006 s, delay = 0.017 s 
+client 2023-03-02 09:35:14,377 [INFO] Sending command to the server: 'time'
+client 2023-03-02 09:35:14,379 [INFO] Got response: '1677749714.3743138'
+client 2023-03-02 09:35:14,379 [INFO] The time difference between the client and the server is within range 2.907 ms..5.221 ms
+client 2023-03-02 09:35:14,379 [INFO] Sending command to the server: 'session,2023-03-02_09-35-14,start,ranging'
+client 2023-03-02 09:35:42,512 [INFO] Got response: 'OK'
+client 2023-03-02 09:35:42,512 [INFO] Running the workload 'make preprocess_data BENCHMARKS="resnet50" && make run_harness RUN_ARGS=" --benchmarks=resnet50 --scenarios=multistream --test_mode=PerformanceOnly --offline_expected_qps=37000 --multi_stream_expected_latency_ns=300000 --single_stream_expected_latency_ns=300000"'
+client 2023-03-02 09:45:53,646 [INFO] Sending command to the server: 'session,2023-03-02_09-35-14,stop,ranging'
+client 2023-03-02 09:46:04,067 [INFO] Got response: 'OK'
+client 2023-03-02 09:46:04,070 [INFO] Copying loadgen logs from '/home/arjun/phoenix_results_closed/valid_results/phoenix_Amd_Am5-nvidia_original-gpu-tensorrt-vdefault-default_config/resnet50/multistream/performance/run_1' to '/home/arjun/phoenix_results_closed/valid_results/phoenix_Amd_Am5-nvidia_original-gpu-tensorrt-vdefault-default_config/resnet50/multistream/performance/tmp_power/ranging'
+client 2023-03-02 09:46:04,070 [INFO] Running workload in testing mode
+client 2023-03-02 09:46:04,070 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-03-02 09:46:04,083 [INFO] NTP:offset = -0.004 s, delay = 0.012 s 
+client 2023-03-02 09:46:04,083 [INFO] Sending command to the server: 'time'
+client 2023-03-02 09:46:04,086 [INFO] Got response: '1677750364.0834024'
+client 2023-03-02 09:46:04,086 [INFO] The time difference between the client and the server is within range 0.034 ms..3.555 ms
+client 2023-03-02 09:46:04,087 [INFO] Sending command to the server: 'session,2023-03-02_09-35-14,start,testing'
+client 2023-03-02 09:46:17,530 [INFO] Got response: 'OK'
+client 2023-03-02 09:46:17,530 [INFO] Running the workload 'make preprocess_data BENCHMARKS="resnet50" && make run_harness RUN_ARGS=" --benchmarks=resnet50 --scenarios=multistream --test_mode=PerformanceOnly --offline_expected_qps=37000 --multi_stream_expected_latency_ns=300000 --single_stream_expected_latency_ns=300000"'
+client 2023-03-02 09:56:28,580 [INFO] Sending command to the server: 'session,2023-03-02_09-35-14,stop,testing'
+client 2023-03-02 09:56:38,780 [INFO] Got response: 'OK'
+client 2023-03-02 09:56:38,781 [INFO] Copying loadgen logs from '/home/arjun/phoenix_results_closed/valid_results/phoenix_Amd_Am5-nvidia_original-gpu-tensorrt-vdefault-default_config/resnet50/multistream/performance/run_1' to '/home/arjun/phoenix_results_closed/valid_results/phoenix_Amd_Am5-nvidia_original-gpu-tensorrt-vdefault-default_config/resnet50/multistream/performance/tmp_power/run_1'
+client 2023-03-02 09:56:38,781 [INFO] Done runs

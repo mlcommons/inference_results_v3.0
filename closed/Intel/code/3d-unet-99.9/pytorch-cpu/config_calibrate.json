@@ -1,0 +1,14 @@
+{
+    "import_path": ".",
+
+    "backend-params": {
+        "model_path": "unet3d_jit_model.pt",
+        "calibrate": true
+    },
+
+    "dataset-params": {
+         "data_path": "build/calibration_data",
+         "performance_count": 16
+
+    }
+}

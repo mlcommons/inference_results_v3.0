@@ -1,0 +1,42 @@
+client 2023-03-03 07:27:26,502 [INFO] Sending command to the server: 'mlcommons/power client v3'
+client 2023-03-03 07:27:26,504 [INFO] Got response: 'mlcommons/power server v3'
+client 2023-03-03 07:27:26,505 [INFO] Synchronizing with the server and with 192.168.88.1...
+client 2023-03-03 07:27:26,531 [INFO] NTP:offset = 0.192 s, delay = 0.001 s 
+client 2023-03-03 07:27:26,532 [INFO] Sending command to the server: 'time'
+client 2023-03-03 07:27:26,534 [INFO] Got response: '1677828446.726228'
+client 2023-03-03 07:27:26,535 [INFO] The time difference between the client and the server is within range -193.494 ms..-190.806 ms
+client 2023-03-03 07:27:26,536 [INFO] Sending command to the server: 'new,offline,536287c7-e23d-44ae-94d5-fbc61df0fac6'
+client 2023-03-03 07:27:26,538 [INFO] Got response: 'OK 2023-03-02_23-27-26_offline,0939eeb4-5be3-40cb-af26-7a05ee730507'
+client 2023-03-03 07:27:26,539 [INFO] Session id is '2023-03-02_23-27-26_offline'
+client 2023-03-03 07:27:26,540 [INFO] Sources: {"sources": {"__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "client.py": "33ca4f26368777ac06e01f9567b714a4b8063886", "lib/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/client.py": "4c2b78fb4849a7e5b584ef792d82aaed20b17f57", "lib/common.py": "624d0c0acc7c39aaff3674f0b99d6a09da53d1dc", "lib/external/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/external/ntplib.py": "4da8f970656505a40483206ef2b5d3dd5e81711d", "lib/server.py": "cda0cdfaee9bfa1249c64a7dd4f89b7bf1b279f0", "lib/source_hashes.py": "60a2e02193209e8d392803326208d5466342da18", "lib/summary.py": "aa92f0a3f975eecd44d3c0cd0236342ccc9f941d", "lib/time_sync.py": "3210db56eb0ff0df57bf4293dc4d4b03fffd46f1", "server.py": "c3f90f2f7eeb4db30727556d0c815ebc89b3d28b", "tests/unit/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "tests/unit/test_server.py": "99ae15aef722f2000ee6ed1ae1523637bf1ae42b", "tests/unit/test_source_hashes.py": "00468a2907583c593e6574a1f6b404e4651c221a"}, "modules": {"ptd_client_server.lib.client": "lib/client.py", "ptd_client_server.lib.common": "lib/common.py", "ptd_client_server.lib.external.ntplib": "lib/external/ntplib.py", "ptd_client_server.lib.source_hashes": "lib/source_hashes.py", "ptd_client_server.lib.summary": "lib/summary.py", "ptd_client_server.lib.time_sync": "lib/time_sync.py"}}
+client 2023-03-03 07:27:26,554 [INFO] Running workload in ranging mode
+client 2023-03-03 07:27:26,554 [INFO] Synchronizing with the server and with 192.168.88.1...
+client 2023-03-03 07:27:26,558 [INFO] NTP:offset = 0.192 s, delay = 0.001 s 
+client 2023-03-03 07:27:26,559 [INFO] Sending command to the server: 'time'
+client 2023-03-03 07:27:26,561 [INFO] Got response: '1677828446.7530391'
+client 2023-03-03 07:27:26,562 [INFO] The time difference between the client and the server is within range -193.487 ms..-191.021 ms
+client 2023-03-03 07:27:26,562 [INFO] Sending command to the server: 'session,2023-03-02_23-27-26_offline,start,ranging'
+client 2023-03-03 07:27:54,583 [INFO] Got response: 'OK'
+client 2023-03-03 07:27:54,584 [INFO] Running the workload './run_offline.sh'
+client 2023-03-03 07:42:36,512 [INFO] Sending command to the server: 'session,2023-03-02_23-27-26_offline,stop,ranging'
+client 2023-03-03 07:42:46,457 [INFO] Got response: 'OK'
+client 2023-03-03 07:42:46,511 [INFO] Copying loadgen logs from '/mnt/power-dev/sima_workload/loadgen_out' to './2023-03-02_23-27-26_offline/ranging'
+client 2023-03-03 07:42:46,580 [INFO] Running workload in testing mode
+client 2023-03-03 07:42:46,581 [INFO] Synchronizing with the server and with 192.168.88.1...
+client 2023-03-03 07:42:46,586 [INFO] NTP:offset = 0.307 s, delay = 0.001 s 
+client 2023-03-03 07:42:46,586 [WARNING] The time offset between the system time and 192.168.88.1 is more then 200 ms (306.512 ms)
+client 2023-03-03 07:42:46,587 [INFO] Sending command to the server: 'set_ntp'
+client 2023-03-03 07:42:53,795 [INFO] Got response: 'OK'
+client 2023-03-03 07:42:53,796 [INFO] Synchronizing with 192.168.88.1 time using NTP...
+client 2023-03-03 07:43:01,102 [INFO] Set system time at 2023-03-03 07:43:01.102422
+client 2023-03-03 07:43:01,107 [INFO] NTP:offset = 0.009 s, delay = 0.001 s 
+client 2023-03-03 07:43:01,108 [INFO] Sending command to the server: 'time'
+client 2023-03-03 07:43:01,110 [INFO] Got response: '1677829381.1185546'
+client 2023-03-03 07:43:01,111 [INFO] The time difference between the client and the server is within range -10.279 ms..-7.483 ms
+client 2023-03-03 07:43:01,112 [INFO] Sending command to the server: 'session,2023-03-02_23-27-26_offline,start,testing'
+client 2023-03-03 07:43:14,002 [INFO] Got response: 'OK'
+client 2023-03-03 07:43:14,003 [INFO] Running the workload './run_offline.sh'
+client 2023-03-03 07:58:15,980 [INFO] Sending command to the server: 'session,2023-03-02_23-27-26_offline,stop,testing'
+client 2023-03-03 07:58:26,060 [INFO] Got response: 'OK'
+client 2023-03-03 07:58:26,080 [INFO] Copying loadgen logs from '/mnt/power-dev/sima_workload/loadgen_out' to './2023-03-02_23-27-26_offline/run_1'
+client 2023-03-03 07:58:26,150 [INFO] Done runs

@@ -1,0 +1,23 @@
+diff --git a/intel_extension_for_pytorch/csrc/jit/codegen/onednn/prepare_dequant.cpp b/intel_extension_for_pytorch/csrc/jit/codegen/onednn/prepare_dequant.cpp
+index d054024b..d6833f44 100644
+--- a/intel_extension_for_pytorch/csrc/jit/codegen/onednn/prepare_dequant.cpp
++++ b/intel_extension_for_pytorch/csrc/jit/codegen/onednn/prepare_dequant.cpp
+@@ -88,7 +88,7 @@ void PrepareDequantForLLGA(std::shared_ptr<Graph>& graph) {
+ }
+ 
+ void addInformationForDequant(Node* node, Node* input_node) {
+-  if (input_node->kind() == Symbol::aten("quantize_per_tensor")) {
++  if ((input_node->kind() == Symbol::aten("quantize_per_tensor")) || (input_node->kind() == Symbol::aten("_make_per_tensor_quantized_tensor"))) {
+     node->s_(Symbol::attr("qtype"), std::string("per_tensor"));
+ 
+     std::vector<int64_t> zps_vector = Operator::IntToVector(input_node, 2);
+@@ -154,7 +154,8 @@ void DequantInformationSave(Node* node) {
+   TORCH_CHECK(
+       input_node->kind() == prim::Constant ||
+           input_node->kind() == Symbol::aten("quantize_per_tensor") ||
+-          input_node->kind() == Symbol::aten("quantize_per_channel"),
++          input_node->kind() == Symbol::aten("quantize_per_channel") ||
++          input_node->kind() == Symbol::aten("_make_per_tensor_quantized_tensor"),
+       "Unsupported input node kind to dequant ",
+       input_node->kind().toQualString());
+   addInformationForDequant(node, input_node);

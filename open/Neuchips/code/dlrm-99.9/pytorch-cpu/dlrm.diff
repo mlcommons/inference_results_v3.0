@@ -1,0 +1,4188 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3b9e498..193149f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,6 +4,12 @@ set(LINUX TRUE)
+ set(CMAKE_INSTALL_MESSAGE NEVER)
+ # set(CMAKE_VERBOSE_MAKEFILE ON)
+ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
++IF (DEFINED ENV{CC})
++  SET(CMAKE_C_COMPILER "$ENV{CC}")
++ENDIF()
++IF (DEFINED ENV{CXX})
++  SET(CMAKE_CXX_COMPILER "$ENV{CXX}")
++ENDIF()
+ 
+ set(PLUGIN_NAME torch_ipex)
+ 
+diff --git a/THIRD-PARTY-PROGRAMS b/THIRD-PARTY-PROGRAMS
+new file mode 100644
+index 0000000..709035f
+--- /dev/null
++++ b/THIRD-PARTY-PROGRAMS
+@@ -0,0 +1,251 @@
++intel-extension-for-pytorch (IPEX) Third Party Programs File
++
++The following is the licences and/or notice of the software Libraries under
++the third party we are use, those third party are provided as github submodule links.
++
++--------------------------------------------------------------------------------
++1. mkl-dnn (third_party/)
++Copyright 2016-2021 Intel Corporation
++Copyright 2018 YANDEX LLC
++Copyright 2020 Arm Limited and affiliates
++Copyright 2020 Codeplay Software Limited
++Copyright 2019-2020 FUJITSU LIMITED
++
++Licensed under the Apache License, Version 2.0 (the "License");
++you may not use this file except in compliance with the License.
++You may obtain a copy of the License at
++
++    http://www.apache.org/licenses/LICENSE-2.0
++
++Unless required by applicable law or agreed to in writing, software
++distributed under the License is distributed on an "AS IS" BASIS,
++WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++See the License for the specific language governing permissions and
++limitations under the License.
++
++This distribution includes third party software ("third party programs").
++This third party software, even if included with the distribution of
++the Intel software, may be governed by separate license terms, including
++without limitation, third party license terms, other Intel software license
++terms, and open source software license terms. These separate license terms
++govern your use of the third party programs as set forth in the
++"THIRD-PARTY-PROGRAMS" file.
++
++                                 Apache License
++                           Version 2.0, January 2004
++                        http://www.apache.org/licenses/
++
++   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
++
++   1. Definitions.
++
++      "License" shall mean the terms and conditions for use, reproduction,
++      and distribution as defined by Sections 1 through 9 of this document.
++
++      "Licensor" shall mean the copyright owner or entity authorized by
++      the copyright owner that is granting the License.
++
++      "Legal Entity" shall mean the union of the acting entity and all
++      other entities that control, are controlled by, or are under common
++      control with that entity. For the purposes of this definition,
++      "control" means (i) the power, direct or indirect, to cause the
++      direction or management of such entity, whether by contract or
++      otherwise, or (ii) ownership of fifty percent (50%) or more of the
++      outstanding shares, or (iii) beneficial ownership of such entity.
++
++      "You" (or "Your") shall mean an individual or Legal Entity
++      exercising permissions granted by this License.
++
++      "Source" form shall mean the preferred form for making modifications,
++      including but not limited to software source code, documentation
++      source, and configuration files.
++
++      "Object" form shall mean any form resulting from mechanical
++      transformation or translation of a Source form, including but
++      not limited to compiled object code, generated documentation,
++      and conversions to other media types.
++
++      "Work" shall mean the work of authorship, whether in Source or
++      Object form, made available under the License, as indicated by a
++      copyright notice that is included in or attached to the work
++      (an example is provided in the Appendix below).
++
++      "Derivative Works" shall mean any work, whether in Source or Object
++      form, that is based on (or derived from) the Work and for which the
++      editorial revisions, annotations, elaborations, or other modifications
++      represent, as a whole, an original work of authorship. For the purposes
++      of this License, Derivative Works shall not include works that remain
++      separable from, or merely link (or bind by name) to the interfaces of,
++      the Work and Derivative Works thereof.
++
++      "Contribution" shall mean any work of authorship, including
++      the original version of the Work and any modifications or additions
++      to that Work or Derivative Works thereof, that is intentionally
++      submitted to Licensor for inclusion in the Work by the copyright owner
++      or by an individual or Legal Entity authorized to submit on behalf of
++      the copyright owner. For the purposes of this definition, "submitted"
++      means any form of electronic, verbal, or written communication sent
++      to the Licensor or its representatives, including but not limited to
++      communication on electronic mailing lists, source code control systems,
++      and issue tracking systems that are managed by, or on behalf of, the
++      Licensor for the purpose of discussing and improving the Work, but
++      excluding communication that is conspicuously marked or otherwise
++      designated in writing by the copyright owner as "Not a Contribution."
++
++      "Contributor" shall mean Licensor and any individual or Legal Entity
++      on behalf of whom a Contribution has been received by Licensor and
++      subsequently incorporated within the Work.
++
++   2. Grant of Copyright License. Subject to the terms and conditions of
++      this License, each Contributor hereby grants to You a perpetual,
++      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
++      copyright license to reproduce, prepare Derivative Works of,
++      publicly display, publicly perform, sublicense, and distribute the
++      Work and such Derivative Works in Source or Object form.
++
++   3. Grant of Patent License. Subject to the terms and conditions of
++      this License, each Contributor hereby grants to You a perpetual,
++      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
++      (except as stated in this section) patent license to make, have made,
++      use, offer to sell, sell, import, and otherwise transfer the Work,
++      where such license applies only to those patent claims licensable
++      by such Contributor that are necessarily infringed by their
++      Contribution(s) alone or by combination of their Contribution(s)
++      with the Work to which such Contribution(s) was submitted. If You
++      institute patent litigation against any entity (including a
++      cross-claim or counterclaim in a lawsuit) alleging that the Work
++      or a Contribution incorporated within the Work constitutes direct
++      or contributory patent infringement, then any patent licenses
++      granted to You under this License for that Work shall terminate
++      as of the date such litigation is filed.
++
++   4. Redistribution. You may reproduce and distribute copies of the
++      Work or Derivative Works thereof in any medium, with or without
++      modifications, and in Source or Object form, provided that You
++      meet the following conditions:
++
++      (a) You must give any other recipients of the Work or
++          Derivative Works a copy of this License; and
++
++      (b) You must cause any modified files to carry prominent notices
++          stating that You changed the files; and
++
++      (c) You must retain, in the Source form of any Derivative Works
++          that You distribute, all copyright, patent, trademark, and
++          attribution notices from the Source form of the Work,
++          excluding those notices that do not pertain to any part of
++          the Derivative Works; and
++
++      (d) If the Work includes a "NOTICE" text file as part of its
++          distribution, then any Derivative Works that You distribute must
++          include a readable copy of the attribution notices contained
++          within such NOTICE file, excluding those notices that do not
++          pertain to any part of the Derivative Works, in at least one
++          of the following places: within a NOTICE text file distributed
++          as part of the Derivative Works; within the Source form or
++          documentation, if provided along with the Derivative Works; or,
++          within a display generated by the Derivative Works, if and
++          wherever such third-party notices normally appear. The contents
++          of the NOTICE file are for informational purposes only and
++          do not modify the License. You may add Your own attribution
++          notices within Derivative Works that You distribute, alongside
++          or as an addendum to the NOTICE text from the Work, provided
++          that such additional attribution notices cannot be construed
++          as modifying the License.
++
++      You may add Your own copyright statement to Your modifications and
++      may provide additional or different license terms and conditions
++      for use, reproduction, or distribution of Your modifications, or
++      for any such Derivative Works as a whole, provided Your use,
++      reproduction, and distribution of the Work otherwise complies with
++      the conditions stated in this License.
++
++   5. Submission of Contributions. Unless You explicitly state otherwise,
++      any Contribution intentionally submitted for inclusion in the Work
++      by You to the Licensor shall be under the terms and conditions of
++      this License, without any additional terms or conditions.
++      Notwithstanding the above, nothing herein shall supersede or modify
++      the terms of any separate license agreement you may have executed
++      with Licensor regarding such Contributions.
++
++   6. Trademarks. This License does not grant permission to use the trade
++      names, trademarks, service marks, or product names of the Licensor,
++      except as required for reasonable and customary use in describing the
++      origin of the Work and reproducing the content of the NOTICE file.
++
++   7. Disclaimer of Warranty. Unless required by applicable law or
++      agreed to in writing, Licensor provides the Work (and each
++      Contributor provides its Contributions) on an "AS IS" BASIS,
++      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
++      implied, including, without limitation, any warranties or conditions
++      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
++      PARTICULAR PURPOSE. You are solely responsible for determining the
++      appropriateness of using or redistributing the Work and assume any
++      risks associated with Your exercise of permissions under this License.
++
++   8. Limitation of Liability. In no event and under no legal theory,
++      whether in tort (including negligence), contract, or otherwise,
++      unless required by applicable law (such as deliberate and grossly
++      negligent acts) or agreed to in writing, shall any Contributor be
++      liable to You for damages, including any direct, indirect, special,
++      incidental, or consequential damages of any character arising as a
++      result of this License or out of the use or inability to use the
++      Work (including but not limited to damages for loss of goodwill,
++      work stoppage, computer failure or malfunction, or any and all
++      other commercial damages or losses), even if such Contributor
++      has been advised of the possibility of such damages.
++
++   9. Accepting Warranty or Additional Liability. While redistributing
++      the Work or Derivative Works thereof, You may choose to offer,
++      and charge a fee for, acceptance of support, warranty, indemnity,
++      or other liability obligations and/or rights consistent with this
++      License. However, in accepting such obligations, You may act only
++      on Your own behalf and on Your sole responsibility, not on behalf
++      of any other Contributor, and only if You agree to indemnify,
++      defend, and hold each Contributor harmless for any liability
++      incurred by, or claims asserted against, such Contributor by reason
++      of your accepting any such warranty or additional liability.
++
++   END OF TERMS AND CONDITIONS
++
++--------------------------------------------------------------------------------
++2.xsmm(third_party/)
++# BSD 3-Clause License
++
++Copyright (c) 2009-2021, Intel Corporation
++Copyright (c) 2016-2019, Google Inc.
++Copyright (c) 2012-2014, Technische Universitaet Muenchen
++All rights reserved.
++
++Redistribution and use in source and binary forms, with or without
++modification, are permitted provided that the following conditions are met:
++
++* Redistributions of source code must retain the above copyright notice, this
++  list of conditions and the following disclaimer.
++
++* Redistributions in binary form must reproduce the above copyright notice,
++  this list of conditions and the following disclaimer in the documentation
++  and/or other materials provided with the distribution.
++
++* Neither the name of the copyright holder nor the names of its
++  contributors may be used to endorse or promote products derived from
++  this software without specific prior written permission.
++
++THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
++DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
++FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
++SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
++CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
++OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++--------------------------------------------------------------------------------
++
++The following third party programs have their own third party program files. These additional third party program files are as follows:
++1.	onednn- third_party/mkl-dnn/THIRD-PARTY-PROGRAMS
++
++--------------------------------------------------------------------------------
++
++Other names and brands may be claimed as the property of others.
+diff --git a/cmake/CPU.cmake b/cmake/CPU.cmake
+index eb675d5..5005084 100644
+--- a/cmake/CPU.cmake
++++ b/cmake/CPU.cmake
+@@ -26,7 +26,7 @@ IF(CMAKE_BUILD_TYPE MATCHES Debug)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g -D_DEBUG")
+ ELSE()
+   message("Release build.")
+-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -DNDEBUG")
++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=sapphirerapids -O2 -DNDEBUG")
+ ENDIF()
+ 
+ IF("${IPEX_DISP_OP}" STREQUAL "1")
+@@ -70,11 +70,19 @@ IF (C_AVX512_FOUND OR CXX_AVX512_FOUND)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx512f")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx512bw")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx512vl")
++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx512dq")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mf16c")
+ ENDIF()
+ IF (C_AVX512_BF16_FOUND OR CXX_AVX512_BF16_FOUND)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx512bf16 -DAVX512_BF16")
+ ENDIF()
++IF (C_AVX512_VNNI_FOUND OR CXX_AVX512_VNNI_FOUND)
++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx512vnni -DAVX512_VNNI")
++ENDIF()
++IF (C_AMX_TILE_FOUND OR CXX_AMX_TILE_FOUND)
++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mamx-tile -mamx-int8 -DAMX_TILE")
++  message("AMX found, AMX_TILE is defined OK.")
++ENDIF()
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
+ # These flags are not available in GCC-4.8.5. Set only when using clang.
+ # Compared against https://gcc.gnu.org/onlinedocs/gcc-4.8.5/gcc/Option-Summary.html
+diff --git a/cmake/Modules/FindAVX.cmake b/cmake/Modules/FindAVX.cmake
+index 31853a3..72ccb72 100644
+--- a/cmake/Modules/FindAVX.cmake
++++ b/cmake/Modules/FindAVX.cmake
+@@ -21,12 +21,39 @@ SET(AVX512_BF16_CODE "
+ 
+   int main() {
+     __m512 src;
+-    // detect avx512f and avx512bf16
++    // detect avx512vl and avx512bf16
+     _mm512_cvtneps_pbh(src);
+     return 0;
+   }
+ ")
+ 
++SET(AVX512_VNNI_CODE "
++  #include <stdint.h>
++  #include <immintrin.h>
++
++  int main() {
++    char a1 = 1;
++    char a2 = 2;
++    char a3 = 0;
++    __m512i src1 = _mm512_set1_epi8(a1);
++    __m512i src2 = _mm512_set1_epi8(a2);
++    __m512i src3 = _mm512_set1_epi8(a3);
++    // detect avx512_vnni
++    _mm512_dpbusds_epi32(src3, src1, src2);
++    return src3[0];
++  }
++")
++
++SET(AMX_TILE_CODE "
++  #include <stdint.h>
++  #include <immintrin.h>
++  #include <emmintrin.h>
++  int main() {
++    _tile_release();
++    return 0;
++  }
++")
++
+ MACRO(CHECK_SSE lang type flags)
+   SET(__FLAG_I 1)
+   SET(CMAKE_REQUIRED_FLAGS_SAVE ${CMAKE_REQUIRED_FLAGS})
+@@ -55,8 +82,14 @@ MACRO(CHECK_SSE lang type flags)
+   MARK_AS_ADVANCED(${lang}_${type}_FOUND ${lang}_${type}_FLAGS)
+ ENDMACRO()
+ 
+-CHECK_SSE(C "AVX512" " ;-mavx512f -mavx512bw -mavx512vl")
+-CHECK_SSE(CXX "AVX512" " ;-mavx512f -mavx512bw -mavx512vl")
++CHECK_SSE(C "AVX512" " ;-mavx512f -mavx512bw -mavx512vl -mavx512dq")
++CHECK_SSE(CXX "AVX512" " ;-mavx512f -mavx512bw -mavx512vl -mavx512dq")
++
++CHECK_SSE(C "AVX512_BF16" " ;-mavx512vl -mavx512bf16")
++CHECK_SSE(CXX "AVX512_BF16" " ;-mavx512vl -mavx512bf16")
++
++CHECK_SSE(C "AVX512_VNNI" " ;-mavx512vnni")
++CHECK_SSE(CXX "AVX512_VNNI" " ;-mavx512vnni")
+ 
+-CHECK_SSE(C "AVX512_BF16" " ;-mavx512f -mavx512bf16")
+-CHECK_SSE(CXX "AVX512_BF16" " ;-mavx512f -mavx512bf16")
++CHECK_SSE(C "AMX_TILE" " ;-mamx-tile")
++CHECK_SSE(CXX "AMX_TILE" " ;-mamx-tile")
+diff --git a/tests/cpu/test_interaction.py b/tests/cpu/test_interaction.py
+index a8d12ef..04924ed 100644
+--- a/tests/cpu/test_interaction.py
++++ b/tests/cpu/test_interaction.py
+@@ -44,7 +44,7 @@ class TestInteractionCases(TestCase):
+             R = torch.cat([x] + [Zflat], dim=1)
+             return R
+ 
+-        dtypes=[torch.float32]
++        dtypes=[torch.float32, torch.bfloat16]
+         for dtype in dtypes:
+             x1 = torch.randn([2048, 128], device=ipex.DEVICE).to(dtype).clone().detach().requires_grad_()
+             x2 = x1.clone().detach().requires_grad_()
+diff --git a/torch_ipex/csrc/_C.cpp b/torch_ipex/csrc/_C.cpp
+index bdd8df6..73d26f6 100644
+--- a/torch_ipex/csrc/_C.cpp
++++ b/torch_ipex/csrc/_C.cpp
+@@ -33,6 +33,11 @@
+ #include <c10/core/DeviceType.h>
+ #include <torch/csrc/Exceptions.h>
+ 
++#include "cpu/toolkit/sklearn.h"
++#include "cpu/toolkit/thread.h"
++#include "cpu/toolkit/concat.h"
++
++
+ namespace torch_ipex {
+ namespace {
+ 
+@@ -230,6 +235,9 @@ void InitIpexModuleBindings(py::module m) {
+   m.def("nms", &IpexExternal::nms);
+   m.def("batch_score_nms", &IpexExternal::batch_score_nms);
+   m.def("linear_relu", &AtenIpexTypeExt::linear_relu);
++  m.def("roc_auc_score", &toolkit::roc_auc_score);
++  m.def("thread_bind", &toolkit::thread_bind);
++  m.def("concat_all_continue", &toolkit::concat_all_continue);
+ }
+ }  // namespace
+ using namespace torch::jit;
+diff --git a/torch_ipex/csrc/cpu/CMakeLists.txt b/torch_ipex/csrc/cpu/CMakeLists.txt
+index abfdf3b..1f44c38 100644
+--- a/torch_ipex/csrc/cpu/CMakeLists.txt
++++ b/torch_ipex/csrc/cpu/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-FILE(GLOB _CPU_SRCS *.cpp dbl/*.cpp int8/*.cpp bf16/*.cpp aten/operators/*.cpp)
++FILE(GLOB _CPU_SRCS *.cpp dbl/*.cpp int8/*.cpp bf16/*.cpp aten/operators/*.cpp mlperf_kernels/*.cpp toolkit/*.cpp)
+ LIST(APPEND DPCPP_CPU_SRCS ${_CPU_SRCS})
+ 
+ # Pass to parent
+diff --git a/torch_ipex/csrc/cpu/CustomOPs.h b/torch_ipex/csrc/cpu/CustomOPs.h
+index dceed5c..39e11c0 100644
+--- a/torch_ipex/csrc/cpu/CustomOPs.h
++++ b/torch_ipex/csrc/cpu/CustomOPs.h
+@@ -614,10 +614,16 @@ public:
+ #if defined(IPEX_PROFILE_OP)
+     RECORD_FUNCTION("IPEXEmbeddingBagOp::_forward", std::vector<c10::IValue>({}));
+ #endif
++    bool auto_dnnl = torch_ipex::check_auto_dnnl();
++    if (!auto_dnnl) {
++      auto ret =
++          at::embedding_bag(weight, indices, offsets, scale_grad_by_freq, mode,
++                            sparse, per_sample_weights, include_last_offset);
++      return {std::get<0>(ret), std::get<1>(ret), std::get<2>(ret),std::get<3>(ret)};
++    }
++
+     try {
+-      if (torch_ipex::check_auto_dnnl() &&
+-          torch_ipex::cpu::aten::embedding_bag::embedding_bag_fast_path_sum(
+-              weight, per_sample_weights, mode) &&
++      if (torch_ipex::cpu::aten::embedding_bag::embedding_bag_fast_path_sum(weight, per_sample_weights, mode) &&
+           weight.device().type() == c10::DeviceType::XPU &&
+           indices.device().type() == c10::DeviceType::XPU &&
+           offsets.device().type() == c10::DeviceType::XPU) {
+@@ -631,8 +637,7 @@ public:
+       TORCH_WARN(e.what());
+ #endif
+     }
+-    if (torch_ipex::check_auto_dnnl() &&
+-        weight.device().type() == c10::DeviceType::XPU &&
++    if (weight.device().type() == c10::DeviceType::XPU &&
+         indices.device().type() == c10::DeviceType::XPU &&
+         offsets.device().type() == c10::DeviceType::XPU) {
+       auto &&_ipex_weight =
+diff --git a/torch_ipex/csrc/cpu/ExtendOPs.cpp b/torch_ipex/csrc/cpu/ExtendOPs.cpp
+index bed7747..c2e2924 100644
+--- a/torch_ipex/csrc/cpu/ExtendOPs.cpp
++++ b/torch_ipex/csrc/cpu/ExtendOPs.cpp
+@@ -1,4 +1,5 @@
+ #include "ExtendOPs.h"
++#include "interaction_forward.h"
+ #include "../utils.h"
+ #include "CustomOPs.h"
+ #include "DevOPs.h"
+@@ -7,14 +8,16 @@
+ #include "aten/aten.hpp"
+ #include "bf16/vec/bf16_vec_kernel.h"
+ #include "dil/dil.hpp"
+-#include "torch_ipex/csrc/cpu/int8/Config.h"
+-#include "xsmm/libxsmm_utils.h"
++#include "int8/Config.h"
+ #include <ATen/Parallel.h>
+ #include <ATen/MatrixRef.h>
+ #include <algorithm>
++#include <immintrin.h>
+ #include <c10/util/Exception.h>
+ #include <torch/csrc/autograd/function.h>
+ 
++#include "mlperf_kernels/mlperf_kernels.h"
++
+ namespace torch_ipex {
+ 
+ void AtenIpexTypeExt::packed_add_(at::Tensor &top_half, at::Tensor &bot_half,
+@@ -142,13 +145,6 @@ void AtenIpexTypeExt::packed_add_(at::Tensor &top_half, at::Tensor &bot_half,
+   }
+ }
+ 
+-template <typename T>
+-static inline void cat(const T *in1, const T *in2, T *out, size_t in1_size,
+-                       size_t in2_size) {
+-  move_ker(out, in1, in1_size);
+-  move_ker(&out[in1_size], in2, in2_size);
+-}
+-
+ template <typename T>
+ static inline void cat_backward(const T *in, T *out1, T *out2, size_t out1_size,
+                                 size_t out2_size) {
+@@ -156,16 +152,6 @@ static inline void cat_backward(const T *in, T *out1, T *out2, size_t out1_size,
+   move_ker(out2, &in[out1_size], out2_size);
+ }
+ 
+-template <typename T>
+-static inline void cat(T *out, const std::vector<T *> &in,
+-                       const std::vector<uint32_t> &feature_sizes, int64_t bs) {
+-  size_t offset = 0;
+-  for (int j = 0; j < feature_sizes.size(); j++) {
+-    move_ker(&out[offset], &in[j][bs * feature_sizes[j]], feature_sizes[j]);
+-    offset += feature_sizes[j];
+-  }
+-}
+-
+ template <typename T>
+ static inline void cat_backward(const T *in, std::vector<T *> &out,
+                                 const std::vector<uint32_t> &feature_sizes,
+@@ -178,110 +164,24 @@ static inline void cat_backward(const T *in, std::vector<T *> &out,
+   }
+ }
+ 
+-template <typename T>
+-static inline void flat_triangle(const T *in, T *out, size_t size) {
+-  size_t offset = 0;
+-  for (int i = 1; i < size; i++) {
+-    move_ker(&out[offset], &in[i * size], i);
+-    offset += i;
+-  }
+-}
+-
+ template <typename T>
+ static inline void flat_triangle_backward(const T *in, T *out, size_t size) {
++  zero_ker(out, size*size);
+   size_t offset = 0;
+-  for (int i = 0; i < size * size; i++) {
+-    out[i] = 0.f;
+-  }
+   for (int i = 1; i < size; i++) {
+     move_ker(&out[i * size], &in[offset], i);
+     offset += i;
+   }
+ }
+ 
+-static inline void mm_backward(float *out, const float *in1, const float *in2,
+-                               uint32_t vector_nums, uint32_t vector_size,
+-                               libxsmm_smmfunction mm_ker) {
+-  // Calculate gy + gy'
+-  float sum_buf[vector_nums * vector_nums];
+-  for (int32_t j = 0; j < vector_nums; j++) {
+-    for (int32_t k = 0; k < vector_nums; k++) {
+-      sum_buf[j * vector_nums + k] =
+-          in1[j * vector_nums + k] + in1[k * vector_nums + j];
+-    }
+-  }
+-  // mm backward
+-  mm_ker(in2, sum_buf, out);
+-}
+-
+-static inline void mm_backward(at::BFloat16 *out, const at::BFloat16 *in1,
+-                               const at::BFloat16 *in2, uint32_t vector_nums,
+-                               uint32_t vector_size,
+-                               libxsmm_smmfunction mm_ker) {
+-  float tmp_in1[vector_nums * vector_nums];
+-  float tmp_in2[vector_nums * vector_size];
+-  float tmp_out[vector_nums * vector_size];
+-
+-  cvt_bf16_to_fp32(tmp_in1, in1, vector_nums * vector_nums);
+-  cvt_bf16_to_fp32(tmp_in2, in2, vector_nums * vector_size);
+-  // Calculate gy + gy'
++template <typename T>
++static inline void transpose_add(T *out, const T *in, uint32_t vector_nums) {
+   for (int32_t j = 0; j < vector_nums; j++) {
+     for (int32_t k = 0; k < vector_nums; k++) {
+-      tmp_in1[j * vector_nums + k] += tmp_in1[k * vector_nums + j];
++      out[j * vector_nums + k] =
++          in[j * vector_nums + k] + in[k * vector_nums + j];
+     }
+   }
+-  // mm backward w/ fp32
+-  mm_ker(tmp_in2, tmp_in1, tmp_out);
+-  cvt_fp32_to_bf16(out, tmp_out, vector_nums * vector_size);
+-}
+-
+-template <typename T>
+-inline at::Tensor _interaction_forward(const std::vector<at::Tensor> &input) {
+-#if defined(IPEX_PROFILE_OP)
+-  RECORD_FUNCTION("_interaction_forward", std::vector<c10::IValue>({}));
+-#endif
+-  uint32_t total_feature_size = 0;
+-  int64_t batch_size = input[0].sizes()[0];
+-  uint32_t vector_size = input[0].sizes()[1];
+-  std::vector<uint32_t> feature_sizes(input.size());
+-  std::vector<T *> input_data(input.size());
+-  for (int i = 0; i < input.size(); i++) {
+-    TORCH_INTERNAL_ASSERT_DEBUG_ONLY(input[i].is_contiguous());
+-    TORCH_INTERNAL_ASSERT_DEBUG_ONLY(input[i].device().is_xpu());
+-    TORCH_INTERNAL_ASSERT_DEBUG_ONLY(input[i].dim() == 2);
+-    feature_sizes[i] = input[i].sizes()[1];
+-    total_feature_size += input[i].sizes()[1];
+-    input_data[i] = input[i].data_ptr<T>();
+-  }
+-  auto vector_nums = total_feature_size / vector_size;
+-  TORCH_INTERNAL_ASSERT_DEBUG_ONLY(total_feature_size % vector_size == 0);
+-  auto interact_feature_size = vector_nums * (vector_nums - 1) / 2;
+-  auto tr_vector_size = sizeof(T) == 4 ? vector_size : vector_size / 2;
+-  auto out = at::empty({batch_size, interact_feature_size + vector_size},
+-                       input[0].options());
+-  auto out_data = out.data_ptr<T>();
+-
+-  auto mm_kernel = get_mm_kernel<T>(vector_nums, vector_nums, vector_size);
+-  auto tr_kernel = get_tr_kernel(tr_vector_size, vector_nums, vector_nums);
+-
+-  at::parallel_for(0, batch_size, 0, [&](int64_t start, int64_t end) {
+-    T cat_buf[vector_nums * vector_size];
+-    T tr_buf[vector_nums * vector_size];
+-    T mm_buf[vector_nums * vector_nums];
+-    T flat_buf[interact_feature_size];
+-    for (int64_t i = start; i < end; i++) {
+-      cat<T>(cat_buf, input_data, feature_sizes, i);
+-      tr_kernel(cat_buf, &tr_vector_size, tr_buf, &vector_nums);
+-      mm_kernel((xsmm_dtype<T> *)tr_buf, (xsmm_dtype<T> *)cat_buf,
+-                (xsmm_dtype<T> *)mm_buf);
+-      flat_triangle<T>(mm_buf, flat_buf, vector_nums);
+-      cat<T>(&input_data[0][i * vector_size], flat_buf,
+-             &out_data[i * (interact_feature_size + vector_size)], vector_size,
+-             interact_feature_size);
+-    }
+-  });
+-
+-  return out;
+ }
+ 
+ template <typename T>
+@@ -313,20 +213,38 @@ _interaction_backward(const at::Tensor &grad_out,
+   auto interact_feature_size = vector_nums * (vector_nums - 1) / 2;
+   auto grad_out_data = grad_out.data_ptr<T>();
+ 
+-  auto mm_kernel = get_mm_kernel<float>(vector_nums, vector_size, vector_nums);
++  auto dtype = get_dil_data_type(input[0].scalar_type());
++  std::vector<int64_t> lhs_shape({vector_nums, vector_nums});
++  std::vector<int64_t> lhs_stride({vector_nums, 1});
++  std::vector<int64_t> rhs_shape({vector_nums, vector_size});
++  std::vector<int64_t> rhs_stride({vector_size, 1});
++  std::vector<int64_t> res_shape({vector_nums, vector_size});
++  std::vector<int64_t> res_stride({vector_size, 1});
++  dil::tensor::desc lhs_desc(std::move(lhs_shape), dtype,
++                               std::move(lhs_stride));
++  dil::tensor::desc rhs_desc(std::move(rhs_shape), dtype,
++                               std::move(rhs_stride));
++  dil::tensor::desc res_desc(std::move(res_shape), dtype,
++                               std::move(res_stride));
++  auto pd = dil::matmul_forward::primitive_desc(
++      {lhs_desc, rhs_desc, res_desc}, dil::engine::cpu_engine());
+ 
+   at::parallel_for(0, batch_size, 0, [&](int64_t start, int64_t end) {
+-    T grad_input0_buf[vector_size];
+-    T grad_flat_buf[interact_feature_size];
+-    T grad_mm_buf[vector_nums * vector_nums];
+-    T grad_cat_buf[vector_nums * vector_size];
+-    T cat_buf[vector_nums * vector_size];
++    T grad_input0_buf[vector_size] __attribute__((aligned(64)));
++    T grad_flat_buf[interact_feature_size] __attribute__((aligned(64)));
++    T grad_mm_buf[vector_nums * vector_nums] __attribute__((aligned(64)));
++    T grad_cat_buf[vector_nums * vector_size] __attribute__((aligned(64)));
++    T cat_buf[vector_nums * vector_size] __attribute__((aligned(64)));
++    T sum_buf[vector_nums * vector_nums] __attribute__((aligned(64)));
++    dil::tensor lhs({lhs_desc, sum_buf});
++    dil::tensor rhs({lhs_desc, cat_buf});
++    dil::tensor res({res_desc, grad_cat_buf});
++    auto p = dnnl::matmul(pd);
+     for (int64_t i = start; i < end; i++) {
+       cat_backward<T>(&grad_out_data[i * (interact_feature_size + vector_size)],
+                       grad_input0_buf, grad_flat_buf, vector_size,
+                       interact_feature_size);
+       flat_triangle_backward<T>(grad_flat_buf, grad_mm_buf, vector_nums);
+-
+       // Special BMM characteristics in Interaction layer
+       //  bmm(A, A'): two inputs are transposed to each other.
+       //
+@@ -348,10 +266,12 @@ _interaction_backward(const at::Tensor &grad_out,
+ 
+       // Calculate A
+       cat<T>(cat_buf, input_data, feature_sizes, i);
+-      mm_backward(grad_cat_buf, grad_mm_buf, cat_buf, vector_nums, vector_size,
+-                  mm_kernel);
++      transpose_add(sum_buf, grad_mm_buf, vector_nums);
++      p.execute(
++          dil::stream::default_stream(),
++          {{DNNL_ARG_SRC, lhs}, {DNNL_ARG_WEIGHTS, rhs}, {DNNL_ARG_DST, res}});
+       cat_backward<T>(grad_cat_buf, output_data, feature_sizes, i);
+-      add_ker(grad_input0_buf, &output_data[0][i * vector_size], vector_size);
++      add_ker(&output_data[0][i * vector_size], grad_input0_buf, vector_size);
+     }
+   });
+   return output;
+@@ -359,19 +279,36 @@ _interaction_backward(const at::Tensor &grad_out,
+ 
+ at::Tensor
+ AtenIpexTypeExt::interaction_forward(const std::vector<at::Tensor> &input) {
+-  if (input[0].scalar_type() == at::kFloat) {
+-    for (auto &in : input) {
+-      cpu::dbl::comm::reorder_to_public(in);
+-      TORCH_INTERNAL_ASSERT_DEBUG_ONLY(in.scalar_type() == at::kFloat);
+-    }
+-    return _interaction_forward<float>(input);
+-  } else {
+-    TORCH_INTERNAL_ASSERT_DEBUG_ONLY(input[0].scalar_type() == at::kBFloat16);
++  if (input[0].scalar_type() == at::kBFloat16) {
+     for (const auto &in : input) {
+       TORCH_INTERNAL_ASSERT_DEBUG_ONLY(in.scalar_type() == at::kBFloat16);
+     }
+     return _interaction_forward<at::BFloat16>(input);
+   }
++
++  bool quantized = false;
++  if (check_auto_mix_int8_fp32() && !check_int8_calibration()) {
++    int64_t num_ops_id = Int8OptConfig::fetch_and_add_ops_id();
++    quantized = cpu::dbl::comm::get_int8_quantized_status(num_ops_id);
++    if (quantized) {
++      return _interaction_forward_quantization(input, num_ops_id);;
++    } else {
++      for (auto &in : input) {
++        cpu::dbl::comm::reorder_to_dtype(in, at::kFloat);
++      }
++    }
++  }
++
++  for (auto &in : input) {
++    cpu::dbl::comm::reorder_to_public(in);
++    TORCH_INTERNAL_ASSERT_DEBUG_ONLY(in.scalar_type() == at::kFloat);
++  }
++
++  auto out = _interaction_forward<float>(input);
++  if (check_int8_calibration() && check_auto_mix_int8_fp32()) {
++    insert_or_updata_observer({input}, {out}, "interaction_forward", Int8OptConfig::fetch_and_add_ops_id());
++  }
++  return out;
+ }
+ 
+ std::vector<at::Tensor>
+@@ -718,6 +655,9 @@ static auto dispatch =
+             })
+         .op("torch_ipex::interaction_forward", &torch_ipex::AtenIpexTypeExt::interaction_forward)
+         .op("torch_ipex::interaction_backward", &torch_ipex::AtenIpexTypeExt::interaction_backward)
++        .op("torch_ipex::fuse_embedding_interaction_forward", &torch_ipex::mlperf::dlrm::fuse_embedding_interaction_forward)
++        .op("torch_ipex::fuse_botmlp_forward", &torch_ipex::mlperf::dlrm::fuse_botmlp_forward)
++        .op("torch_ipex::fuse_topmlp_forward", &torch_ipex::mlperf::dlrm::fuse_topmlp_forward)
+         .op("torch_ipex::frozen_batch_norm", &torch_ipex::AtenIpexTypeExt::frozen_batch_norm)
+         .op("torch_ipex::layer_norm", &torch_ipex::AtenIpexTypeExt::layer_norm);
+ }
+diff --git a/torch_ipex/csrc/cpu/aten/operators/embedding_bag.cpp b/torch_ipex/csrc/cpu/aten/operators/embedding_bag.cpp
+index 1061744..fef4416 100755
+--- a/torch_ipex/csrc/cpu/aten/operators/embedding_bag.cpp
++++ b/torch_ipex/csrc/cpu/aten/operators/embedding_bag.cpp
+@@ -1,6 +1,5 @@
+ #include "embedding_bag.hpp"
+-#include "aten_ipex_bridge.h"
+-#include "cpu/bf16/vec/bf16_vec_kernel.h"
++#include "cpu/int8/Config.h"
+ 
+ namespace torch_ipex {
+ namespace cpu {
+@@ -11,6 +10,7 @@ const int MODE_SUM = 0;
+ const int MODE_MEAN = 1;
+ const int MODE_MAX = 2;
+ 
++
+ static inline void
+ make_offset2bag(const at::Tensor &offsets, const at::Tensor &indices, at::Tensor& offset2bag) {
+   offset2bag.index_add_(0, offsets, at::ones_like(offsets, offsets.options())); // offset2bag = [1 0 1 0 1]
+@@ -18,6 +18,20 @@ make_offset2bag(const at::Tensor &offsets, const at::Tensor &indices, at::Tensor
+   offset2bag = offset2bag.cumsum(0);     // offset2bag = [0 0 1 1 2]
+ }
+ 
++at::Tensor
++embedding_bag_get_offset2bag(const at::Tensor& indices, const at::Tensor & offsets, const at::Tensor & offset2bag) {
++  int64_t indices_numel = indices.numel();
++  at::Tensor offset2bag_ ;
++  if (indices_numel != 0 && offset2bag.numel() == 0) {
++    offset2bag_ = at::empty({indices.sizes()[0] + 1}, indices.options()).zero_();
++    make_offset2bag(offsets, indices, offset2bag_);
++    offset2bag_.resize_({indices.sizes()[0]});
++  } else {
++    offset2bag_ = offset2bag;
++  }
++  return offset2bag_;
++}
++
+ // To save compute, if we are going to go down the fast path case for the 'sum'
+ // mode, we skip calculating offset2bag, since it is not going to be used.
+ static inline bool is_bfloat16_tensor(const at::Tensor tensor_) {
+@@ -25,59 +39,36 @@ static inline bool is_bfloat16_tensor(const at::Tensor tensor_) {
+   return false;
+ }
+ 
+-bool embedding_bag_fast_path_sum(const at::Tensor weight, const at::Tensor per_sample_weights, int64_t mode) {
++bool embedding_bag_fast_path_sum(const at::Tensor& weight, const at::Tensor& per_sample_weights, int64_t mode) {
+   if ((mode != MODE_SUM) || (weight.stride(1) != 1) || per_sample_weights.defined()) return false;
+   if ((weight.scalar_type() != at::kFloat) && (weight.scalar_type() != at::kBFloat16)) return false;
+   return true;
+ }
+ 
+-template<typename T>
+-static inline at::Tensor _embedding_bag_index_add_select_fast(const at::Tensor select_indices,
+-    const at::Tensor src, const at::Tensor offsets,  bool include_last_offset) {
+-  int64_t ddim = src.size(1);
+-  auto* src_data = src.data_ptr<T>();
+-  int64_t output_size = offsets.numel() - 1;
+-  int64_t* offsets_data = offsets.data_ptr<int64_t>();
+-  std::vector<int64_t> offsets_include_last;
+-
+-  if (!include_last_offset) {
+-    output_size = offsets.numel();
+-    offsets_include_last.resize(output_size + 1);
+-    int64_t* offsets_include_last_data = offsets_include_last.data();
+-    int64_t iter_time = (output_size >> 5);
+-    int64_t align32_size = (iter_time << 5);
+-    int64_t left_size = output_size - align32_size;
+-    //std::memcpy(offsets_include_last.data(), offsets_data, sizeof(int64_t) * output_size);
+-    at::parallel_for(0, iter_time, 16, [&](int64_t start, int64_t end) {
+-      for (int64_t i = start; i < end; i += 1) {
+-        auto start_offset = i << 5;
+-        move_ker(&offsets_include_last_data[start_offset], &offsets_data[start_offset], 32);
+-      }
+-    });
+-    if (left_size > 0) {
+-      move_ker(&offsets_include_last_data[align32_size], &offsets_data[align32_size], left_size);
+-    }
+-    offsets_include_last[output_size] = select_indices.numel();
+-    offsets_data = offsets_include_last.data();
+-  }
+-
+-  at::Tensor output = at::empty({output_size, src.size(1)}, src.options());
+-  auto* output_data = output.data_ptr<T>();
+-  auto indices_accessor = select_indices.accessor<int64_t, 1>();
+-  at::parallel_for(0, output_size, 16, [&](int64_t start, int64_t end) {
+-    for (int64_t i = start; i < end; i++) {
+-      auto* out_data_ptr = &output_data[i * ddim];
+-      zero_ker((T*)out_data_ptr, ddim);
+-      auto inputs_start = offsets_data[i];
+-      auto inputs_end = offsets_data[i + 1];
+-      for (int64_t s = inputs_start; s < inputs_end; s++) {
+-        T* select_data_ptr = &src_data[indices_accessor[s] * ddim];
+-        add_ker((T *)out_data_ptr, (T *)select_data_ptr, ddim);
+-      }
++static inline at::Tensor
++embedding_bag_int8_impl(const at::Tensor & weight, const at::Tensor & indices,
++                        const at::Tensor & offsets, bool include_last_offset) {
++    // from DevOps.cpp AtenIpexCPUDev::dil_linear L1039
++    at::Tensor output;
++    // int8 no calibration
++    int64_t num_ops_id = Int8OptConfig::fetch_and_add_ops_id();
++    bool quantized = dbl::comm::get_int8_quantized_status(num_ops_id);
++    if (quantized) {
++        // if quantizetion info is provided,
++        // reorder float to int8 if necessary
++        // reorder weight in float to weight in int8
++        dbl::comm::reorder_to_int8_for_mix_prec(weight, {}, false, {}, true);
++        // query
++        output = _embedding_bag_index_add_select_fast<int8_t>(
++            indices, weight, offsets, include_last_offset);
++    } else {
++        // reorder weight in float
++        dbl::comm::reorder_to_dtype(weight, at::kFloat);
++        // query
++        output = _embedding_bag_index_add_select_fast<float>(
++                 indices, weight, offsets, include_last_offset);
+     }
+-  });
+-
+-  return output;
++    return output;
+ }
+ 
+ at::Tensor embedding_bag_impl(const at::Tensor & weight, const at::Tensor & indices,
+@@ -87,32 +78,31 @@ at::Tensor embedding_bag_impl(const at::Tensor & weight, const at::Tensor & indi
+   at::Tensor offsets_ = offsets.is_contiguous()? offsets : offsets.contiguous();
+ 
+   at::Tensor output;
++
+   if(is_bfloat16_tensor(weight)) {
+-      output = _embedding_bag_index_add_select_fast<at::BFloat16>(indices, weight, offsets_, include_last_offset);
+-  } else {
+-      output = _embedding_bag_index_add_select_fast<float>(indices, weight, offsets_, include_last_offset);
++      output = _embedding_bag_index_add_select_fast<at::BFloat16>(
++          indices, weight, offsets_, include_last_offset);
++      return output;
+   }
+-  return output;
+-}
+ 
+-static inline at::Tensor expand_values_if_needed(const at::Tensor& values) {
+-  // expand
+-  if (values.dim() == 0) {
+-    // Mimic Numpy behavior here and treat it as a 1D tensor
+-    return values.expand({1});
++  if ((not check_int8_calibration()) and check_auto_mix_int8_fp32()) {
++      output = embedding_bag_int8_impl(weight, indices, offsets_, include_last_offset);
++      return output;
+   }
+ 
+-  return values;
+-}
+-
+-static inline
+-at::Tensor _sparse_coo_tensor_unsafe(const at::Tensor& indices, const at::Tensor& values_, c10::ArrayRef<int64_t> size, const at::TensorOptions& options) {
+-
+-  at::Tensor values = expand_values_if_needed(values_);
+-  assert(options.has_layout() && options.layout() == c10::kSparse);
+-  int64_t sparse_dim = indices.size(0);
+-  int64_t dense_dim = values.dim() - 1;
+-  return at::native::new_with_dims_and_tensor_sparse(sparse_dim, dense_dim, size, indices, values, options.dtype().toScalarType(), at::kSparse);
++  output = _embedding_bag_index_add_select_fast<float>(
++      indices, weight, offsets_,
++      include_last_offset);
++
++  if (check_int8_calibration() and check_auto_mix_int8_fp32()) {
++      // calibration based on results of float datatype
++      auto op_name = "EmbeddingBag";
++      insert_or_updata_observer({output},
++                                {output},
++                                op_name,
++                                Int8OptConfig::fetch_and_add_ops_id());
++  }
++  return output;
+ }
+ 
+ template<typename T>
+@@ -146,17 +136,22 @@ static inline at::Tensor embedding_bag_sparse_backward_sum_fast(
+   int64_t num_features = index_grad.size(-1);
+   auto weight_size = std::array<int64_t, 2>{{ num_weights, num_features }};
+   auto dense_options = index_grad.options();
++  at::Tensor values;
++  at::Tensor index;
+ 
+   if (index_grad.numel() == 0) {
+-    return _sparse_coo_tensor_unsafe(at::empty({1, 0}, indices.options()),
+-                                         at::empty({0, num_features}, dense_options),
+-                                         weight_size);
++    index = at::empty({0, num_features}, dense_options);
++    values = at::empty({1, 0}, indices.options());
++  } else {
++    index = indices.reshape({1, -1});
++    values = index_grad.reshape({-1, num_features});
+   }
+ 
+-  auto index = indices.reshape({1, -1});
+-  auto values = index_grad.reshape({-1, num_features});
+-
+-  return _sparse_coo_tensor_unsafe(index, values, weight_size);
++  auto options = values.options();
++  int64_t sparse_dim = index.size(0);
++  int64_t dense_dim = values.dim() - 1;
++  return at::native::new_with_dims_and_tensor_sparse(sparse_dim, dense_dim, weight_size, index, values,
++                                                     options.dtype().toScalarType(), at::kSparse);
+ }
+ 
+ static inline int64_t
+@@ -245,7 +240,7 @@ static inline at::Tensor embedding_bag_dense_backward_sum_fast(const at::Tensor
+   return index_grad_weight;
+ }
+ 
+-bool embedding_bag_backward_fast_path_sum(const at::Tensor grad, const at::Tensor indices, const at::Tensor offset2bag, const at::Tensor per_sample_weights, bool scale_grad_by_freq, int64_t mode) {
++bool embedding_bag_backward_fast_path_sum(const at::Tensor& grad, const at::Tensor& indices, const at::Tensor& offset2bag, const at::Tensor& per_sample_weights, bool scale_grad_by_freq, int64_t mode) {
+ 
+   if ((grad.scalar_type() != at::kFloat) && (grad.scalar_type() != at::kBFloat16)) return false;
+   if ((mode != MODE_SUM) || (grad.stride(1) != 1)) return false;
+@@ -255,21 +250,6 @@ bool embedding_bag_backward_fast_path_sum(const at::Tensor grad, const at::Tenso
+   return true;
+ }
+ 
+-at::Tensor
+-embedding_bag_get_offset2bag(const at::Tensor indices, const at::Tensor & offsets, const at::Tensor & offset2bag)
+-{
+-  int64_t indices_numel = indices.numel();
+-  at::Tensor offset2bag_ ;
+-  if (indices_numel != 0 && offset2bag.numel() == 0) {
+-    offset2bag_ = at::empty({indices.sizes()[0] + 1}, indices.options()).zero_();
+-    make_offset2bag(offsets, indices, offset2bag_);
+-    offset2bag_.resize_({indices.sizes()[0]});
+-  } else {
+-    offset2bag_ = offset2bag;
+-  }
+-  return offset2bag_;
+-}
+-
+ at::Tensor embedding_bag_backward_impl(const at::Tensor & grad, const at::Tensor & indices,
+   const at::Tensor & offsets, const at::Tensor & offset2bag, const at::Tensor & bag_size, const at::Tensor & maximum_indices,
+   int64_t num_weights, bool scale_grad_by_freq, int64_t mode, bool sparse,
+diff --git a/torch_ipex/csrc/cpu/aten/operators/embedding_bag.hpp b/torch_ipex/csrc/cpu/aten/operators/embedding_bag.hpp
+index c719bb8..d733586 100755
+--- a/torch_ipex/csrc/cpu/aten/operators/embedding_bag.hpp
++++ b/torch_ipex/csrc/cpu/aten/operators/embedding_bag.hpp
+@@ -7,28 +7,155 @@
+ 
+ #include <vector>
+ 
++#include "utils.h"
++#include "aten_ipex_bridge.h"
++
++#include "cpu/bf16/vec/bf16_vec_kernel.h"
++#include "cpu/int8/vec/int8_vec_kernel.h"
++
+ 
+ namespace torch_ipex {
+-namespace cpu {
+-namespace aten {
+-namespace embedding_bag {
++    namespace cpu {
++        namespace aten {
++            namespace embedding_bag {
++
++                at::Tensor embedding_bag_impl(const at::Tensor & weight, const at::Tensor & indices,
++                                              const at::Tensor & offsets, bool scale_grad_by_freq, int64_t mode, bool sparse,
++                                              const at::Tensor & per_sample_weights, bool include_last_offset);
++
++                template<typename T>
++                inline at::Tensor _embedding_bag_index_add_select_fast(const at::Tensor& select_indices,
++                                                                       const at::Tensor& src,
++								       const at::Tensor& offsets,
++								       bool include_last_offset) {
++                    int64_t ddim = src.size(1);
++                    auto* src_data = src.data_ptr<T>();
++                    int64_t output_size = offsets.numel() - 1;
++                    int64_t* offsets_data = offsets.data_ptr<int64_t>();
++                    std::vector<int64_t> offsets_include_last;
++                    if (!include_last_offset) {
++                        output_size = offsets.numel();
++                        offsets_include_last.resize(output_size + 1);
++                        int64_t* offsets_include_last_data = offsets_include_last.data();
++                        int64_t iter_time = (output_size >> 5);
++                        int64_t align32_size = (iter_time << 5);
++                        int64_t left_size = output_size - align32_size;
++                        //std::memcpy(offsets_include_last.data(), offsets_data, sizeof(int64_t) * output_size);
++                        at::parallel_for(0, iter_time, 16, [&](int64_t start, int64_t end) {
++                            for (int64_t i = start; i < end; i += 1) {
++                                auto start_offset = i << 5;
++                                move_ker(&offsets_include_last_data[start_offset], &offsets_data[start_offset], 32);
++                            }
++                        });
++                        if (left_size > 0) {
++                            move_ker(&offsets_include_last_data[align32_size], &offsets_data[align32_size], left_size);
++                        }
++                        offsets_include_last[output_size] = select_indices.numel();
++                        offsets_data = offsets_include_last.data();
++                    }
++
++                    at::Tensor output = at::empty({output_size, src.size(1)}, src.options());
++                    auto* output_data = output.data_ptr<T>();
++                    auto indices_accessor = select_indices.accessor<int64_t, 1>();
++                    at::parallel_for(0, output_size, 16, [&](int64_t start, int64_t end) {
++                        for (int64_t i = start; i < end; i++) {
++                            auto* out_data_ptr = &output_data[i * ddim];
++                            auto inputs_start = offsets_data[i];
++                            auto inputs_end = offsets_data[i + 1];
++                            if (inputs_start >= inputs_end) {
++                                zero_ker((T*)out_data_ptr, ddim);
++                            } else {
++                                T* select_data_ptr = &src_data[indices_accessor[inputs_start] * ddim];
++                                move_ker((T *)out_data_ptr, (T *)select_data_ptr, ddim);
++                            }
++                            for (int64_t s = (inputs_start + 1); s < inputs_end; s++) {
++                                T* select_data_ptr = &src_data[indices_accessor[s] * ddim];
++                                add_ker((T *)out_data_ptr, (T *)select_data_ptr, ddim);
++                            }
++                        }
++                    });
++
++                    return output;
++                }
++
++                template<>
++                inline at::Tensor _embedding_bag_index_add_select_fast<int8_t>(
++                    const at::Tensor& select_indices,
++                    const at::Tensor& src_at,
++                    const at::Tensor& offsets,
++                    bool include_last_offset) {
++                    dil::tensor src = dbl::comm::try_gen_dil_tensor(src_at);
++                    int64_t ddim = src.get_dim(1);
++                    int8_t* src_data = static_cast<int8_t *>(src.get_data_handle());
++                    int64_t output_size = offsets.numel() - 1;
++                    int64_t* offsets_data = offsets.data_ptr<int64_t>();
++                    std::vector<int64_t> offsets_include_last;
++                    if (!include_last_offset) {
++                        output_size = offsets.numel();
++                        offsets_include_last.resize(output_size + 1);
++                        int64_t* offsets_include_last_data = offsets_include_last.data();
++                        int64_t iter_time = (output_size >> 5);
++                        int64_t align32_size = (iter_time << 5);
++                        int64_t left_size = output_size - align32_size;
++                        //std::memcpy(offsets_include_last.data(), offsets_data, sizeof(int64_t) * output_size);
++                        at::parallel_for(0, iter_time, 16, [&](int64_t start, int64_t end) {
++                            for (int64_t i = start; i < end; i += 1) {
++                                auto start_offset = i << 5;
++                                move_ker(&offsets_include_last_data[start_offset], &offsets_data[start_offset], 32);
++                            }
++                        });
++                        if (left_size > 0) {
++                            move_ker(&offsets_include_last_data[align32_size], &offsets_data[align32_size], left_size);
++                        }
++                        offsets_include_last[output_size] = select_indices.numel();
++                        offsets_data = offsets_include_last.data();
++                    }
++                    // init output tensor
++                    dil::dims dst_dims{output_size, src.get_dim(1)};
++                    dil::tensor::desc dst_desc(dst_dims, dil::data_type::s8);
++                    dil::tensor output{dst_desc};
++                    auto scale = src.get_scale();
++                    output.set_scale(scale);
++                    int8_t* output_data = static_cast<int8_t *>(output.get_data_handle());
++                    auto indices_accessor = select_indices.accessor<int64_t, 1>();
++                    at::parallel_for(0, output_size, 16, [&](int64_t start, int64_t end) {
++                        for (int64_t i = start; i < end; i++) {
++                            int8_t* out_data_ptr = &output_data[i * ddim];
++                            auto inputs_start = offsets_data[i];
++                            auto inputs_end = offsets_data[i + 1];
++                            if (inputs_start >= inputs_end) {
++                                zero_ker(out_data_ptr, ddim);
++                            } else {
++                                int8_t* select_data_ptr = &src_data[indices_accessor[inputs_start] * ddim];
++                                move_ker(out_data_ptr, select_data_ptr, ddim);
++                            }
++                            for (int64_t s = (inputs_start + 1); s < inputs_end; s++) {
++                                int8_t* select_data_ptr = &src_data[indices_accessor[s] * ddim];
++                                add_ker(out_data_ptr, select_data_ptr, ddim);
++                            }
++                        }
++                    });
++
++                    return dbl::comm::gen_aten_tensor_by(std::move(output));
++                }
+ 
+-at::Tensor embedding_bag_impl(const at::Tensor & weight, const at::Tensor & indices,
+-  const at::Tensor & offsets, bool scale_grad_by_freq, int64_t mode, bool sparse,
+-  const at::Tensor & per_sample_weights, bool include_last_offset);
++                at::Tensor
++                embedding_bag_get_offset2bag(const at::Tensor& indices, const at::Tensor & offsets, const at::Tensor & offset2bag); 
+ 
+-at::Tensor embedding_bag_backward_impl(const at::Tensor & grad, const at::Tensor & indices,
+-  const at::Tensor & offsets, const at::Tensor & offset2bag, const at::Tensor & bag_size, const at::Tensor & maximum_indices,
+-  int64_t num_weights, bool scale_grad_by_freq, int64_t mode, bool sparse,
+-  const at::Tensor & per_sample_weights);
++                at::Tensor embedding_bag_backward_impl(const at::Tensor & grad, const at::Tensor & indices,
++                                                       const at::Tensor & offsets, const at::Tensor & offset2bag,
++                                                       const at::Tensor & bag_size, const at::Tensor & maximum_indices,
++                                                       int64_t num_weights, bool scale_grad_by_freq, int64_t mode, bool sparse,
++                                                       const at::Tensor & per_sample_weights);
+ 
+-at::Tensor embedding_bag_get_offset2bag(const at::Tensor indices, const at::Tensor & offsets, const at::Tensor & offset2bag);
+ 
+-bool embedding_bag_backward_fast_path_sum(const at::Tensor grad, const at::Tensor indices, const at::Tensor offset2bag, const at::Tensor per_sample_weights, bool scale_grad_by_freq, int64_t mode);
++                bool embedding_bag_backward_fast_path_sum(const at::Tensor& grad, const at::Tensor& indices,
++			                                  const at::Tensor& offset2bag, const at::Tensor& per_sample_weights,
++							  bool scale_grad_by_freq, int64_t mode);
+ 
+-bool embedding_bag_fast_path_sum(const at::Tensor weight, const at::Tensor per_sample_weights, int64_t mode);
++                bool embedding_bag_fast_path_sum(const at::Tensor& weight, const at::Tensor& per_sample_weights, int64_t mode);
+ 
+-}  // namespace embedding_bag
+-}  // namespace aten
+-}  // namespace cpu
++            }  // namespace embedding_bag
++        }  // namespace aten
++    }  // namespace cpu
+ }  // namespace torch_ipex
+diff --git a/torch_ipex/csrc/cpu/bf16/vec/bf16_vec_kernel.h b/torch_ipex/csrc/cpu/bf16/vec/bf16_vec_kernel.h
+index e85740f..97873e1 100644
+--- a/torch_ipex/csrc/cpu/bf16/vec/bf16_vec_kernel.h
++++ b/torch_ipex/csrc/cpu/bf16/vec/bf16_vec_kernel.h
+@@ -1,24 +1,20 @@
++#pragma once
+ #include <immintrin.h>
+ #include "vec_type_cvt.h"
+ 
+-inline __m512 pack_bf16_to_fp32(const __m256i top, const __m256i bot) {
+-  auto x1 = _mm512_cvtepu16_epi32(top);
+-  auto x2 = _mm512_cvtepu16_epi32(bot);
+-  auto y = _mm512_add_epi32(_mm512_bslli_epi128(x1, 2), x2);
+-  return _mm512_castsi512_ps(y);
+-}
+-
+ // Only support AVX512 impl at current stage. Will expand this impl to cover AVX2 and other cases.
+-inline void packed_bf16_add_ker(at::BFloat16 *a1, at::BFloat16 *a2, at::BFloat16 *b, int len, float alpha) {
++static inline __attribute__((always_inline))
++void packed_bf16_add_ker(at::BFloat16 *a1, at::BFloat16 *a2, at::BFloat16 *b, int len, float alpha) {
+   auto vAlpha = _mm512_set1_ps(alpha);
+   int i = 0;
++  #pragma unroll(2)
+   for (; i < len - 15; i += 16) {
+     auto x1 = _mm256_loadu_si256((__m256i *)(a1 + i));
+     auto x2 = _mm256_loadu_si256((__m256i *)(a2 + i));
+     auto y1 = _mm256_loadu_si256((__m256i *)(b + i));
+ 
+-    auto z1 = pack_bf16_to_fp32(x1, x2);
+     auto z2 = cvt_bf16_to_fp32(y1);
++    auto z1 = pack_bf16_to_fp32(x1, x2);
+     z1 = _mm512_fmadd_ps(vAlpha, z2, z1);
+     // Update result back to split input tensors.
+     _mm256_storeu_si256((__m256i *)(a1 + i), trunc_fp32_to_bf16(z1));
+@@ -40,7 +36,8 @@ inline void packed_bf16_add_ker(at::BFloat16 *a1, at::BFloat16 *a2, at::BFloat16
+   }
+ }
+ 
+-inline void add_ker(at::BFloat16 *inout, at::BFloat16 *in, int len) {
++static inline __attribute__((always_inline))
++void add_ker(at::BFloat16 *inout, at::BFloat16 *in, int len) {
+   int i;
+   #pragma unroll(2)
+   for(i = 0; i < len - 31; i += 32) {
+@@ -71,24 +68,22 @@ inline void add_ker(at::BFloat16 *inout, at::BFloat16 *in, int len) {
+   }
+ }
+ 
+-static inline void add_ker(float *inout, float *in, int len) {
++static inline __attribute__((always_inline))
++void add_ker(float *inout, float *in, int len) {
+   int i;
+   #pragma unroll(2)
+   for(i = 0; i < len - 31; i += 32) {
+     auto out1 = _mm512_loadu_ps(inout + i);
+     auto out2 = _mm512_loadu_ps(inout + i + 16);
+-    auto in1 = _mm512_loadu_ps(in + i);
+-    auto in2 = _mm512_loadu_ps(in + i + 16);
+-    out1 = _mm512_add_ps(out1, in1);
+-    out2 = _mm512_add_ps(out2, in2);
++    out1 = _mm512_add_ps(out1, _mm512_loadu_ps(in + i));
++    out2 = _mm512_add_ps(out2, _mm512_loadu_ps(in + i + 16));
+     _mm512_storeu_ps(inout + i, out1);
+     _mm512_storeu_ps(inout + i + 16, out2);
+   }
+ 
+   if (i < len - 15) {
+     auto out1 = _mm512_loadu_ps(inout + i);
+-    auto in1 = _mm512_loadu_ps(in + i);
+-    _mm512_storeu_ps(inout + i, _mm512_add_ps(out1, in1));
++    _mm512_storeu_ps(inout + i, _mm512_add_ps(out1, _mm512_loadu_ps(in + i)));
+     i += 16;
+   }
+ 
+@@ -100,7 +95,8 @@ static inline void add_ker(float *inout, float *in, int len) {
+   }
+ }
+ 
+-static inline void add_ker(float *inout, at::BFloat16 *in, int len) {
++static inline __attribute__((always_inline))
++void add_ker(float *inout, at::BFloat16 *in, int len) {
+   int i;
+   #pragma unroll(2)
+   for(i = 0; i < len - 31; i += 32) {
+@@ -131,9 +127,26 @@ static inline void add_ker(float *inout, at::BFloat16 *in, int len) {
+   }
+ }
+ 
+-static inline void move_ker(at::BFloat16 *out, float *in, int64_t len) {
++static inline __attribute__((always_inline))
++void move_ker(double *out, const double *in, int64_t len) {
+   int64_t i;
+   #pragma unroll(4)
++  for (i = 0; i < len - 7 ; i += 8) {
++    auto in0 = _mm512_loadu_pd(in + i);
++    _mm512_storeu_pd(out + i, in0);
++  }
++
++  if (i < len) {
++    auto mask = ((1 << (len - i)) - 1);
++    auto in0 = _mm512_maskz_loadu_pd(mask, in + i);
++    _mm512_mask_storeu_pd(out + i, mask, in0);
++  }
++}
++
++static inline __attribute__((always_inline))
++void move_ker(at::BFloat16 *out, float *in, int64_t len) {
++  int64_t i;
++  #pragma unroll(2)
+   for (i = 0; i < len - 31; i += 32) {
+     auto in0 = cvt_fp32_to_bf16(_mm512_loadu_ps(in + i));
+     auto in1 = cvt_fp32_to_bf16(_mm512_loadu_ps(in + i + 16));
+@@ -154,11 +167,12 @@ static inline void move_ker(at::BFloat16 *out, float *in, int64_t len) {
+   }
+ }
+ 
+-static inline void move_ker(float *out, const float *in, int64_t len) {
++static inline __attribute__((always_inline))
++void move_ker(float *out, const float *in, int64_t len) {
+   int64_t i;
+   #pragma unroll(4)
+   for (i = 0; i < len - 15 ; i += 16) {
+-    auto in0 = _mm512_loadu_ps(in + i );
++    auto in0 = _mm512_loadu_ps(in + i);
+     _mm512_storeu_ps(out + i, in0);
+   }
+ 
+@@ -169,7 +183,8 @@ static inline void move_ker(float *out, const float *in, int64_t len) {
+   }
+ }
+ 
+-static inline void move_ker(at::BFloat16 *out, const at::BFloat16 *in, int64_t len) {
++static inline __attribute__((always_inline))
++void move_ker(at::BFloat16 *out, const at::BFloat16 *in, int64_t len) {
+   int64_t i;
+   #pragma unroll(4)
+   for (i = 0; i < len - 31; i += 32) {
+@@ -184,37 +199,17 @@ static inline void move_ker(at::BFloat16 *out, const at::BFloat16 *in, int64_t l
+   }
+ }
+ 
+-static inline void move_ker(int64_t *out, int64_t *in, int64_t len) {
+-  int64_t i;
+-  #pragma unroll(4)
+-  for (i = 0; i < len - 7 ; i += 8) {
+-    auto in0 = _mm512_loadu_pd(in + i );
+-    _mm512_storeu_pd(out + i, in0);
+-  }
+-
+-  if (i < len) {
+-    auto mask = ((1 << (len - i)) - 1);
+-    auto in0 = _mm512_maskz_loadu_pd(mask, in + i);
+-    _mm512_mask_storeu_pd(out + i, mask, in0);
+-  }
+-}
+-
+-static inline void move_ker(int32_t *out, const int32_t *in, int64_t len) {
++static inline __attribute__((always_inline))
++void move_ker_128(at::BFloat16 *out, const at::BFloat16 *in) {
+   int64_t i;
+-  #pragma unroll(4)
+-  for (i = 0; i < len - 15 ; i += 16) {
+-    auto in0 = _mm512_loadu_ps(in + i );
+-    _mm512_storeu_ps(out + i, in0);
+-  }
+-
+-  if (i < len) {
+-    auto mask = ((1 << (len - i)) - 1);
+-    auto in0 = _mm512_maskz_loadu_ps(mask, in + i);
+-    _mm512_mask_storeu_ps(out + i, mask, in0);
+-  }
++  auto in0 = _mm512_loadu_si512(in);
++  auto in1 = _mm512_loadu_si512(in + 32);
++  _mm512_storeu_si512(out, in0);
++  _mm512_storeu_si512(out + 32, in1);
+ }
+ 
+-static inline void zero_ker(float *out, int64_t len) {
++static inline __attribute__((always_inline))
++void zero_ker(float *out, int64_t len) {
+   int64_t i;
+   __m512 zero_512 = _mm512_setzero_ps();
+   #pragma unroll(4)
+@@ -228,7 +223,8 @@ static inline void zero_ker(float *out, int64_t len) {
+   }
+ }
+ 
+-static inline void zero_ker(at::BFloat16 *out, int64_t len) {
++static inline __attribute__((always_inline))
++void zero_ker(at::BFloat16 *out, int64_t len) {
+   int64_t i;
+   __m512i zero_512 = _mm512_setzero_si512();
+   #pragma unroll(4)
+@@ -241,3 +237,237 @@ static inline void zero_ker(at::BFloat16 *out, int64_t len) {
+     _mm512_mask_storeu_epi16(out + i, mask, zero_512);
+   }
+ }
++
++static inline __attribute__((always_inline))
++void load_bf16x128(__m512i* __restrict__ out, const at::BFloat16* __restrict__ in) {
++  out[0] = _mm512_loadu_si512(in);
++  out[1] = _mm512_loadu_si512(in + 32);
++  out[2] = _mm512_loadu_si512(in + 64);
++  out[3] = _mm512_loadu_si512(in + 96);
++}
++
++static inline __attribute__((always_inline))
++void load_bf16(__m512i* out, const at::BFloat16* in, size_t len) {
++  if (len == 128) {
++    load_bf16x128(out, in);
++  } else {
++    size_t i;
++    size_t off = 0;
++    #pragma unroll(4)
++    for (i = 0; i < len - 31; i += 32) {
++      out[off] = _mm512_loadu_si512(in + i);
++      off += 1;
++    }
++
++    if (i < len) {
++      auto mask = (1 << (len - i)) - 1;
++      out[off] = _mm512_maskz_loadu_epi16(mask, in + i);
++    }
++  }
++}
++
++static inline __attribute__((always_inline))
++void load_bf16x128_to_fp32x128(__m512* out, const at::BFloat16* in) {
++  auto in0 = _mm256_loadu_si256((__m256i const *)in);
++  auto in1 = _mm256_loadu_si256((__m256i const *)(in + 16));
++  auto in2 = _mm256_loadu_si256((__m256i const *)(in + 32));
++  auto in3 = _mm256_loadu_si256((__m256i const *)(in + 48));
++  auto in4 = _mm256_loadu_si256((__m256i const *)(in + 64));
++  auto in5 = _mm256_loadu_si256((__m256i const *)(in + 80));
++  auto in6 = _mm256_loadu_si256((__m256i const *)(in + 96));
++  auto in7 = _mm256_loadu_si256((__m256i const *)(in + 112));
++  out[0] = cvt_bf16_to_fp32(in0);
++  out[1] = cvt_bf16_to_fp32(in1);
++  out[2] = cvt_bf16_to_fp32(in2);
++  out[3] = cvt_bf16_to_fp32(in3);
++  out[4] = cvt_bf16_to_fp32(in4);
++  out[5] = cvt_bf16_to_fp32(in5);
++  out[6] = cvt_bf16_to_fp32(in6);
++  out[7] = cvt_bf16_to_fp32(in7);
++}
++
++static inline __attribute__((always_inline))
++void load_bf16_to_fp32(__m512* __restrict__ out, const at::BFloat16* __restrict__ in, size_t len) {
++  if (len == 128) {
++    load_bf16x128_to_fp32x128(out, in);
++  } else {
++    size_t i;
++    size_t off = 0;
++    #pragma unroll(4)
++    for (i = 0; i < len - 15; i += 16) {
++      auto in0 = _mm256_loadu_si256((__m256i const *)(in + i));
++      out[off] = cvt_bf16_to_fp32(in0);
++      off += 1;
++    }
++
++    if (i < len) {
++      auto mask = (1 << (len - i)) - 1;
++      auto in0 = _mm256_maskz_loadu_epi16(mask, in + i);
++      out[off] = cvt_bf16_to_fp32(in0);
++    }
++  }
++}
++
++static inline __attribute__((always_inline))
++__m512 reduce_add_f32x16x16(const __m512* acc_sums) {
++  auto l0 = _mm512_unpacklo_ps(acc_sums[0], acc_sums[1]);
++  auto l1 = _mm512_unpackhi_ps(acc_sums[0], acc_sums[1]);
++  auto l2 = _mm512_unpacklo_ps(acc_sums[2], acc_sums[3]);
++  auto l3 = _mm512_unpackhi_ps(acc_sums[2], acc_sums[3]);
++  auto l4 = _mm512_unpacklo_ps(acc_sums[4], acc_sums[5]);
++  auto l5 = _mm512_unpackhi_ps(acc_sums[4], acc_sums[5]);
++  auto l6 = _mm512_unpacklo_ps(acc_sums[6], acc_sums[7]);
++  auto l7 = _mm512_unpackhi_ps(acc_sums[6], acc_sums[7]);
++
++  l0 = _mm512_add_ps(l0, l1);
++  l2 = _mm512_add_ps(l2, l3);
++  l4 = _mm512_add_ps(l4, l5);
++  l6 = _mm512_add_ps(l6, l7);
++  l1 = _mm512_castpd_ps(_mm512_unpacklo_pd(_mm512_castps_pd(l0),_mm512_castps_pd(l2)));
++  l3 = _mm512_castpd_ps(_mm512_unpackhi_pd(_mm512_castps_pd(l0),_mm512_castps_pd(l2)));
++  l5 = _mm512_castpd_ps(_mm512_unpacklo_pd(_mm512_castps_pd(l4),_mm512_castps_pd(l6)));
++  l7 = _mm512_castpd_ps(_mm512_unpackhi_pd(_mm512_castps_pd(l4),_mm512_castps_pd(l6)));
++  l1 = _mm512_add_ps(l1, l3);
++  l5 = _mm512_add_ps(l5, l7);
++
++  l0 = _mm512_shuffle_f32x4(l1, l5, 0x88);
++  l2 = _mm512_shuffle_f32x4(l1, l5, 0xdd);
++
++  auto h0 = _mm512_unpacklo_ps(acc_sums[8], acc_sums[9]);
++  auto h1 = _mm512_unpackhi_ps(acc_sums[8], acc_sums[9]);
++  auto h2 = _mm512_unpacklo_ps(acc_sums[10], acc_sums[11]);
++  auto h3 = _mm512_unpackhi_ps(acc_sums[10], acc_sums[11]);
++  auto h4 = _mm512_unpacklo_ps(acc_sums[12], acc_sums[13]);
++  auto h5 = _mm512_unpackhi_ps(acc_sums[12], acc_sums[13]);
++  auto h6 = _mm512_unpacklo_ps(acc_sums[14], acc_sums[15]);
++  auto h7 = _mm512_unpackhi_ps(acc_sums[14], acc_sums[15]);
++  h0 = _mm512_add_ps(h0, h1);
++  h2 = _mm512_add_ps(h2, h3);
++  h4 = _mm512_add_ps(h4, h5);
++  h6 = _mm512_add_ps(h6, h7);
++  h1 = _mm512_castpd_ps(_mm512_unpacklo_pd(_mm512_castps_pd(h0),_mm512_castps_pd(h2)));
++  h3 = _mm512_castpd_ps(_mm512_unpackhi_pd(_mm512_castps_pd(h0),_mm512_castps_pd(h2)));
++  h5 = _mm512_castpd_ps(_mm512_unpacklo_pd(_mm512_castps_pd(h4),_mm512_castps_pd(h6)));
++  h7 = _mm512_castpd_ps(_mm512_unpackhi_pd(_mm512_castps_pd(h4),_mm512_castps_pd(h6)));
++  h1 = _mm512_add_ps(h1, h3);
++  h5 = _mm512_add_ps(h5, h7);
++  h0 = _mm512_shuffle_f32x4(h1, h5, 0x88);
++  h2 = _mm512_shuffle_f32x4(h1, h5, 0xdd);
++
++  l0 = _mm512_add_ps(l0, l2);
++  h0 = _mm512_add_ps(h0, h2);
++  l1 = _mm512_shuffle_f32x4(l0, h0, 0x88);
++  l0 = _mm512_shuffle_f32x4(l0, h0, 0xdd);
++  l0 = _mm512_add_ps(l0, l1);
++
++  return l0;
++}
++
++static inline __attribute__((always_inline))
++void reduce_add_f32x16x16x4_and_store_to_bf16(at::BFloat16* __restrict__ outs, const __m512* __restrict__ acc_sums) {
++  auto l1 =  reduce_add_f32x16x16(acc_sums);
++  auto l2 =  reduce_add_f32x16x16(acc_sums + 16);
++  auto l3 =  reduce_add_f32x16x16(acc_sums + 32);
++  auto l4 =  reduce_add_f32x16x16(acc_sums + 48);
++  auto l1_bf = cvt_fp32_to_bf16(l1);
++  auto l2_bf = cvt_fp32_to_bf16(l2);
++  auto l3_bf = cvt_fp32_to_bf16(l3);
++  auto l4_bf = cvt_fp32_to_bf16(l4);
++  _mm256_storeu_si256((__m256i*)outs, l1_bf);
++  _mm256_storeu_si256((__m256i*)(outs + 16), l2_bf);
++  _mm256_storeu_si256((__m256i*)(outs + 32), l3_bf);
++  _mm256_storeu_si256((__m256i*)(outs + 48), l4_bf);
++}
++
++static inline __attribute__((always_inline))
++void reduce_add_f32x16x16_and_store_to_bf16(at::BFloat16* __restrict__ outs, const __m512* __restrict__ acc_sums) {
++  auto l1 =  reduce_add_f32x16x16(acc_sums);
++  auto l1_bf = cvt_fp32_to_bf16(l1);
++  _mm256_storeu_si256((__m256i*)outs, l1_bf);
++}
++
++static inline __attribute__((always_inline))
++void reduce_add_f32x16x16_and_mask_store_to_bf16(at::BFloat16* __restrict__ outs, __mmask16 mask,
++     const __m512* __restrict__ acc_sums) {
++  auto l1 =  reduce_add_f32x16x16(acc_sums);
++  auto l1_bf = cvt_fp32_to_bf16(l1);
++  _mm256_mask_storeu_epi16((__m256i*)outs, mask, l1_bf);
++}
++
++static inline float reduce_add_f32x16(__m512& __restrict__ acc_sum) {
++  auto ab_256_high = _mm512_extractf32x8_ps(acc_sum, 1);
++  auto ab_256_low = _mm512_castps512_ps256(acc_sum);
++  ab_256_low = _mm256_add_ps(ab_256_low, ab_256_high);
++
++  auto ab_128_high = _mm256_extractf32x4_ps(ab_256_low, 1);
++  auto ab_128_low = _mm256_castps256_ps128(ab_256_low);
++  ab_128_low = _mm_add_ps(ab_128_low, ab_128_high);
++
++  ab_128_high = _mm_castpd_ps(_mm_unpackhi_pd(_mm_castps_pd(ab_128_low), _mm_castps_pd(ab_128_low)));
++  ab_128_low = _mm_add_ps(ab_128_low, ab_128_high);
++  ab_128_high = _mm_shuffle_ps(ab_128_low, ab_128_low, 0xe1);
++  ab_128_low = _mm_add_ps(ab_128_low, ab_128_high);
++  return _mm_cvtss_f32(ab_128_low);
++}
++
++#if defined(AVX512_BF16)
++static inline __attribute__((always_inline))
++void mul_and_sum_bf16x128_to_f32x16(__m512& out, const __m512bh *a16, const __m512bh *b16) {
++  out = _mm512_setzero();
++  out = _mm512_dpbf16_ps(out, a16[0], b16[0]);
++  out = _mm512_dpbf16_ps(out, a16[1], b16[1]);
++  out = _mm512_dpbf16_ps(out, a16[2], b16[2]);
++  out = _mm512_dpbf16_ps(out, a16[3], b16[3]);
++}
++
++static inline __attribute__((always_inline))
++void mul_and_sum_bf16x128x2_to_f32x16x2(__m512& out0, __m512& out1,
++      const __m512bh *a16_0, const __m512bh *b16_0, const __m512bh *a16_1, const __m512bh *b16_1) {
++  out0 = _mm512_setzero();
++  out1 = _mm512_setzero();
++  out0 = _mm512_dpbf16_ps(out0, a16_0[0], b16_0[0]);
++  out1 = _mm512_dpbf16_ps(out1, a16_1[0], b16_1[0]);
++  out0 = _mm512_dpbf16_ps(out0, a16_0[1], b16_0[1]);
++  out1 = _mm512_dpbf16_ps(out1, a16_1[1], b16_1[1]);
++  out0 = _mm512_dpbf16_ps(out0, a16_0[2], b16_0[2]);
++  out1 = _mm512_dpbf16_ps(out1, a16_1[2], b16_1[2]);
++  out0 = _mm512_dpbf16_ps(out0, a16_0[3], b16_0[3]);
++  out1 = _mm512_dpbf16_ps(out1, a16_1[3], b16_1[3]);
++}
++
++static inline __attribute__((always_inline))
++at::BFloat16 _dot_bf16(const __m512bh* a, const __m512bh* b, size_t tlen) {
++  float c = 0;
++  __m512 acc;
++  for (size_t i = 0; i < tlen; i++) {
++     mul_and_sum_bf16x128_to_f32x16(acc, a + i, b + i);
++     c += reduce_add_f32x16(acc);
++  }
++  return (at::BFloat16)((*(uint32_t*)&c) >> 16);
++}
++#endif
++
++static inline __attribute__((always_inline))
++void mul_and_sum_fp32x128_to_f32x16(__m512& out, const __m512 *a16, const __m512 *b16) {
++  out = _mm512_setzero_ps();
++  out = _mm512_fmadd_ps(a16[0], b16[0], out);
++  out = _mm512_fmadd_ps(a16[1], b16[1], out);
++  out = _mm512_fmadd_ps(a16[2], b16[2], out);
++  out = _mm512_fmadd_ps(a16[3], b16[3], out);
++  out = _mm512_fmadd_ps(a16[4], b16[4], out);
++  out = _mm512_fmadd_ps(a16[5], b16[5], out);
++  out = _mm512_fmadd_ps(a16[6], b16[6], out);
++  out = _mm512_fmadd_ps(a16[7], b16[7], out);
++}
++
++
++static inline __attribute__((always_inline))
++at::BFloat16 _dot_fp32_to_bf16(const __m512* a, const __m512* b, size_t tlen) {
++  float c = 0;
++  __m512 acc;
++  for (size_t i = 0; i < tlen; i++) {
++     mul_and_sum_fp32x128_to_f32x16(acc, a + i, b + i);
++     c += reduce_add_f32x16(acc);
++  }
++  return (at::BFloat16)((*(uint32_t*)&c) >> 16);
++}
+diff --git a/torch_ipex/csrc/cpu/bf16/vec/vec_type_cvt.h b/torch_ipex/csrc/cpu/bf16/vec/vec_type_cvt.h
+index 895c624..1e54583 100644
+--- a/torch_ipex/csrc/cpu/bf16/vec/vec_type_cvt.h
++++ b/torch_ipex/csrc/cpu/bf16/vec/vec_type_cvt.h
+@@ -27,12 +27,20 @@ inline __m256i trunc_fp32_to_bf16(const __m512 src) {
+ 
+ inline __m256i cvt_fp32_to_bf16(const __m512 src) {
+ #if defined(AVX512_BF16)
+-  return _mm512_cvtneps_pbh(src);
++  return (__m256i)_mm512_cvtneps_pbh(src);
+ #else
+   return trunc_fp32_to_bf16(src);
+ #endif
+ }
+ 
++static inline __attribute__((always_inline))
++__m512 pack_bf16_to_fp32(const __m256i top, const __m256i bot) {
++  auto x1 = _mm512_cvtepu16_epi32(top);
++  auto x2 = _mm512_cvtepu16_epi32(bot);
++  auto y = _mm512_add_epi32(_mm512_bslli_epi128(x1, 2), x2);
++  return _mm512_castsi512_ps(y);
++}
++
+ inline void cvt_fp32_to_bf16(at::BFloat16 *dst, const float *src, int len) {
+   int i = 0;
+   for (; i < len - 15; i += 16) {
+diff --git a/torch_ipex/csrc/cpu/dbl/Common.cpp b/torch_ipex/csrc/cpu/dbl/Common.cpp
+index e7c2281..cffe1a7 100644
+--- a/torch_ipex/csrc/cpu/dbl/Common.cpp
++++ b/torch_ipex/csrc/cpu/dbl/Common.cpp
+@@ -210,7 +210,7 @@ std::tuple<std::vector<std::vector<float>>, std::vector<std::vector<int32_t>>> g
+   }
+ }
+ 
+-void reorder_to_int8_for_mix_prec(const at::Tensor& tensor, std::vector<float> scales, bool uint8_used, std::vector<int32_t> shift) {
++void reorder_to_int8_for_mix_prec(const at::Tensor& tensor, std::vector<float> scales, bool uint8_used, std::vector<int32_t> shift, bool per_tensor) {
+   if (!check_auto_mix_int8_fp32() || check_int8_calibration())
+     return;
+ 
+@@ -227,9 +227,13 @@ void reorder_to_int8_for_mix_prec(const at::Tensor& tensor, std::vector<float> s
+ 
+   auto inner_scales = scales;
+   if (scales.empty()) {
+-    // compute weight scales for per_channel
+-    for (auto i = 0; i < tensor.size(0); i++) {
+-      inner_scales.push_back(float(127.5) / tensor[i].abs().max().item<float>());
++    if (per_tensor) {
++      inner_scales.push_back(float(127.5) / tensor.abs().max().item<float>());
++    } else {
++      // compute weight scales for per_channel
++      for (auto i = 0; i < tensor.size(0); i++) {
++        inner_scales.push_back(float(127.5) / tensor[i].abs().max().item<float>());
++      }
+     }
+   }
+ 
+diff --git a/torch_ipex/csrc/cpu/dbl/Common.h b/torch_ipex/csrc/cpu/dbl/Common.h
+index c6cfc57..f5fa490 100644
+--- a/torch_ipex/csrc/cpu/dbl/Common.h
++++ b/torch_ipex/csrc/cpu/dbl/Common.h
+@@ -26,7 +26,7 @@ bool get_int8_quantized_status(const int64_t ops_id);
+ // for asymmetric quantization
+ std::tuple<std::vector<std::vector<float>>, std::vector<std::vector<int32_t>>> get_int8_asymmetric(const int64_t ops_id);
+ 
+-void reorder_to_int8_for_mix_prec(const at::Tensor& tensor, std::vector<float> scales, bool uint8_used = false, std::vector<int32_t> shift = {});
++void reorder_to_int8_for_mix_prec(const at::Tensor& tensor, std::vector<float> scales, bool uint8_used = false, std::vector<int32_t> shift = {}, bool per_tensor = false);
+ 
+ /**
+  * Reorder the input tensor to the specified scalar type.
+diff --git a/torch_ipex/csrc/cpu/int8/Config.cpp b/torch_ipex/csrc/cpu/int8/Config.cpp
+index e378774..b403f68 100644
+--- a/torch_ipex/csrc/cpu/int8/Config.cpp
++++ b/torch_ipex/csrc/cpu/int8/Config.cpp
+@@ -167,11 +167,13 @@ Int8OptConfig::get_indicator_scales(std::vector<bool> i_uint8_used,
+       inputs_scale[i] /= 127.5;
+       inputs_scale[i] *= 255.5;
+       scale_update = true;
++      inputs_uint8_used[i] = i_uint8_used[i];
+     } else if (inputs_uint8_used[i] && !i_uint8_used[i]) {
+       // update zero_point and scales
+       inputs_scale[i] /= 255.5;
+       inputs_scale[i] *= 127.5;
+       scale_update = true;
++      inputs_uint8_used[i] = i_uint8_used[i];
+     }
+   }
+   for (auto j = 0; j < o_uint8_used.size(); j++) {
+@@ -180,11 +182,13 @@ Int8OptConfig::get_indicator_scales(std::vector<bool> i_uint8_used,
+       outputs_scale[j] /= 127.5;
+       outputs_scale[j] *= 255.5;
+       scale_update = true;
++      outputs_uint8_used[j] = o_uint8_used[j];
+     } else if (outputs_uint8_used[j] && !o_uint8_used[j]) {
+       // update zero_point and scales
+       outputs_scale[j] /= 255.5;
+       outputs_scale[j] *= 127.5;
+       scale_update = true;
++      outputs_uint8_used[j] = o_uint8_used[j];
+     }
+   }
+   if (scale_update) {
+@@ -237,4 +241,4 @@ int64_t Int8OptConfig::fetch_and_add_ops_id() {
+ }
+ 
+ thread_local int64_t Int8OptConfig::current_ops_id = 0;
+-} // namespace torch_ipex
+\ No newline at end of file
++} // namespace torch_ipex
+diff --git a/torch_ipex/csrc/cpu/int8/vec/int8_vec_kernel.h b/torch_ipex/csrc/cpu/int8/vec/int8_vec_kernel.h
+new file mode 100644
+index 0000000..01be4c8
+--- /dev/null
++++ b/torch_ipex/csrc/cpu/int8/vec/int8_vec_kernel.h
+@@ -0,0 +1,696 @@
++#pragma once
++#include <immintrin.h>
++#include <cstdlib>
++
++static inline __attribute__((always_inline))
++void zero_ker(int32_t *out, int64_t len) {
++  int64_t i;
++  __m512i zero_512 = _mm512_setzero_si512();
++  #pragma unroll(2)
++  for (i = 0; i < len - 15; i += 16) {
++    _mm512_storeu_si512(out + i, zero_512);
++  }
++
++  if (i < len) {
++    auto mask = ((1 << (len - i)) - 1);
++    _mm512_mask_storeu_epi32(out + i, mask, zero_512);
++  }
++}
++
++static inline __attribute__((always_inline))
++void zero_ker(int8_t *out, int64_t len) {
++  int64_t i;
++  __m512i zero_512 = _mm512_setzero_si512();
++  #pragma unroll(2)
++  for (i = 0; i < len - 63; i += 64) {
++    _mm512_storeu_si512(out + i, zero_512);
++  }
++
++  if (i < len) {
++    auto mask = ((1 << (len - i)) - 1);
++    _mm512_mask_storeu_epi8(out + i, mask, zero_512);
++  }
++}
++
++static inline __attribute__((always_inline))
++void memset_m512i_aligned_ker(int8_t *out, __m512i& v_512) {
++  void * out_p = (void*)out;
++  _mm512_store_si512(out_p, v_512);
++  _mm512_store_si512(out_p + 64, v_512);
++}
++
++static inline __attribute__((always_inline))
++void move_ker(int64_t *out, const int64_t *in, int64_t len) {
++  int64_t i;
++  #pragma unroll(2)
++  for (i = 0; i < len - 7 ; i += 8) {
++    auto in0 = _mm512_loadu_si512(in + i);
++    _mm512_storeu_si512((void*)(out + i), in0);
++  }
++
++  if (i < len) {
++    auto mask = ((1 << (len - i)) - 1);
++    auto in0 = _mm512_maskz_loadu_epi64(mask, in + i);
++    _mm512_mask_storeu_epi64(out + i, mask, in0);
++  }
++}
++
++static inline __attribute__((always_inline))
++void move_ker(int32_t *out, const int32_t *in, int64_t len) {
++  int64_t i;
++  #pragma unroll(2)
++  for (i = 0; i < len - 15 ; i += 16) {
++    auto in0 = _mm512_loadu_si512(in + i);
++    _mm512_storeu_si512(out + i, in0);
++  }
++
++  if (i < len) {
++    auto mask = ((1 << (len - i)) - 1);
++    auto in0 = _mm512_maskz_loadu_epi32(mask, in + i);
++    _mm512_mask_storeu_epi32(out + i, mask, in0);
++  }
++}
++
++static inline __attribute__((always_inline))
++void move_ker(int16_t *out, const int16_t *in, int64_t len) {
++  int64_t i;
++  #pragma unroll(2)
++  for (i = 0; i < len - 31 ; i += 32) {
++    auto in0 = _mm512_loadu_si512(in + i);
++    _mm512_storeu_si512(out + i, in0);
++  }
++
++  if (i < len) {
++    auto mask = ((1 << (len - i)) - 1);
++    auto in0 = _mm512_maskz_loadu_epi16(mask, in + i);
++    _mm512_mask_storeu_epi16(out + i, mask, in0);
++  }
++}
++
++static inline __attribute__((always_inline))
++void move_ker(unsigned char *out, const unsigned char *in, int64_t len) {
++  int64_t i;
++  #pragma unroll(2)
++  for (i = 0; i < len - 63 ; i += 64) {
++    auto in0 = _mm512_loadu_si512(in + i);
++    _mm512_storeu_si512(out + i, in0);
++  }
++
++  if (i < len) {
++    auto mask = ((1 << (len - i)) - 1);
++    auto in0 = _mm512_maskz_loadu_epi8(mask, in + i);
++    _mm512_mask_storeu_epi8(out + i, mask, in0);
++  }
++}
++
++static inline __attribute__((always_inline))
++void move_ker(bool *out, const bool *in, int64_t len) {
++  int64_t i;
++  #pragma unroll(2)
++  for (i = 0; i < len - 63 ; i += 64) {
++    auto in0 = _mm512_loadu_si512(in + i);
++    _mm512_storeu_si512(out + i, in0);
++  }
++
++  if (i < len) {
++    auto mask = ((1 << (len - i)) - 1);
++    auto in0 = _mm512_maskz_loadu_epi8(mask, in + i);
++    _mm512_mask_storeu_epi8(out + i, mask, in0);
++  }
++}
++
++static inline __attribute__((always_inline))
++void move_ker(int8_t *out, const int8_t *in, int64_t len) {
++  int64_t i;
++  #pragma unroll(2)
++  for (i = 0; i < len - 63 ; i += 64) {
++    auto in0 = _mm512_loadu_si512(in + i);
++    _mm512_storeu_si512(out + i, in0);
++  }
++
++  if (i < len) {
++    auto mask = ((1 << (len - i)) - 1);
++    auto in0 = _mm512_maskz_loadu_epi8(mask, in + i);
++    _mm512_mask_storeu_epi8(out + i, mask, in0);
++  }
++}
++
++static inline __attribute__((always_inline))
++void move_ker_128(int8_t *out, const int8_t *in) {
++  int64_t i;
++  auto in0 = _mm512_loadu_si512(in);
++  auto in1 = _mm512_loadu_si512(in + 64);
++  _mm512_storeu_si512(out, in0);
++  _mm512_storeu_si512(out + 64, in1);
++}
++
++static inline __attribute__((always_inline))
++void load_s8x128_store_aligned_ker(int8_t * __restrict__ out, const int8_t * __restrict__ in) {
++  auto in0 = _mm512_loadu_si512(in);
++  auto in1 = _mm512_loadu_si512(in + 64);
++  _mm512_store_si512(out, in0);
++  _mm512_store_si512(out + 64, in1);
++}
++
++static inline __attribute__((always_inline))
++void load_double_s8x128_store_aligned_ker(int8_t * __restrict__ out0,  const int8_t * __restrict__ in0,
++	int8_t * __restrict__ out1, const int8_t * __restrict__ in1) {
++  auto in0_0 = _mm512_loadu_si512(in0);
++  auto in0_1 = _mm512_loadu_si512(in0 + 64);
++  auto in1_0 = _mm512_loadu_si512(in1);
++  auto in1_1 = _mm512_loadu_si512(in1 + 64);
++  _mm512_store_si512(out0, in0_0);
++  _mm512_store_si512(out0 + 64, in0_1);
++  _mm512_store_si512(out1, in1_0);
++  _mm512_store_si512(out1 + 64, in1_1);
++}
++
++
++static inline void move_ker(int8_t *out, const int32_t *in, int64_t len) {
++  int64_t i;
++  #pragma unroll(2)
++  for (i = 0; i < len - 15 ; i += 16) {
++    auto in0 = _mm512_loadu_si512(in + i);
++    auto out0 = _mm512_cvtepi32_epi8(in0);
++    _mm_storeu_si128((__m128i*)(out + i), out0);
++  }
++
++  if (i < len) {
++    auto mask = ((1 << (len - i)) - 1);
++    auto in0 = _mm512_maskz_loadu_epi32(mask, in + i);
++    auto out0 = _mm512_cvtepi32_epi8(in0);
++    _mm_mask_storeu_epi8(out + i, mask, out0);
++  }
++}
++
++static inline void move_ker(int8_t *out, const __m512i *in, int64_t len) {
++  int64_t i;
++  #pragma unroll(2)
++  for (i = 0; i < len ; i ++) {
++    _mm512_storeu_si512(out + i * 64, in[i]);
++  }
++}
++
++static inline void add_ker(int8_t *inout, int8_t *in, int64_t len) {
++/*
++  for (int64_t i = 0; i < len; ++i) {
++    inout[i] += in[i];
++  }
++*/
++  int64_t i;
++  #pragma unroll(2)
++  for (i = 0; i < len - 63 ; i += 64) {
++    auto in0 = _mm512_loadu_si512(in + i);
++    auto out = _mm512_loadu_si512(inout + i);
++    out = _mm512_adds_epi8(out, in0); //add with saturate
++    _mm512_storeu_si512(inout + i, out);
++  }
++
++  if (i < len) {
++    auto mask = ((1 << (len - i)) - 1);
++    auto in0 = _mm512_maskz_loadu_epi8(mask, in + i);
++    auto out = _mm512_maskz_loadu_epi8(mask, inout + i);
++    out = _mm512_adds_epi8(out, in0);
++    _mm512_mask_storeu_epi8(inout + i, mask, out);
++  }
++}
++
++static inline __attribute__((always_inline))
++void scale_and_store_int8_128(void * __restrict__ out, const void * __restrict__ in, __m512& __restrict__  scale) {
++  auto in0_0_32i = _mm512_cvtepi8_epi32(_mm_loadu_si128((__m128i*)in));
++  auto in0_1_32i = _mm512_cvtepi8_epi32(_mm_loadu_si128((__m128i*)(in + 16)));
++  auto in0_2_32i = _mm512_cvtepi8_epi32(_mm_loadu_si128((__m128i*)(in + 32)));
++  auto in0_3_32i = _mm512_cvtepi8_epi32(_mm_loadu_si128((__m128i*)(in + 48)));
++  auto in0_4_32i = _mm512_cvtepi8_epi32(_mm_loadu_si128((__m128i*)(in + 64)));
++  auto in0_5_32i = _mm512_cvtepi8_epi32(_mm_loadu_si128((__m128i*)(in + 80)));
++  auto in0_6_32i = _mm512_cvtepi8_epi32(_mm_loadu_si128((__m128i*)(in + 96)));
++  auto in0_7_32i = _mm512_cvtepi8_epi32(_mm_loadu_si128((__m128i*)(in + 112)));
++  auto in0_0_32f = _mm512_cvt_roundepi32_ps(in0_0_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto in0_1_32f = _mm512_cvt_roundepi32_ps(in0_1_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto in0_2_32f = _mm512_cvt_roundepi32_ps(in0_2_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto in0_3_32f = _mm512_cvt_roundepi32_ps(in0_3_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto in0_4_32f = _mm512_cvt_roundepi32_ps(in0_4_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto in0_5_32f = _mm512_cvt_roundepi32_ps(in0_5_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto in0_6_32f = _mm512_cvt_roundepi32_ps(in0_6_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto in0_7_32f = _mm512_cvt_roundepi32_ps(in0_7_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_0_32f = _mm512_mul_round_ps(in0_0_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_1_32f = _mm512_mul_round_ps(in0_1_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_2_32f = _mm512_mul_round_ps(in0_2_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_3_32f = _mm512_mul_round_ps(in0_3_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_4_32f = _mm512_mul_round_ps(in0_4_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_5_32f = _mm512_mul_round_ps(in0_5_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_6_32f = _mm512_mul_round_ps(in0_6_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_7_32f = _mm512_mul_round_ps(in0_7_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_0_32i = _mm512_cvt_roundps_epi32(in0_0_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_1_32i = _mm512_cvt_roundps_epi32(in0_1_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_2_32i = _mm512_cvt_roundps_epi32(in0_2_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_3_32i = _mm512_cvt_roundps_epi32(in0_3_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_4_32i = _mm512_cvt_roundps_epi32(in0_4_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_5_32i = _mm512_cvt_roundps_epi32(in0_5_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_6_32i = _mm512_cvt_roundps_epi32(in0_6_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_7_32i = _mm512_cvt_roundps_epi32(in0_7_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  _mm_storeu_si128((__m128i*)out, _mm512_cvtsepi32_epi8(in0_0_32i));
++  _mm_storeu_si128((__m128i*)(out + 16), _mm512_cvtsepi32_epi8(in0_1_32i));
++  _mm_storeu_si128((__m128i*)(out + 32), _mm512_cvtsepi32_epi8(in0_2_32i));
++  _mm_storeu_si128((__m128i*)(out + 48), _mm512_cvtsepi32_epi8(in0_3_32i));
++  _mm_storeu_si128((__m128i*)(out + 64), _mm512_cvtsepi32_epi8(in0_4_32i));
++  _mm_storeu_si128((__m128i*)(out + 80), _mm512_cvtsepi32_epi8(in0_5_32i));
++  _mm_storeu_si128((__m128i*)(out + 96), _mm512_cvtsepi32_epi8(in0_6_32i));
++  _mm_storeu_si128((__m128i*)(out + 112), _mm512_cvtsepi32_epi8(in0_7_32i));
++}
++
++static inline void scale_and_store_int8_64(void * __restrict__ out, const void * __restrict__ in, __m512& __restrict__ scale) {
++  auto in0_0_32i = _mm512_cvtepi8_epi32(_mm_loadu_si128((__m128i*)in));
++  auto in0_1_32i = _mm512_cvtepi8_epi32(_mm_loadu_si128((__m128i*)(in + 16)));
++  auto in0_2_32i = _mm512_cvtepi8_epi32(_mm_loadu_si128((__m128i*)(in + 32)));
++  auto in0_3_32i = _mm512_cvtepi8_epi32(_mm_loadu_si128((__m128i*)(in + 48)));
++  auto in0_0_32f = _mm512_cvt_roundepi32_ps(in0_0_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto in0_1_32f = _mm512_cvt_roundepi32_ps(in0_1_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto in0_2_32f = _mm512_cvt_roundepi32_ps(in0_2_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto in0_3_32f = _mm512_cvt_roundepi32_ps(in0_3_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_0_32f = _mm512_mul_round_ps(in0_0_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_1_32f = _mm512_mul_round_ps(in0_1_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_2_32f = _mm512_mul_round_ps(in0_2_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_3_32f = _mm512_mul_round_ps(in0_3_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_0_32i = _mm512_cvt_roundps_epi32(in0_0_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_1_32i = _mm512_cvt_roundps_epi32(in0_1_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_2_32i = _mm512_cvt_roundps_epi32(in0_2_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_3_32i = _mm512_cvt_roundps_epi32(in0_3_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  _mm_storeu_si128((__m128i*)out, _mm512_cvtsepi32_epi8(in0_0_32i));
++  _mm_storeu_si128((__m128i*)(out + 16), _mm512_cvtsepi32_epi8(in0_1_32i));
++  _mm_storeu_si128((__m128i*)(out + 32), _mm512_cvtsepi32_epi8(in0_2_32i));
++  _mm_storeu_si128((__m128i*)(out + 48), _mm512_cvtsepi32_epi8(in0_3_32i));
++}
++
++static inline void scale_and_store_int8_32(void* __restrict__ out,
++	       const void * __restrict__ in,
++	       __m512&__restrict__  scale) {
++  auto in0_0_32i = _mm512_cvtepi8_epi32(_mm_loadu_si128((__m128i*)in));
++  auto in0_1_32i = _mm512_cvtepi8_epi32(_mm_loadu_si128((__m128i*)(in + 16)));
++  auto in0_0_32f = _mm512_cvt_roundepi32_ps(in0_0_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto in0_1_32f = _mm512_cvt_roundepi32_ps(in0_1_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_0_32f = _mm512_mul_round_ps(in0_0_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_1_32f = _mm512_mul_round_ps(in0_1_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_0_32i = _mm512_cvt_roundps_epi32(in0_0_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_1_32i = _mm512_cvt_roundps_epi32(in0_1_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  _mm_storeu_si128((__m128i*)out, _mm512_cvtsepi32_epi8(in0_0_32i));
++  _mm_storeu_si128((__m128i*)(out + 16), _mm512_cvtsepi32_epi8(in0_1_32i));
++}
++
++static inline void scale_and_store_int8_16(void* __restrict__ out, const void * __restrict__ in, __m512& scale) {
++  auto in0_32i = _mm512_cvtepi8_epi32(_mm_loadu_si128((__m128i*)in));
++  auto in0_32f = _mm512_cvt_roundepi32_ps(in0_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_32f = _mm512_mul_round_ps(in0_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_32i = _mm512_cvt_roundps_epi32(in0_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  _mm_storeu_si128((__m128i*)out, _mm512_cvtsepi32_epi8(in0_32i));
++}
++
++static inline void scale_and_store_int8_maskz_16(void * __restrict__ out,
++	       const void * __restrict__ in, __m512& scale, __mmask16 mask) {
++  auto in0 = _mm_maskz_loadu_epi8(mask, in);
++  auto in0_32i = _mm512_cvtepi8_epi32(_mm_maskz_loadu_epi8(mask, in));
++  auto in0_32f = _mm512_cvt_roundepi32_ps(in0_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_32f = _mm512_mul_round_ps(in0_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_32i = _mm512_cvt_roundps_epi32(in0_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  _mm_mask_storeu_epi8(out, mask, _mm512_cvtsepi32_epi8(in0_32i));
++}
++
++static inline __attribute__((always_inline))
++void scale_and_move_ker_128(int8_t * __restrict__ out, const int8_t * __restrict__ in, float scale) {
++  __m512 scale_vec512 = _mm512_set1_ps(scale);
++  scale_and_store_int8_128((void*)out, (const void*)in, scale_vec512);
++}
++
++static inline void scale_and_move_ker(int8_t * __restrict__ out, const int8_t * __restrict__ in, float scale, int32_t len) {
++  int32_t i;
++/*
++  for (i = 0; i < len; i ++) {
++     int32_t out_i = (int32_t)((float)in[i] * scale);
++     out[i] = (out_f >= 127 ? (int8_t)127 : out_f <= -127 ? (int8_t)-127 : (int8_t)(int32_t)out_f);
++  }
++*/
++  __m512 scale_vec512 = _mm512_set1_ps(scale);
++  for (i = 0; i < len - 127 ; i += 128) {
++    scale_and_store_int8_128((void*)(out + i), (const void*)(in + i), scale_vec512);
++  }
++  if ((len - i) > 63) {
++    scale_and_store_int8_64((void*)(out + i), (const void*)(in + i), scale_vec512);
++    i += 64;
++  }
++  if ((len - i) > 31) {
++    scale_and_store_int8_32((void*)(out + i), (const void*)(in + i), scale_vec512);
++    i += 32;
++  }
++  if ((len - i) > 15) {
++    scale_and_store_int8_16((void*)(out + i), (const void*)(in + i), scale_vec512);
++    i += 16;
++  }
++  if (i < len) {
++    __mmask16 mask = (__mmask16)((1 << (len - i)) - 1);
++    scale_and_store_int8_maskz_16(out + i, in + i, scale_vec512, mask);
++  }
++}
++
++static inline void scale_int32_and_store_int8_16x4(int8_t* __restrict__ out,
++               const int32_t * __restrict__ __attribute__((aligned(64))) in,
++	       const float* __restrict__ __attribute__((aligned(64))) scales_ptr) {
++  auto in0_32i = _mm512_load_si512((const void*)in);
++  auto in1_32i = _mm512_load_si512((const void*)(in + 16));
++  auto in2_32i = _mm512_load_si512((const void*)(in + 32));
++  auto in3_32i = _mm512_load_si512((const void*)(in + 48));
++  __m512 scale0 = _mm512_load_ps(scales_ptr);
++  __m512 scale1 = _mm512_load_ps(scales_ptr + 16);
++  __m512 scale2 = _mm512_load_ps(scales_ptr + 32);
++  __m512 scale3 = _mm512_load_ps(scales_ptr + 48);
++  auto in0_f = _mm512_cvt_roundepi32_ps(in0_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto in1_f = _mm512_cvt_roundepi32_ps(in1_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto in2_f = _mm512_cvt_roundepi32_ps(in2_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto in3_f = _mm512_cvt_roundepi32_ps(in3_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_f = _mm512_mul_round_ps(in0_f, scale0, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in1_f = _mm512_mul_round_ps(in1_f, scale1, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in2_f = _mm512_mul_round_ps(in2_f, scale2, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in3_f = _mm512_mul_round_ps(in3_f, scale3, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto out1_16 = _mm512_cvtsepi32_epi8(_mm512_cvt_roundps_epi32(in0_f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)));
++  auto out2_16 = _mm512_cvtsepi32_epi8(_mm512_cvt_roundps_epi32(in1_f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)));
++  auto out3_16 = _mm512_cvtsepi32_epi8(_mm512_cvt_roundps_epi32(in2_f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)));
++  auto out4_16 = _mm512_cvtsepi32_epi8(_mm512_cvt_roundps_epi32(in3_f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)));
++  _mm_storeu_si128((__m128i*)out, out1_16);
++  _mm_storeu_si128((__m128i*)(out + 16), out2_16);
++  _mm_storeu_si128((__m128i*)(out + 32), out3_16);
++  _mm_storeu_si128((__m128i*)(out + 48), out4_16);
++}
++
++static inline void scale_int32_and_store_int8_16x2(int8_t* __restrict__ out,
++               const int32_t * __restrict__ __attribute__((aligned(64))) in,
++	       const float* __restrict__ __attribute__((aligned(64))) scales_ptr) {
++  auto in0_32i = _mm512_load_si512((const void*)in);
++  auto in1_32i = _mm512_load_si512((const void*)(in + 16));
++  __m512 scale0 = _mm512_load_ps(scales_ptr);
++  __m512 scale1 = _mm512_load_ps(scales_ptr + 16);
++  auto in0_32f = _mm512_cvt_roundepi32_ps(in0_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto in1_32f = _mm512_cvt_roundepi32_ps(in1_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_32f = _mm512_mul_round_ps(in0_32f, scale0, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in1_32f = _mm512_mul_round_ps(in1_32f, scale1, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto out0_16 = _mm512_cvtsepi32_epi8(_mm512_cvt_roundps_epi32(in0_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)));
++  auto out1_16 = _mm512_cvtsepi32_epi8(_mm512_cvt_roundps_epi32(in1_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)));
++  _mm_storeu_si128((__m128i*)out,out0_16);
++  _mm_storeu_si128((__m128i*)(out + 16), out1_16);
++}
++
++static inline void scale_int32_and_store_int8_16(int8_t* __restrict__ out,
++	       const int32_t * __restrict__ __attribute__((aligned(64))) in, __m512 scale) {
++  auto in0_32i = _mm512_load_si512(in);
++  auto in0_32f = _mm512_cvt_roundepi32_ps(in0_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_32f = _mm512_mul_round_ps(in0_32f,  scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto out_16 = _mm512_cvtsepi32_epi8(_mm512_cvt_roundps_epi32(in0_32f,(_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)));
++  _mm_storeu_si128((__m128i*)out, out_16);
++}
++
++static inline void scale_int32_and_store_int8_maskz_16(int8_t * __restrict__ out,
++	       const int32_t * __restrict__ __attribute__((aligned(64))) in,
++	       __m512 scale, __mmask16 mask) {
++  auto in0_32i = _mm512_maskz_load_epi32(mask, in);
++  auto in0_32f = _mm512_cvt_roundepi32_ps(in0_32i, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  in0_32f = _mm512_mul_round_ps(in0_32f, scale, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto out_i8 = _mm512_cvtsepi32_epi8(_mm512_cvt_roundps_epi32(in0_32f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)));
++  _mm_mask_storeu_epi8((void*)out, mask, out_i8);
++}
++
++static inline __attribute__((always_inline))
++void load_s8x128_to_s16x128(__m512i* __restrict__ out_s16x4, const int8_t * __restrict__ in) {
++  auto in_0 = _mm256_loadu_si256((__m256i*)in);
++  auto in_1 = _mm256_loadu_si256((__m256i*)(in + 32));
++  auto in_2 = _mm256_loadu_si256((__m256i*)(in + 64));
++  auto in_3 = _mm256_loadu_si256((__m256i*)(in + 96));
++  out_s16x4[0] = _mm512_cvtepi8_epi16(in_0);
++  out_s16x4[1] = _mm512_cvtepi8_epi16(in_1);
++  out_s16x4[2] = _mm512_cvtepi8_epi16(in_2);
++  out_s16x4[3] = _mm512_cvtepi8_epi16(in_3);
++}
++
++static inline __attribute__((always_inline))
++void load_s8_to_s16(__m512i* __restrict__ out_s16, const int8_t * __restrict__ in, size_t len) {
++  size_t i = 0;
++  size_t idx = 0;
++  for (; i < len - 127 ; i += 128) {
++    auto idx = i / 32;
++    load_s8x128_to_s16x128(&out_s16[idx], &in[i]);
++    idx += 4;
++  }
++  for (; i < len - 31 ; i += 32) {
++    auto in_0 = _mm256_loadu_si256((__m256i*)in + i);
++    out_s16[idx] = _mm512_cvtepi8_epi16(in_0);
++    idx += 1;
++  }
++  if (i < len) {
++    auto mask = (__mmask32)((1 << (len - i)) - 1);
++    auto in_0 = _mm256_maskz_loadu_epi8(mask, in + i);
++    out_s16[idx] = _mm512_cvtepi8_epi16(in_0);
++  }
++}
++
++static inline __attribute__((always_inline))
++void load_s8x128x2_to_s16x128x2(__m512i* __restrict__ out_s16x8, const int8_t * in0, const int8_t* in1) {
++  auto in0_0 = _mm256_loadu_si256((__m256i*)in0);
++  auto in0_1 = _mm256_loadu_si256((__m256i*)(in0 + 32));
++  auto in0_2 = _mm256_loadu_si256((__m256i*)(in0 + 64));
++  auto in0_3 = _mm256_loadu_si256((__m256i*)(in0 + 96));
++  auto in1_0 = _mm256_loadu_si256((__m256i*)in1);
++  auto in1_1 = _mm256_loadu_si256((__m256i*)(in1 + 32));
++  auto in1_2 = _mm256_loadu_si256((__m256i*)(in1 + 64));
++  auto in1_3 = _mm256_loadu_si256((__m256i*)(in1 + 96));
++  out_s16x8[0] = _mm512_cvtepi8_epi16(in0_0);
++  out_s16x8[1] = _mm512_cvtepi8_epi16(in0_1);
++  out_s16x8[2] = _mm512_cvtepi8_epi16(in0_2);
++  out_s16x8[3] = _mm512_cvtepi8_epi16(in0_3);
++  out_s16x8[4] = _mm512_cvtepi8_epi16(in1_0);
++  out_s16x8[5] = _mm512_cvtepi8_epi16(in1_1);
++  out_s16x8[6] = _mm512_cvtepi8_epi16(in1_2);
++  out_s16x8[7] = _mm512_cvtepi8_epi16(in1_3);
++}
++
++static inline __attribute__((always_inline))
++void mul_and_sum_s16x128_to_s32x16(__m512i& __restrict__ out, const __m512i *a16x4, const __m512i *b16x4) {
++  auto a_0_i = _mm512_madd_epi16(a16x4[0], b16x4[0]);
++  auto a_2_i = _mm512_madd_epi16(a16x4[2], b16x4[2]);
++#ifdef AVX512_VNNI
++  a_0_i = _mm512_dpwssd_epi32(a_0_i, a16x4[1], b16x4[1]);
++  a_2_i = _mm512_dpwssd_epi32(a_2_i, a16x4[3], b16x4[3]);
++#else
++  auto a_1_i = _mm512_madd_epi16(a16x4[1], b16x4[1]);
++  auto a_3_i = _mm512_madd_epi16(a16x4[3], b16x4[3]);
++  a_0_i = _mm512_add_epi32(a_0_i, a_1_i);
++  a_2_i = _mm512_add_epi32(a_2_i, a_3_i);
++#endif
++  out = _mm512_add_epi32(a_0_i, a_2_i);
++}
++
++static inline __attribute__((always_inline))
++void mul_and_sum_s8x128x2_to_s32x16x2(__m512i& __restrict__ out0, __m512i& __restrict__ out1, const int8_t *a0, const int8_t *b0, const int8_t *a1, const int8_t *b1) {
++  auto a0_0 = _mm256_loadu_si256((__m256i*)a0);
++  auto a0_1 = _mm256_loadu_si256((__m256i*)(a0 + 32));
++  auto a0_2 = _mm256_loadu_si256((__m256i*)(a0 + 64));
++  auto a0_3 = _mm256_loadu_si256((__m256i*)(a0 + 96));
++  auto b0_0 = _mm256_loadu_si256((__m256i*)b0);
++  auto b0_1 = _mm256_loadu_si256((__m256i*)(b0 + 32));
++  auto b0_2 = _mm256_loadu_si256((__m256i*)(b0 + 64));
++  auto b0_3 = _mm256_loadu_si256((__m256i*)(b0 + 96));
++  auto a0_0_i = _mm512_cvtepi8_epi16(a0_0);
++  auto a0_1_i = _mm512_cvtepi8_epi16(a0_1);
++  auto a0_2_i = _mm512_cvtepi8_epi16(a0_2);
++  auto a0_3_i = _mm512_cvtepi8_epi16(a0_3);
++  auto b0_0_i = _mm512_cvtepi8_epi16(b0_0);
++  auto b0_1_i = _mm512_cvtepi8_epi16(b0_1);
++  auto b0_2_i = _mm512_cvtepi8_epi16(b0_2);
++  auto b0_3_i = _mm512_cvtepi8_epi16(b0_3);
++  auto a1_0 = _mm256_loadu_si256((__m256i*)a1);
++  auto a1_1 = _mm256_loadu_si256((__m256i*)(a1 + 32));
++  auto a1_2 = _mm256_loadu_si256((__m256i*)(a1 + 64));
++  auto a1_3 = _mm256_loadu_si256((__m256i*)(a1 + 96));
++  auto b1_0 = _mm256_loadu_si256((__m256i*)b1);
++  auto b1_1 = _mm256_loadu_si256((__m256i*)(b1 + 32));
++  auto b1_2 = _mm256_loadu_si256((__m256i*)(b1 + 64));
++  auto b1_3 = _mm256_loadu_si256((__m256i*)(b1 + 96));
++  auto a1_0_i = _mm512_cvtepi8_epi16(a1_0);
++  auto a1_1_i = _mm512_cvtepi8_epi16(a1_1);
++  auto a1_2_i = _mm512_cvtepi8_epi16(a1_2);
++  auto a1_3_i = _mm512_cvtepi8_epi16(a1_3);
++  auto b1_0_i = _mm512_cvtepi8_epi16(b1_0);
++  auto b1_1_i = _mm512_cvtepi8_epi16(b1_1);
++  auto b1_2_i = _mm512_cvtepi8_epi16(b1_2);
++  auto b1_3_i = _mm512_cvtepi8_epi16(b1_3);
++  a0_0_i = _mm512_madd_epi16(a0_0_i, b0_0_i);
++  a0_2_i = _mm512_madd_epi16(a0_2_i, b0_2_i);
++  a1_0_i = _mm512_madd_epi16(a1_0_i, b1_0_i);
++  a1_2_i = _mm512_madd_epi16(a1_2_i, b1_2_i);
++#ifdef AVX512_VNNI
++  a0_0_i = _mm512_dpwssd_epi32(a0_0_i, a0_1_i, b0_1_i);
++  a1_0_i = _mm512_dpwssd_epi32(a1_0_i, a1_1_i, b1_1_i);
++  a0_2_i = _mm512_dpwssd_epi32(a0_2_i, a0_3_i, b0_3_i);
++  a1_2_i = _mm512_dpwssd_epi32(a1_2_i, a1_3_i, b1_3_i);
++#else
++  a0_1_i = _mm512_madd_epi16(a0_1_i, b0_1_i);
++  a0_3_i = _mm512_madd_epi16(a0_3_i, b0_3_i);
++  a1_1_i = _mm512_madd_epi16(a1_1_i, b1_1_i);
++  a1_3_i = _mm512_madd_epi16(a1_3_i, b1_3_i);
++  a0_0_i = _mm512_add_epi32(a0_0_i, a0_1_i);
++  a0_2_i = _mm512_add_epi32(a0_2_i, a0_3_i);
++  a1_0_i = _mm512_add_epi32(a1_0_i, a1_1_i);
++  a1_2_i = _mm512_add_epi32(a1_2_i, a1_3_i);
++#endif
++  out0 = _mm512_add_epi32(a0_0_i, a0_2_i);
++  out1 = _mm512_add_epi32(a1_0_i, a1_2_i);
++}
++
++static inline __attribute__((always_inline))
++void mul_and_sum_s16x128x2_to_s32x16x2(__m512i& __restrict__ out0, __m512i& __restrict__ out1,
++	       const __m512i* a0_16x4, const __m512i *b0_16x4, const __m512i *a1_16x4, const __m512i *b1_16x4) {
++  auto a0_0_i = _mm512_madd_epi16(a0_16x4[0], b0_16x4[0]);
++  auto a1_0_i = _mm512_madd_epi16(a1_16x4[0], b1_16x4[0]);
++  auto a0_2_i = _mm512_madd_epi16(a0_16x4[2], b0_16x4[2]);
++  auto a1_2_i = _mm512_madd_epi16(a1_16x4[2], b1_16x4[2]);
++#ifdef AVX512_VNNI
++  a0_0_i = _mm512_dpwssd_epi32(a0_0_i, a0_16x4[1], b0_16x4[1]);
++  a1_0_i = _mm512_dpwssd_epi32(a1_0_i, a1_16x4[1], b1_16x4[1]);
++  a0_2_i = _mm512_dpwssd_epi32(a0_2_i, a0_16x4[3], b0_16x4[3]);
++  a1_2_i = _mm512_dpwssd_epi32(a1_2_i, a1_16x4[3], b1_16x4[3]);
++#else
++  auto a0_1_i = _mm512_madd_epi16(a0_16x4[1], b0_16x4[1]);
++  auto a0_3_i = _mm512_madd_epi16(a0_16x4[3], b0_16x4[3]);
++  auto a1_1_i = _mm512_madd_epi16(a1_16x4[1], b1_16x4[1]);
++  auto a1_3_i = _mm512_madd_epi16(a1_16x4[3], b1_16x4[3]);
++  a0_0_i = _mm512_add_epi32(a0_0_i, a0_1_i);
++  a0_2_i = _mm512_add_epi32(a0_2_i, a0_3_i);
++  a1_0_i = _mm512_add_epi32(a1_0_i, a1_1_i);
++  a1_2_i = _mm512_add_epi32(a1_2_i, a1_3_i);
++#endif
++  out0 = _mm512_add_epi32(a0_0_i, a0_2_i);
++  out1 = _mm512_add_epi32(a1_0_i, a1_2_i);
++}
++
++static inline __attribute__((always_inline))
++__m512i reduce_add_s32x16x16(const __m512i* acc_sums) {
++  auto l0 = _mm512_unpacklo_epi32(acc_sums[0], acc_sums[1]);
++  auto l1 = _mm512_unpackhi_epi32(acc_sums[0], acc_sums[1]);
++  auto l2 = _mm512_unpacklo_epi32(acc_sums[2], acc_sums[3]);
++  auto l3 = _mm512_unpackhi_epi32(acc_sums[2], acc_sums[3]);
++  auto l4 = _mm512_unpacklo_epi32(acc_sums[4], acc_sums[5]);
++  auto l5 = _mm512_unpackhi_epi32(acc_sums[4], acc_sums[5]);
++  auto l6 = _mm512_unpacklo_epi32(acc_sums[6], acc_sums[7]);
++  auto l7 = _mm512_unpackhi_epi32(acc_sums[6], acc_sums[7]);
++
++  l0 = _mm512_add_epi32(l0, l1);
++  l2 = _mm512_add_epi32(l2, l3);
++  l4 = _mm512_add_epi32(l4, l5);
++  l6 = _mm512_add_epi32(l6, l7);
++  l1 = _mm512_unpacklo_epi64(l0,l2);
++  l3 = _mm512_unpackhi_epi64(l0,l2);
++  l5 = _mm512_unpacklo_epi64(l4,l6);
++  l7 = _mm512_unpackhi_epi64(l4,l6);
++  l1 = _mm512_add_epi32(l1, l3);
++  l5 = _mm512_add_epi32(l5, l7);
++
++  l0 = _mm512_shuffle_i32x4(l1, l5, 0x88);
++  l2 = _mm512_shuffle_i32x4(l1, l5, 0xdd);
++
++  auto h0 = _mm512_unpacklo_epi32(acc_sums[8], acc_sums[9]);
++  auto h1 = _mm512_unpackhi_epi32(acc_sums[8], acc_sums[9]);
++  auto h2 = _mm512_unpacklo_epi32(acc_sums[10], acc_sums[11]);
++  auto h3 = _mm512_unpackhi_epi32(acc_sums[10], acc_sums[11]);
++  auto h4 = _mm512_unpacklo_epi32(acc_sums[12], acc_sums[13]);
++  auto h5 = _mm512_unpackhi_epi32(acc_sums[12], acc_sums[13]);
++  auto h6 = _mm512_unpacklo_epi32(acc_sums[14], acc_sums[15]);
++  auto h7 = _mm512_unpackhi_epi32(acc_sums[14], acc_sums[15]);
++  h0 = _mm512_add_epi32(h0, h1);
++  h2 = _mm512_add_epi32(h2, h3);
++  h4 = _mm512_add_epi32(h4, h5);
++  h6 = _mm512_add_epi32(h6, h7);
++  h1 = _mm512_unpacklo_epi64(h0,h2);
++  h3 = _mm512_unpackhi_epi64(h0,h2);
++  h5 = _mm512_unpacklo_epi64(h4,h6);
++  h7 = _mm512_unpackhi_epi64(h4,h6);
++  h1 = _mm512_add_epi32(h1, h3);
++  h5 = _mm512_add_epi32(h5, h7);
++  h0 = _mm512_shuffle_i32x4(h1, h5, 0x88);
++  h2 = _mm512_shuffle_i32x4(h1, h5, 0xdd);
++
++  l0 = _mm512_add_epi32(l0, l2);
++  h0 = _mm512_add_epi32(h0, h2);
++  l1 = _mm512_shuffle_i32x4(l0, h0, 0x88);
++  l0 = _mm512_shuffle_i32x4(l0, h0, 0xdd);
++  l0 = _mm512_add_epi32(l0, l1);
++
++  return l0;
++}
++
++static inline __attribute__((always_inline))
++void reduce_add_s32x16x16_with_scales(int8_t* __restrict__ outs, __m512i* __restrict__ acc_sums, __m512 scales) {
++  auto l1 =  reduce_add_s32x16x16(acc_sums);
++  auto l1_f = _mm512_cvt_roundepi32_ps(l1, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  l1_f = _mm512_mul_round_ps(l1_f, scales, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto out_16 = _mm512_cvtsepi32_epi8(_mm512_cvt_roundps_epi32(l1_f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)));
++  _mm_storeu_si128((__m128i*)outs, out_16);
++}
++
++static inline __attribute__((always_inline))
++void reduce_add_s32x16x16x4_with_scales(int8_t* __restrict__ outs,
++	       const __m512i* __restrict__ acc_sums,
++	       const __m512* __restrict__ scales) {
++  auto l1 =  reduce_add_s32x16x16(acc_sums);
++  auto l2 =  reduce_add_s32x16x16(acc_sums + 16);
++  auto l3 =  reduce_add_s32x16x16(acc_sums + 32);
++  auto l4 =  reduce_add_s32x16x16(acc_sums + 48);
++  auto l1_f = _mm512_cvt_roundepi32_ps(l1, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto l2_f = _mm512_cvt_roundepi32_ps(l2, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto l3_f = _mm512_cvt_roundepi32_ps(l3, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto l4_f = _mm512_cvt_roundepi32_ps(l4, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  l1_f = _mm512_mul_round_ps(l1_f, scales[0], (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  l2_f = _mm512_mul_round_ps(l2_f, scales[1], (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  l3_f = _mm512_mul_round_ps(l3_f, scales[2], (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  l4_f = _mm512_mul_round_ps(l4_f, scales[3], (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto out1_16 = _mm512_cvtsepi32_epi8(_mm512_cvt_roundps_epi32(l1_f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)));
++  auto out2_16 = _mm512_cvtsepi32_epi8(_mm512_cvt_roundps_epi32(l2_f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)));
++  auto out3_16 = _mm512_cvtsepi32_epi8(_mm512_cvt_roundps_epi32(l3_f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)));
++  auto out4_16 = _mm512_cvtsepi32_epi8(_mm512_cvt_roundps_epi32(l4_f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)));
++  _mm_storeu_si128((__m128i*)outs, out1_16);
++  _mm_storeu_si128((__m128i*)(outs + 16), out2_16);
++  _mm_storeu_si128((__m128i*)(outs + 32), out3_16);
++  _mm_storeu_si128((__m128i*)(outs + 48), out4_16);
++}
++
++static inline __attribute__((always_inline))
++void reduce_add_s32x16x16_with_scales_and_mask_store(int8_t* __restrict__ outs, __mmask16 mask,
++	       const __m512i* __restrict__ acc_sums, __m512 scales) {
++  auto l1 =  reduce_add_s32x16x16(acc_sums);
++  auto l1_f = _mm512_cvt_roundepi32_ps(l1, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  l1_f = _mm512_mul_round_ps(l1_f, scales, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC));
++  auto out_16 = _mm512_cvtsepi32_epi8(_mm512_cvt_roundps_epi32(l1_f, (_MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)));
++  _mm_mask_storeu_epi8((__m128i*)outs, mask, out_16);
++}
++
++static inline int32_t reduce_add_s32x16(__m512i& __restrict__ acc_sum) {
++  auto ab_256_high = _mm512_extracti32x8_epi32(acc_sum, 1);
++  auto ab_256_low = _mm512_castsi512_si256(acc_sum);
++  ab_256_low = _mm256_add_epi32(ab_256_low, ab_256_high);
++
++  auto ab_128_high = _mm256_extracti128_si256(ab_256_low, 1);
++  auto ab_128_low = _mm256_castsi256_si128(ab_256_low);
++  ab_128_low = _mm_add_epi32(ab_128_low, ab_128_high);
++
++  ab_128_high = _mm_unpackhi_epi64(ab_128_low, ab_128_low);
++  ab_128_low = _mm_add_epi32(ab_128_low, ab_128_high);
++  ab_128_high = _mm_shuffle_epi32(ab_128_low, 0xe1);
++  ab_128_low = _mm_add_epi32(ab_128_low, ab_128_high);
++  return _mm_cvtsi128_si32(ab_128_low);
++}
++
++static inline __attribute__((always_inline))
++int8_t _dot_s16s16_scale_to_s8(const __m512i* a, const __m512i* b, size_t tlen, float scale) {
++  int32_t c = 0;
++  __m512i acc;
++  for (size_t i = 0; i < tlen; i++) {
++    mul_and_sum_s16x128_to_s32x16(acc, a + i, b + i);
++    c += reduce_add_s32x16(acc);
++  }
++  return (int8_t)(c * scale);
++}
+diff --git a/torch_ipex/csrc/cpu/interaction_forward.h b/torch_ipex/csrc/cpu/interaction_forward.h
+new file mode 100644
+index 0000000..3e66dab
+--- /dev/null
++++ b/torch_ipex/csrc/cpu/interaction_forward.h
+@@ -0,0 +1,267 @@
++#pragma once
++#include <stdint.h>
++#include <vector>
++#include <cmath>
++#include "aten/aten.hpp"
++#include "dbl/Common.h"
++#include "bf16/vec/bf16_vec_kernel.h"
++#include "int8/vec/int8_vec_kernel.h"
++
++namespace torch_ipex {
++  typedef struct tileconfig_t {
++    uint8_t  palette_id;
++    uint8_t  startRow;
++    uint8_t  reserved[14];
++    uint16_t colb[16];
++    uint8_t  rows[16];
++  } tileconfig_t;
++
++  template <typename T>
++  static inline void flat_triangle(const T *in, T *out, size_t size) {
++#if defined(IPEX_PROFILE_OP)
++    RECORD_FUNCTION("ExtendOps::_flat_triangle", std::vector<c10::IValue>({}));
++#endif
++    size_t offset = 0;
++#pragma unroll(2)
++    for (int i = 1; i < size; i++) {
++      move_ker(&out[offset], &in[i * size], i);
++      offset += i;
++    }
++  }
++
++  template <typename T>
++  static inline void cat(const T *in1, const T *in2, T *out, size_t in1_size,
++                         size_t in2_size) {
++#if defined(IPEX_PROFILE_OP)
++    RECORD_FUNCTION("ExtendOps::_cat", std::vector<c10::IValue>({}));
++#endif
++    move_ker(out, in1, in1_size);
++    move_ker(&out[in1_size], in2, in2_size);
++  }
++
++  template <typename T>
++  static inline void cat(T *out, const std::vector<T *> &in, const std::vector<uint32_t> &feature_sizes, int64_t bs) {
++#if defined(IPEX_PROFILE_OP)
++    RECORD_FUNCTION("ExtendOps::_cat_array", std::vector<c10::IValue>({}));
++#endif
++    size_t offset = 0;
++    for (int j = 0; j < feature_sizes.size(); j++) {
++      move_ker(&out[offset], &in[j][bs * feature_sizes[j]], feature_sizes[j]);
++      offset += feature_sizes[j];
++    }
++  }
++
++  template <typename T>
++  inline at::Tensor _interaction_forward(const std::vector<at::Tensor> &input) {
++#if defined(IPEX_PROFILE_OP)
++    RECORD_FUNCTION("_interaction_forward", std::vector<c10::IValue>({}));
++#endif
++    uint32_t total_feature_size = 0;
++    int64_t batch_size = input[0].sizes()[0];
++    uint32_t vector_size = input[0].sizes()[1];
++    uint32_t input_size = input.size();
++    std::vector<uint32_t> feature_sizes(input_size);
++    std::vector<T *> input_data(input_size);
++    for (int i = 0; i < input_size; i++) {
++      TORCH_INTERNAL_ASSERT_DEBUG_ONLY(input[i].is_contiguous());
++      TORCH_INTERNAL_ASSERT_DEBUG_ONLY(input[i].device().is_xpu());
++      TORCH_INTERNAL_ASSERT_DEBUG_ONLY(input[i].dim() == 2);
++      feature_sizes[i] = input[i].sizes()[1];
++      total_feature_size += input[i].sizes()[1];
++      input_data[i] = input[i].data_ptr<T>();
++    }
++    auto vector_nums = total_feature_size / vector_size;
++    TORCH_INTERNAL_ASSERT_DEBUG_ONLY(total_feature_size % vector_size == 0);
++    auto interact_feature_size = vector_nums * (vector_nums - 1) / 2;
++    auto out_data_line_len = interact_feature_size + vector_size;
++    auto out = at::empty({batch_size, out_data_line_len}, input[0].options());
++    auto out_data = out.data_ptr<T>();
++
++    auto dtype = get_dil_data_type(input[0].scalar_type());
++    std::vector<int64_t> lhs_shape({vector_nums, vector_size});
++    std::vector<int64_t> lhs_stride({vector_size, 1});
++    std::vector<int64_t> rhs_shape({vector_size, vector_nums});
++    std::vector<int64_t> rhs_stride({1, vector_size});
++    std::vector<int64_t> res_shape({vector_nums, vector_nums});
++    std::vector<int64_t> res_stride({vector_nums, 1});
++    dil::tensor::desc lhs_desc(std::move(lhs_shape), dtype, std::move(lhs_stride));
++    dil::tensor::desc rhs_desc(std::move(rhs_shape), dtype, std::move(rhs_stride));
++    dil::tensor::desc res_desc(std::move(res_shape), dtype, std::move(res_stride));
++    auto pd = dil::matmul_forward::primitive_desc(
++        {lhs_desc, rhs_desc, res_desc}, dil::engine::cpu_engine());
++
++    at::parallel_for(0, batch_size, 0, [&](int64_t start, int64_t end) {
++      T cat_buf[vector_nums * vector_size] __attribute__((aligned(64)));
++      dil::tensor lhs({lhs_desc, cat_buf});
++      dil::tensor rhs({lhs_desc, cat_buf});
++      T mm_buf[vector_nums * vector_nums] __attribute__((aligned(64)));
++      dil::tensor res({res_desc, mm_buf});
++      auto p = dnnl::matmul(pd);
++      auto row_len = start * vector_size;
++      auto out_len = start * out_data_line_len;
++      for (int64_t i = start; i < end; i++) {
++        move_ker(&out_data[out_len], &input_data[0][row_len], vector_size);
++        cat<T>(cat_buf, input_data, feature_sizes, i);
++        p.execute(dil::stream::default_stream(),
++          {{DNNL_ARG_SRC, lhs}, {DNNL_ARG_WEIGHTS, rhs}, {DNNL_ARG_DST, res}});
++        T* flat_buf = (T*)(&out_data[out_len] + vector_size);
++        flat_triangle<T>(mm_buf, flat_buf, vector_nums);
++	row_len += vector_size;
++	out_len += out_data_line_len;
++      }
++    });
++
++    return out;
++  }
++
++  static inline  __attribute__((always_inline))
++  void _interaction_s16s16_scale_to_s8_128(int8_t *out, size_t M,
++       const float* __attribute__((aligned(64))) scales, const __m512i* convert_to_s16_buf, __m512i * cat_buf) {
++#if defined(IPEX_PROFILE_OP)
++    RECORD_FUNCTION("ExtendOps::_interaction_s16s16_scale_to_s8_128", std::vector<c10::IValue>({}));
++#endif
++    mul_and_sum_s16x128_to_s32x16(cat_buf[0], (convert_to_s16_buf + 4), convert_to_s16_buf);
++    size_t offset = 1;
++    for (int i = 2; i < M; i++) {
++      auto * c = convert_to_s16_buf + (i * 4);
++      int j = 0;
++      for (; j < i - 1; j += 2) {
++        auto* a = convert_to_s16_buf + (j * 4);
++        mul_and_sum_s16x128x2_to_s32x16x2(cat_buf[offset], cat_buf[offset + 1], c, a, c, a+4);
++        offset+=2;
++      }
++      for (; j < i; j++) {
++        auto* a = convert_to_s16_buf + (j * 4);
++        mul_and_sum_s16x128_to_s32x16(cat_buf[offset], c, a);
++        offset++;
++      }
++    }
++
++    //Do reduce add with scale
++    size_t off = 0;
++    __m512 scales_m512[4];
++    for (; off < offset - 63 ; off += 64) {
++      scales_m512[0] = _mm512_load_ps((const void *)(scales + off));
++      scales_m512[1] = _mm512_load_ps((const void *)(scales + off + 16));
++      scales_m512[2] = _mm512_load_ps((const void *)(scales + off + 32));
++      scales_m512[3] = _mm512_load_ps((const void *)(scales + off + 48));
++      reduce_add_s32x16x16x4_with_scales(out + off, cat_buf + off, scales_m512);
++    }
++    for (; off < offset - 15 ; off += 16) {
++      reduce_add_s32x16x16_with_scales(out + off, cat_buf + off, _mm512_load_ps((const void *)(scales + off)));
++    }
++    auto mask = ((1 << (offset - off)) - 1);
++    reduce_add_s32x16x16_with_scales_and_mask_store(out + off, mask, cat_buf + off, _mm512_load_ps((const void *)(scales + off)));
++  }
++
++  static inline
++  void _interaction_s16s16_scale_to_s8(int8_t *out, const __m512i* convert_to_s16_buf, size_t M, size_t strides, float* scales) {
++#if defined(IPEX_PROFILE_OP)
++    RECORD_FUNCTION("ExtendOps::_interaction_s16s16_scale_to_s8", std::vector<c10::IValue>({}));
++#endif
++    size_t offset = 0;
++    auto a_off = strides;
++    for (int i = 1; i < M; i++) {
++      const __m512i* a = convert_to_s16_buf + a_off;
++      auto b_off = 0;
++      for (int j = 0; j < i; j++) {
++        const __m512i* b = convert_to_s16_buf + b_off;
++        out[offset] = _dot_s16s16_scale_to_s8(a, b, strides, scales[offset]);
++        b_off += strides;
++        offset++;
++      }
++      a_off += strides;
++    }
++  }
++
++  static inline
++  at::Tensor _interaction_forward_quantization(const std::vector<at::Tensor> &input, int64_t num_ops_id) {
++#if defined(IPEX_PROFILE_OP)
++    RECORD_FUNCTION("_interaction_forward_quantization_vnni", std::vector<c10::IValue>({}));
++#endif
++    std::vector<std::vector<float>> scales = cpu::dbl::comm::get_int8_scales({input}, /*uint8_used for output*/ false, num_ops_id);
++    uint32_t input_size = input.size();
++    uint32_t total_feature_size = 0;
++    int64_t batch_size = input[0].sizes()[0];
++    uint32_t vector_size = input[0].sizes()[1];
++
++    float output_scale = scales[1][0];
++    std::vector<float> in_scales(input_size);
++    std::vector<uint32_t> feature_sizes(input_size);
++    std::vector<int8_t *> input_data(input_size);
++    for (auto i = 0 ; i < input_size; i++) {
++      TORCH_INTERNAL_ASSERT_DEBUG_ONLY(input[i].is_contiguous());
++      TORCH_INTERNAL_ASSERT_DEBUG_ONLY(input[i].device().is_xpu());
++      TORCH_INTERNAL_ASSERT_DEBUG_ONLY(input[i].dim() == 2);
++
++      auto cur_input = input[i];
++      TORCH_INTERNAL_ASSERT_DEBUG_ONLY(cur_input.sizes()[0] >= batch_size);
++      cpu::dbl::comm::reorder_to_int8_for_mix_prec(cur_input, {scales[0][i]});
++
++      auto qinput = cpu::dbl::comm::try_gen_dil_tensor(cur_input);
++      input_data[i] = (int8_t*)qinput.get_data_handle();
++      in_scales[i] = qinput.get_scale()[0];
++      feature_sizes[i] = cur_input.sizes()[1];
++      total_feature_size += feature_sizes[i];
++    }
++    auto vector_nums = total_feature_size / vector_size;
++    TORCH_INTERNAL_ASSERT_DEBUG_ONLY(total_feature_size % vector_size == 0);
++    auto interact_feature_size = vector_nums * (vector_nums - 1) / 2;
++    auto out_data_line_len = interact_feature_size + vector_size;
++    dil::dims dst_dims{batch_size, out_data_line_len};
++    dil::tensor::desc dst_desc(dst_dims, dil::data_type::s8);
++    dil::tensor out_dil{dst_desc};
++    out_dil.set_scale(scales[1]);
++    auto out_data = (int8_t*)out_dil.get_data_handle();
++    auto aligned_off = (interact_feature_size >> 4) << 4;
++    aligned_off = (aligned_off < interact_feature_size) ? (aligned_off + 16) : aligned_off;
++    float out_in_scales[aligned_off] __attribute__((aligned(64)));
++    size_t offset = 0;
++    for (int i = 1; i < vector_nums; i++) {
++      for (int j = 0; j < i; j++) {
++        auto input_scale = in_scales[i] * in_scales[j];
++        out_in_scales[offset] = output_scale / input_scale;
++        offset++;
++      }
++    }
++
++    float dense_scale = output_scale / in_scales[0];
++    bool do_dense_scale = (std::abs(dense_scale - 1.0) > 0.0005);
++    auto strides = (vector_size + 31) / 32;
++    at::parallel_for(0, batch_size, 0, [&](int64_t start, int64_t end) {
++      __m512i cat_buf[aligned_off] __attribute__((aligned(64)));
++      __m512i convert_to_s16_buf[vector_nums * strides] __attribute__((aligned(64)));
++      std::vector<int8_t*> input_addr(vector_nums);
++      auto row_len = start * vector_size;
++      for (int64_t i = start; i < end; i++) {
++        int8_t* out_ptr = &out_data[i * out_data_line_len];
++        int8_t* flat_buf = (int8_t*)(out_ptr + vector_size);
++        if (vector_size == 128) {
++	  if(do_dense_scale) {
++            scale_and_move_ker_128(out_ptr, &input_data[0][row_len], dense_scale);
++	  } else {
++            move_ker_128(out_ptr, &input_data[0][row_len]);
++	  }
++          int k = 0;
++          for (; k < vector_nums - 1; k += 2) {
++            load_s8x128x2_to_s16x128x2(&convert_to_s16_buf[k * 4], &input_data[k][row_len], &input_data[k+1][row_len]);
++          }
++          for (; k < vector_nums; k++) {
++            load_s8x128_to_s16x128(&convert_to_s16_buf[k * 4], &input_data[k][row_len]);
++          }
++
++          _interaction_s16s16_scale_to_s8_128(flat_buf, vector_nums, out_in_scales, convert_to_s16_buf, cat_buf);
++        } else {
++          for (int k = 0; k < vector_nums; k++) {
++            load_s8_to_s16(convert_to_s16_buf, &input_data[k][row_len], vector_size);
++          }
++          scale_and_move_ker(out_ptr, &input_data[0][row_len], dense_scale, vector_size);
++          _interaction_s16s16_scale_to_s8(flat_buf, convert_to_s16_buf, vector_nums, strides, out_in_scales);
++        }
++        row_len += vector_size;
++      }
++    });
++
++    return cpu::dbl::comm::gen_aten_tensor_by(std::move(out_dil));
++  }
++} //torch_ipex
+diff --git a/torch_ipex/csrc/cpu/mlperf_kernels/fuse_embedding_interaction.cpp b/torch_ipex/csrc/cpu/mlperf_kernels/fuse_embedding_interaction.cpp
+new file mode 100644
+index 0000000..4a5a30b
+--- /dev/null
++++ b/torch_ipex/csrc/cpu/mlperf_kernels/fuse_embedding_interaction.cpp
+@@ -0,0 +1,215 @@
++#include <immintrin.h>
++#include <cmath>
++#include "cpu/aten/aten.hpp"
++#include "cpu/dil/dil.hpp"
++#include "cpu/dbl/Common.h"
++#include "cpu/int8/Config.h"
++#include "utils.h"
++#include "cpu/interaction_forward.h"
++#include "cpu/aten/operators/embedding_bag.hpp"
++
++namespace torch_ipex {
++    namespace mlperf {
++        namespace dlrm {
++            static inline __attribute__((always_inline))
++            void update_cache_128(const int ci, const int64_t i, const int8_t *p,
++                              __m512i (&cache_reg)[27*4], int64_t (&cache_idx)[27]) {
++                if (cache_idx[ci] != i) {
++                    cache_idx[ci] = i;
++		    load_s8x128_to_s16x128(&cache_reg[ci*4], p);
++                }
++	    }
++#ifdef AMX_TILE
++            extern dil::tensor fuse_emb_interaction_int8_128_26_amx(const at::Tensor &lS_o,
++                                            const at::Tensor &lS_i,
++                                            const std::vector<at::Tensor> &emb,
++                                            const at::Tensor &dx,
++                                            const size_t Batch,
++                                            const int64_t ops_id);
++#else
++            dil::tensor fuse_emb_interaction_int8_128_26(const at::Tensor &lS_o,
++                                            const at::Tensor &lS_i,
++                                            const std::vector<at::Tensor> &emb,
++                                            const at::Tensor &dx,
++                                            const size_t Batch,
++                                            const int64_t ops_id) {
++                /*
++                 * Batch for batch
++                 * lS_o is offset, lS_i is index, emb is embedding weight
++                 * dx is output of MLP bottom
++                 */
++                const size_t s = 26;
++                const size_t vector_nums = 27;
++                const size_t vector_size = 128;
++                const size_t log_vector_size = 7;
++                const size_t flat_nums = (vector_nums * s) / 2;
++                const size_t ROW = vector_size + flat_nums; // 128 + 27 * 26/2
++
++                // get ptr
++                const int64_t *offset[s];
++                const int64_t *index[s];
++                const int8_t *weight[s];
++                std::vector<float> in_scales(vector_nums);
++                for (int i = 0; i < s; ++i) {
++		    auto emb_dil_tensor = cpu::dbl::comm::try_gen_dil_tensor(emb[i]);
++                    weight[i] = static_cast<int8_t *>(emb_dil_tensor.get_data_handle());
++                    in_scales[i + 1] = emb_dil_tensor.get_scale()[0];
++                    index[i] = lS_i.data_ptr<int64_t>() + i * Batch;
++                    offset[i] = lS_o.data_ptr<int64_t>() + i * Batch;
++                }
++
++		auto dx_dil_tensor = cpu::dbl::comm::try_gen_dil_tensor(dx);
++                const int8_t *densex = static_cast<const int8_t *>(dx_dil_tensor.get_data_handle());
++                // get scale
++                std::vector<std::vector<float>> scales_json = cpu::dbl::comm::get_int8_scales({dx}, /*uint8_used for output*/ false, ops_id);
++                in_scales[0] = dx_dil_tensor.get_scale()[0]; // dx.get_scale();
++                const float r_scale = scales_json[1][0];
++                const float c_scale = r_scale / in_scales[0];
++
++                dil::dims dst_dims{Batch, ROW};
++                dil::tensor::desc dst_desc(dst_dims, dil::data_type::s8);
++                dil::tensor output{dst_desc};
++                output.set_scale(scales_json[1]);
++                float scales[352] __attribute__((aligned(64)));
++                size_t off = 0;
++                for (int i = 1; i < vector_nums; i++) {
++                  for (int j = 0; j < i; j++) {
++                    auto input_scale = in_scales[i] * in_scales[j];
++                    scales[off] = r_scale / input_scale;
++                    off++;
++                  }
++                }
++                scales[351] = 0.0f;
++
++                int8_t * res = static_cast<int8_t *>(output.get_data_handle());
++                bool do_dense_scale = (std::abs(c_scale - 1.0) > 0.0005);
++                at::parallel_for(0, Batch, 0, [&](int64_t start, int64_t end) {
++                  __m512i flat_buf[352] __attribute__((aligned(64)));
++                  flat_buf[351] = _mm512_setzero_si512();
++                  __m512i convert_to_s16_buf[vector_nums*4] __attribute__((aligned(64)));
++                  int64_t cache_idx[vector_nums] = {
++                      -1, -1, -1, -1, -1, -1, -1, -1,
++                      -1, -1, -1, -1, -1, -1, -1, -1,
++                      -1, -1, -1, -1, -1, -1, -1, -1,
++                      -1, -1, -1};
++
++                  const int8_t* input0_ptr = densex + (start << log_vector_size);
++                  _mm_prefetch(input0_ptr, _MM_HINT_T0);
++                  _mm_prefetch(input0_ptr + 64, _MM_HINT_T0);
++		  int8_t* output0_ptr = res + start * ROW;
++                  for (int i = start; i < end; ++i) {
++		    if (do_dense_scale) {
++                      scale_and_move_ker_128(output0_ptr, input0_ptr, c_scale);
++		    } else {
++                      move_ker_128(output0_ptr, input0_ptr);
++		    }
++                    load_s8x128_to_s16x128(&convert_to_s16_buf[0], input0_ptr);
++
++                    int64_t ii0 = (index[0][offset[0][i]] << log_vector_size);
++                    int64_t ii1 = (index[1][offset[1][i]] << log_vector_size);
++                    const int8_t* p0 = &(weight[0][ii0]);
++                    const int8_t* p1 = &(weight[1][ii1]);
++                    _mm_prefetch(p0, _MM_HINT_T0);
++                    _mm_prefetch(p0 + 64, _MM_HINT_T0);
++                    _mm_prefetch(p1, _MM_HINT_T0);
++                    _mm_prefetch(p1 + 64, _MM_HINT_T0);
++                    int j = 3;
++                    for (; j < vector_nums - 1; j += 2) {
++                      update_cache_128(j - 2, ii0, p0, convert_to_s16_buf, cache_idx);
++                      update_cache_128(j - 1, ii1, p1, convert_to_s16_buf, cache_idx);
++                      ii0 = (index[j - 1][offset[j - 1][i]] << log_vector_size);
++                      ii1 = (index[j][offset[j][i]] << log_vector_size);
++                      p0 = &(weight[j - 1][ii0]);
++                      p1 = &(weight[j][ii1]);
++		      _mm_prefetch(p0, _MM_HINT_T0);
++		      _mm_prefetch(p0 + 64, _MM_HINT_T0);
++		      _mm_prefetch(p1, _MM_HINT_T0);
++		      _mm_prefetch(p1 + 64, _MM_HINT_T0);
++                    }
++                    update_cache_128(j - 2, ii0, p0, convert_to_s16_buf, cache_idx);
++                    update_cache_128(j - 1, ii1, p1, convert_to_s16_buf, cache_idx);
++
++                    // dot product of each pair
++                    int8_t* outp = output0_ptr + vector_size;
++                    _interaction_s16s16_scale_to_s8_128(outp, vector_nums, scales, convert_to_s16_buf, flat_buf);
++
++		    input0_ptr += vector_size;
++                    _mm_prefetch(input0_ptr, _MM_HINT_T0);
++                    _mm_prefetch(input0_ptr + 64, _MM_HINT_T0);
++                    output0_ptr += ROW;
++                  }
++		});
++                return output;
++            }
++#endif
++
++            template<typename T>
++            at::Tensor _fuseembint_forward(
++                const at::Tensor &lS_o,
++                const at::Tensor &lS_i,
++                const std::vector<at::Tensor> &emb,
++                const at::Tensor &densex,
++                int64_t ops_id = -1) {
++                std::vector<at::Tensor> input;
++                input.push_back(densex);
++                for (int i = 0; i < emb.size(); ++i) {
++                    auto embo = cpu::aten::embedding_bag::_embedding_bag_index_add_select_fast<T>(lS_i[i], emb[i], lS_o[i], false);
++                    input.push_back(embo);
++                }
++                at::Tensor out = _interaction_forward<T>(input);
++                return out;
++            }
++
++            template<>
++            at::Tensor _fuseembint_forward<int8_t>(
++                const at::Tensor &lS_o,
++                const at::Tensor &lS_i,
++                const std::vector<at::Tensor> &emb,
++                const at::Tensor &densex,
++                int64_t ops_id) {
++                bool is_emb_26_128 = ((emb.size() == 26) & (emb[0].size(1) == 128));
++                if (is_emb_26_128) {
++#ifdef AMX_TILE
++                  auto dil_output = fuse_emb_interaction_int8_128_26_amx(lS_o, lS_i, emb, densex, lS_i.size(1), ops_id);
++                  auto output = cpu::dbl::comm::gen_aten_tensor_by(std::move(dil_output));
++                  return output;
++#else
++                  auto dil_output = fuse_emb_interaction_int8_128_26(lS_o, lS_i, emb, densex, lS_i.size(1), ops_id);
++                  auto output = cpu::dbl::comm::gen_aten_tensor_by(std::move(dil_output));
++                  return output;
++#endif
++                }
++                assert(!"Only support 26 embeddings and emb size=128");
++                at::Tensor out;
++                return out;
++            }
++
++            at::Tensor fuse_embedding_interaction_forward(
++                const at::Tensor &lS_o,
++                const at::Tensor &lS_i,
++                const std::vector<at::Tensor>& emb,
++                const at::Tensor &densex) {
++                if (densex.scalar_type() == at::kBFloat16) {
++                   return _fuseembint_forward<at::BFloat16>(lS_o, lS_i, emb, densex);
++                }
++
++                if (check_auto_mix_int8_fp32() && !check_int8_calibration()) {
++                    int64_t num_ops_id = Int8OptConfig::fetch_and_add_ops_id();
++                    bool quantized = cpu::dbl::comm::get_int8_quantized_status(num_ops_id);
++                    if (quantized) {
++                        for (auto &w : emb) {
++                            cpu::dbl::comm::reorder_to_int8_for_mix_prec(w, {}, false, {}, true);
++                        }
++                        return _fuseembint_forward<int8_t>(lS_o, lS_i, emb, densex, num_ops_id);
++                    }
++                }
++                cpu::dbl::comm::reorder_to_dtype(densex, at::kFloat);
++                at::Tensor out = _fuseembint_forward<float>(lS_o, lS_i, emb, densex);
++                if (check_int8_calibration() && check_auto_mix_int8_fp32()) {
++                    insert_or_updata_observer({densex}, {out}, "fuse_embedding_interaction", Int8OptConfig::fetch_and_add_ops_id());
++                }
++                return out;
++            }
++        }
++    }
++}
+diff --git a/torch_ipex/csrc/cpu/mlperf_kernels/fuse_embedding_interaction_amx.cpp b/torch_ipex/csrc/cpu/mlperf_kernels/fuse_embedding_interaction_amx.cpp
+new file mode 100644
+index 0000000..c2e93a0
+--- /dev/null
++++ b/torch_ipex/csrc/cpu/mlperf_kernels/fuse_embedding_interaction_amx.cpp
+@@ -0,0 +1,222 @@
++#include <immintrin.h>
++#include "cpu/aten/aten.hpp"
++#include "cpu/dil/dil.hpp"
++#include "cpu/dbl/Common.h"
++#include "cpu/int8/Config.h"
++#include "utils.h"
++#include "cpu/interaction_forward.h"
++#include "cpu/aten/operators/embedding_bag.hpp"
++
++#ifdef AMX_TILE
++namespace torch_ipex {
++  namespace mlperf {
++    namespace dlrm {
++      dil::tensor fuse_emb_interaction_int8_128_26_amx(const at::Tensor &lS_o,
++                                            const at::Tensor &lS_i,
++                                            const std::vector<at::Tensor> &emb,
++                                            const at::Tensor &dx,
++                                            const size_t Batch,
++                                            const int64_t ops_id) {
++        const uint8_t _S = 26;
++        const uint8_t _S1 = 27;
++        const uint8_t _M = 28;
++        const uint8_t TILE_M = 14;
++        const uint8_t TILE_N = TILE_M;
++        const uint8_t TILE_K = 64;
++        const uint8_t TILE_BROWS = 16;
++        const uint8_t _K = 128;
++        const uint8_t LOG2_K = 7;
++
++        /*
++         * lS_o is offset, lS_i is index, emb is embedding weight
++         * dx is output of MLP bottom
++         */
++        // get ptr
++        const int64_t *offset[_S];
++        const int64_t *index[_S];
++        const int8_t *weight[_S];
++        std::vector<float> in_scales(_S1);
++        for (int i = 0; i < _S; ++i) {
++	  auto emb_dil_tensor = cpu::dbl::comm::try_gen_dil_tensor(emb[i]);
++          weight[i] = static_cast<int8_t *>(emb_dil_tensor.get_data_handle());
++          in_scales[i + 1] = emb_dil_tensor.get_scale()[0];
++          index[i] = lS_i.data_ptr<int64_t>() + i * Batch;
++          offset[i] = lS_o.data_ptr<int64_t>() + i * Batch;
++        }
++
++	auto dx_dil_tensor = cpu::dbl::comm::try_gen_dil_tensor(dx);
++        const int8_t *densex = static_cast<const int8_t *>(dx_dil_tensor.get_data_handle());
++        // get scale
++        std::vector<std::vector<float>> scales_json = cpu::dbl::comm::get_int8_scales({dx}, /*uint8_used for output*/ false, ops_id);
++        in_scales[0] = dx_dil_tensor.get_scale()[0]; // dx.get_scale();
++        const float r_scale = scales_json[1][0];
++        const float c_scale = r_scale / in_scales[0];
++
++        // setup size and create output
++	const int32_t flat_nums = _S1 * _S / 2;
++        const size_t ROW = _K + flat_nums; // 128 + 27 * 26/2
++
++        dil::dims dst_dims{Batch, ROW};
++        dil::tensor::desc dst_desc(dst_dims, dil::data_type::s8);
++        dil::tensor output{dst_desc};
++        output.set_scale(scales_json[1]);
++        float scales[352] __attribute__((aligned(64)));
++        size_t off = 0;
++        for (int i = 1; i < _S1; i++) {
++          for (int j = 0; j < i; j++) {
++            auto input_scale = in_scales[i] * in_scales[j];
++            scales[off] = r_scale / input_scale;
++            off++;
++          }
++        }
++        scales[351] = 0.0f;
++
++	torch_ipex::tileconfig_t tc = {0};
++        tc.palette_id = 1;
++        //tc.startRow = 0;
++        // Configure C tiles
++        for (int t = 0; t < 4; ++t) {
++          tc.rows[t] = (uint8_t)TILE_M;
++          tc.colb[t] = (uint16_t)(TILE_N * sizeof(int32_t));
++        }
++        // Configure A tiles
++        for (int t = 4; t < 6; ++t) {
++          tc.rows[t] = (uint8_t)TILE_M;
++          tc.colb[t] = (uint16_t)(TILE_K * sizeof(int8_t));
++        }
++        // Configure B tile. B effectively has 64 rows and 16 columns.
++        for (int t = 6; t < 8; ++t) {
++          tc.rows[t] = (uint8_t)TILE_BROWS;
++          tc.colb[t] = (uint16_t)(TILE_N * 4 * sizeof(int8_t));
++        }
++
++        int8_t * res = static_cast<int8_t *>(output.get_data_handle());
++        bool do_dense_scale = (std::abs(c_scale - 1.0) > 0.0005);
++
++        at::parallel_for(0, Batch, 0, [&](int64_t start, int64_t end) {
++          int32_t Cmem[_M][_M] __attribute__((aligned(64)));
++          int32_t flat_buf[351] __attribute__((aligned(64)));
++          int8_t Amem[_M][_K] __attribute__((aligned(64)));
++          int8_t Bmem[_K/4][_M][4] __attribute__((aligned(64)));
++          _tile_loadconfig((const void * )&tc);
++
++	  const int8_t* input0_ptr = densex + (start << LOG2_K);
++          _mm_prefetch(input0_ptr, _MM_HINT_T0);
++          _mm_prefetch(input0_ptr + 64, _MM_HINT_T0);
++          int8_t* output0_ptr = res + start * ROW;
++          for (int i = start; i < end; ++i) {
++            if (do_dense_scale) {
++              scale_and_move_ker_128(output0_ptr, input0_ptr, c_scale);
++            } else {
++              move_ker_128(output0_ptr, input0_ptr);
++            }
++	    load_s8x128_store_aligned_ker(Amem[0], input0_ptr);
++
++            int64_t ii0 = index[0][offset[0][i]] << LOG2_K;
++            int64_t ii1 = index[1][offset[1][i]] << LOG2_K;
++            const int8_t *p0 = &(weight[0][ii0]);
++            const int8_t *p1 = &(weight[1][ii1]);
++            _mm_prefetch(p0, _MM_HINT_T0);
++            _mm_prefetch(p0 + 64, _MM_HINT_T0);
++            _mm_prefetch(p1, _MM_HINT_T0);
++            _mm_prefetch(p1 + 64, _MM_HINT_T0);
++	    int j = 3;
++            for (; j < (_S1 - 1); j += 2) {
++              load_double_s8x128_store_aligned_ker(Amem[j - 2], p0, Amem[j - 1], p1);
++              ii0 = index[j-1][offset[j-1][i]] << LOG2_K;
++              ii1 = index[j][offset[j][i]] << LOG2_K;
++              p0 = &(weight[j-1][ii0]);
++              p1 = &(weight[j][ii1]);
++              _mm_prefetch(p0, _MM_HINT_T0);
++              _mm_prefetch(p0 + 64, _MM_HINT_T0);
++              _mm_prefetch(p1, _MM_HINT_T0);
++              _mm_prefetch(p1 + 64, _MM_HINT_T0);
++            }
++            load_double_s8x128_store_aligned_ker(Amem[j - 2], p0, Amem[j - 1], p1);
++
++            #pragma unroll
++            for (int k = 0; k < 32; k++) {
++	      int32_t ak = (k << 2);
++	      int n;
++              #pragma unroll
++              for (n = 0; n < _M - 7; n += 8) {
++                (*(int32_t*)Bmem[k][n]) = (*(int32_t*)(&Amem[n][ak]));
++                (*(int32_t*)Bmem[k][n + 1]) = (*(int32_t*)(&Amem[n + 1][ak]));
++                (*(int32_t*)Bmem[k][n + 2]) = (*(int32_t*)(&Amem[n + 2][ak]));
++                (*(int32_t*)Bmem[k][n + 3]) = (*(int32_t*)(&Amem[n + 3][ak]));
++                (*(int32_t*)Bmem[k][n + 4]) = (*(int32_t*)(&Amem[n + 4][ak]));
++                (*(int32_t*)Bmem[k][n + 5]) = (*(int32_t*)(&Amem[n + 5][ak]));
++                (*(int32_t*)Bmem[k][n + 6]) = (*(int32_t*)(&Amem[n + 6][ak]));
++                (*(int32_t*)Bmem[k][n + 7]) = (*(int32_t*)(&Amem[n + 7][ak]));
++	      }
++              #pragma unroll
++              for (; n < _M; n++) {
++                (*(int32_t*)Bmem[k][n]) = (*(int32_t*)(&Amem[n][ak]));
++	      }
++	    }
++
++
++	    _tile_zero(0);
++	    _tile_zero(2);
++	    _tile_zero(3);
++
++            _tile_loadd(6, Bmem[0][0], _M * 4 * sizeof(int8_t));
++
++            _tile_loadd(4, &Amem[0][0], _K * sizeof(int8_t));
++            _tile_dpbssd(0, 4, 6);
++
++            _tile_loadd(5, &Amem[TILE_M][0], _K * sizeof(int8_t));
++            _tile_dpbssd(2, 5, 6);
++
++            _tile_loadd(7, Bmem[0][TILE_N], _M * 4 * sizeof(int8_t));
++            _tile_dpbssd(3, 5, 7);
++
++            _tile_loadd(6, Bmem[TILE_BROWS][0], _M * 4 * sizeof(int8_t));
++
++            _tile_loadd(4, &Amem[0][TILE_K], _K * sizeof(int8_t));
++            _tile_dpbssd(0, 4, 6);
++            _tile_stored(0, &Cmem[0][0], _M * sizeof(int32_t));
++
++            _tile_loadd(5, &Amem[TILE_M][TILE_K], _K * sizeof(int8_t));
++            _tile_dpbssd(2, 5, 6);
++            _tile_stored(2, &Cmem[TILE_M][0], _M * sizeof(int32_t));
++
++            _tile_loadd(7, Bmem[TILE_BROWS][TILE_N], _M * 4 * sizeof(int8_t));
++            _tile_dpbssd(3, 5, 7);
++            _tile_stored(3, &Cmem[TILE_M][TILE_N], _M * sizeof(int32_t));
++
++	    flat_buf[0] = Cmem[1][0];
++	    flat_buf[1] = Cmem[2][0];
++	    flat_buf[2] = Cmem[2][1];
++            int32_t offset = 3;
++            #pragma unroll
++            for (int i = 3; i < _S1; i++) {
++	      move_ker((int32_t*)(&flat_buf[offset]), Cmem[i], i);
++	      offset += i;
++	    }
++
++	    int8_t* outp = output0_ptr + _K;
++            int off;
++            #pragma unroll
++            for (off = 0; off < 351 - 63; off += 64) {
++	      scale_int32_and_store_int8_16x4((outp + off), (flat_buf + off), (scales + off));
++	    }
++	    __m512 scale_m512 = _mm512_load_ps((const void *)(scales + off));
++	    scale_int32_and_store_int8_16((outp + off), (flat_buf + off), scale_m512);
++	    off += 16;
++	    scale_m512 = _mm512_load_ps((const void *)(scales + off));
++	    scale_int32_and_store_int8_maskz_16((outp + off), (flat_buf + off), scale_m512, 0x7fff);
++
++            input0_ptr += _K;
++            _mm_prefetch(input0_ptr, _MM_HINT_T0);
++            _mm_prefetch(input0_ptr + 64, _MM_HINT_T0);
++	    output0_ptr += ROW;
++	  }
++	});
++
++        return output;
++      }
++    }
++  }
++}
++#endif
+diff --git a/torch_ipex/csrc/cpu/mlperf_kernels/fusemlp.cpp b/torch_ipex/csrc/cpu/mlperf_kernels/fusemlp.cpp
+new file mode 100644
+index 0000000..469fda9
+--- /dev/null
++++ b/torch_ipex/csrc/cpu/mlperf_kernels/fusemlp.cpp
+@@ -0,0 +1,415 @@
++#include <immintrin.h>
++#include <cmath>
++#include "cpu/aten/aten.hpp"
++#include "cpu/dil/dil.hpp"
++#include "cpu/dbl/Common.h"
++#include "cpu/int8/Config.h"
++#include "utils.h"
++
++#include "oneapi/dnnl/dnnl.hpp"
++
++namespace torch_ipex {
++namespace mlperf {
++namespace dlrm {
++    using std::vector;
++    template <bool constM, int64_t MB>
++    dnnl::matmul::primitive_desc matmul_pd_create(
++        int64_t M, int64_t K, int64_t N, const dnnl::engine &eng, bool relu = true) {
++        const int64_t Mfinal = constM ? MB : (M % MB);
++        dnnl::memory::desc a_md({Mfinal, K}, dnnl::memory::data_type::s8, dnnl::memory::format_tag::ab);
++        dnnl::memory::desc b_md({K, N}, dnnl::memory::data_type::s8, dnnl::memory::format_tag::any);
++        dnnl::memory::desc c_md({Mfinal, N}, dnnl::memory::data_type::s8, dnnl::memory::format_tag::ab);
++        dnnl::memory::desc bias_md({1, N}, dnnl::memory::data_type::s32, {N, 1});
++
++        dnnl::primitive_attr attr;
++        attr.set_output_scales(2, {DNNL_RUNTIME_F32_VAL});
++        attr.set_zero_points(DNNL_ARG_SRC, 0, {0});
++        attr.set_zero_points(DNNL_ARG_DST, 0, {0});
++
++        if (relu) {
++            dnnl::post_ops po;
++            po.append_eltwise(1.0f, dnnl::algorithm::eltwise_relu, 0.0f, 0.0f);
++            attr.set_post_ops(po);
++        }
++
++        dnnl::matmul::desc matmul_d(a_md, b_md, bias_md, c_md);
++        dnnl::matmul::primitive_desc matmul_pd(matmul_d, attr, eng);
++        return matmul_pd;
++    }
++
++    template<typename T>
++    inline T *new_data(size_t size) {
++        size_t nz = ((size - 1) / 64 + 1) * 64;
++        return (T *)aligned_alloc(64, nz);
++    }
++
++
++    template <int64_t MB>
++    struct fusemlp {
++        dnnl::engine eng;
++        dnnl::stream s;
++        vector<dnnl::matmul> matmul_p_MB;
++        vector<dnnl::matmul> matmul_p_RS;
++        vector<dnnl::memory> B_m_pack;
++        vector<dnnl::memory> bias_m;
++        vector<dnnl::memory> scales_m;
++
++        int8_t *buff0 = nullptr;
++        int8_t *buff1 = nullptr;
++        int64_t last_batch = -1;
++        fusemlp(int64_t n0, int64_t n1) {
++            this->eng = dnnl::engine(dnnl::engine::kind::cpu, 0);
++            this->s = dnnl::stream(this->eng);
++            if (this->buff0 == nullptr)
++                this->buff0 = new_data<int8_t>(MB * n0 * sizeof(int8_t));
++            if (this->buff1 == nullptr)
++                this->buff1 = new_data<int8_t>(MB * n1 * sizeof(int8_t));
++        }
++
++        ~fusemlp() {
++            free(buff0);
++            free(buff1);
++            buff0 = nullptr;
++            buff1 = nullptr;
++        }
++
++        template<int NLAY>
++        void setup(const int64_t *M,
++                   const int64_t *N,
++                   const int64_t *K,
++                   vector<vector<float>> &scales,
++                   int8_t **weight_int8,
++                   int **bias_int32,
++                   int sigmoid_layer = -1) {
++            static_assert(NLAY > 0 && "NLAY must be a positive integer");
++            for (int i = 0; i < NLAY; ++i) {
++                bool relu = true;
++                if (i == sigmoid_layer) {
++                    relu = false;
++                }
++                dnnl::matmul::primitive_desc matmul_pd =
++                    matmul_pd_create<true, MB>(M[i], K[i], N[i], eng, relu);
++                this->matmul_p_MB.push_back(dnnl::matmul(matmul_pd));
++                this->bias_m.push_back(
++                    dnnl::memory(matmul_pd.bias_desc(), eng, (void *)bias_int32[i]));
++                this->B_m_pack.push_back(
++                    dnnl::memory(matmul_pd.weights_desc(), eng));
++                this->scales_m.push_back(
++                    dnnl::memory(
++                        {{N[i]}, dnnl::memory::data_type::f32,
++                         {1}},
++                        eng, (void *)scales[i].data()));
++                this->prepack(K[i], N[i], weight_int8[i], B_m_pack[i]);
++            }
++            this->restMpd<NLAY>(M, N, K, sigmoid_layer);
++        }
++
++        template<int NLAY>
++        void restMpd(const int64_t *M,
++                     const int64_t *N,
++                     const int64_t *K,
++                     int sigmoid_layer=-1) {
++            static_assert(NLAY > 0 && "NLAY must be a positive integer");
++            if (this->last_batch != M[0]) {
++                this->matmul_p_RS.clear();
++                if (M[0] % MB > 0) {
++                    for (int i = 0; i < NLAY; ++i) {
++                        bool relu = true;
++                        if (i == sigmoid_layer) {
++                            relu = false;
++                        }
++                        dnnl::matmul::primitive_desc matmul_pd =
++                            matmul_pd_create<false, MB>(M[i], K[i], N[i],
++                                                        this->eng, relu);
++                        this->matmul_p_RS.push_back(dnnl::matmul(matmul_pd));
++                    }
++                }
++                this->last_batch = M[0];
++            }
++        }
++
++        void prepack(int64_t K, int64_t N, const int8_t *src, dnnl::memory &dst) {
++            dnnl::memory orig_mem(
++                {{K, N},
++                 dnnl::memory::data_type::s8,
++                 dnnl::memory::format_tag::ba},
++                this->eng, (void *)src);
++            dnnl::reorder(orig_mem, dst).execute(this->s, orig_mem, dst);
++            this->s.wait();
++        }
++
++        template<int NLAY>
++        void fusemlp_dnnpack_ptr(const int8_t *input,
++                                 int8_t *res,
++                                 const int64_t *M, const int64_t *N,
++                                 const int64_t *K,
++                                 vector<vector<float>> &scales,
++                                 int sigmoid_layer=-1) {
++            static_assert(NLAY > 0 && "NLAY must be a positive integer");
++            int64_t restM = M[0] % MB;
++            int64_t MM = M[0] / MB;
++            dnnl::memory::desc a_mds[NLAY];
++            dnnl::memory::desc c_mds[NLAY];
++            this->restMpd<NLAY>(M, N, K, sigmoid_layer);
++            for (int i = 0; i < NLAY; ++i) {
++                a_mds[i] = dnnl::memory::desc({MB, K[i]}, dnnl::memory::data_type::s8,
++                                              dnnl::memory::format_tag::ab);
++                c_mds[i] = dnnl::memory::desc({MB, N[i]}, dnnl::memory::data_type::s8,
++                                              dnnl::memory::format_tag::ab);
++            }
++
++            for (int mm = 0; mm < MM; ++mm) {
++                for (int i = 0; i < NLAY; ++i) {
++                    const int8_t *src = (i == 0) ? &input[mm * MB * K[0]] : (i % 2 == 0 ? buff1 : buff0);
++                    int8_t *dst = (i == NLAY-1) ? &res[mm * MB * N[NLAY-1]] : (i % 2 == 0 ? buff0 : buff1);
++                    dnnl::memory A_m(a_mds[i], this->eng, (void *)src);
++                    dnnl::memory C_m(c_mds[i], this->eng, dst);
++                    dnnl::memory scales_m({{N[i]}, dnnl::memory::data_type::f32, {1}},
++                                          this->eng, (void *)scales[i].data());
++                    this->matmul_p_MB[i].execute(
++                        this->s,
++                        {{DNNL_ARG_SRC, A_m},
++                         {DNNL_ARG_WEIGHTS, this->B_m_pack[i]},
++                         {DNNL_ARG_BIAS, this->bias_m[i]},
++                         {DNNL_ARG_DST, C_m},
++                         {DNNL_ARG_ATTR_OUTPUT_SCALES, scales_m}});
++                }
++            }
++
++            if (restM > 0) {
++                for (int i = 0; i < NLAY; ++i) {
++                    const int8_t *src = (i == 0) ? &input[MM * MB * K[0]] : (i % 2 == 0 ? buff1 : buff0);
++                    int8_t *dst = (i == NLAY-1) ? &res[MM * MB * N[NLAY-1]] : (i % 2 == 0 ? buff0 : buff1);
++                    dnnl::memory::desc a_md({restM, K[i]}, dnnl::memory::data_type::s8,
++                                            dnnl::memory::format_tag::ab);
++                    dnnl::memory::desc c_md({restM, N[i]}, dnnl::memory::data_type::s8,
++                                            dnnl::memory::format_tag::ab);
++                    dnnl::memory A_m(a_md, this->eng, (void *)src);
++                    dnnl::memory C_m(c_md, this->eng, (void *)dst);
++                    dnnl::memory scales_m({{N[i]}, dnnl::memory::data_type::f32, {1}},
++                                          this->eng, (void *)scales[i].data());
++                    this->matmul_p_RS[i].execute(
++                        this->s,
++                        {{DNNL_ARG_SRC, A_m},
++                         {DNNL_ARG_WEIGHTS, this->B_m_pack[i]},
++                         {DNNL_ARG_BIAS, this->bias_m[i]},
++                         {DNNL_ARG_DST, C_m},
++                         {DNNL_ARG_ATTR_OUTPUT_SCALES, scales_m}});
++
++                }
++            }
++        }
++    };
++
++    using fusebotmlp = fusemlp<1024>;
++    using fusetopmlp = fusemlp<1024>;
++
++    static std::shared_ptr<fusebotmlp> botmlp;
++    static std::shared_ptr<fusetopmlp> topmlp;
++
++    template<int NLAY>
++    at::Tensor _fusebotmlp_dnn(const int Batch,
++                            const int8_t *x,
++                            const int64_t *M,
++                            const int64_t *N,
++                            const int64_t *K,
++                            const float out_scale,
++                            vector<vector<float>> &scales) {
++        dil::dims dst_dims{Batch, 128};
++        dil::tensor::desc dst_desc(dst_dims, dil::data_type::s8);
++        dil::tensor dil_output{dst_desc};
++        vector<float> out_scale_v = {out_scale};
++        dil_output.set_scale(out_scale_v);
++        int8_t *res = reinterpret_cast<int8_t *>(dil_output.get_data_handle());
++        botmlp->fusemlp_dnnpack_ptr<NLAY>(x, res, M, N, K, scales);
++        return cpu::dbl::comm::gen_aten_tensor_by(std::move(dil_output));
++    }
++
++    template<int NLAY>
++    at::Tensor _fusetopmlp_dnn(const int Batch,
++                            const int8_t *x,
++                            const int64_t *M,
++                            const int64_t *N,
++                            const int64_t *K,
++                            const float out_scale,
++                            vector<vector<float>> &scales) {
++        dil::dims dst_dims{Batch, 1};
++        dil::tensor::desc dst_desc(dst_dims, dil::data_type::s8);
++        dil::tensor dil_output{dst_desc};
++        vector<float> out_scale_v = {out_scale};
++        dil_output.set_scale(out_scale_v);
++        int8_t *res = reinterpret_cast<int8_t *>(dil_output.get_data_handle());
++        topmlp->fusemlp_dnnpack_ptr<NLAY>(x, res, M, N, K, scales);
++        return cpu::dbl::comm::gen_aten_tensor_by(std::move(dil_output));
++    }
++
++    at::Tensor fuse_botmlp_forward(
++        const at::Tensor &x_t,
++        at::Tensor &weight0,
++        at::Tensor &weight1,
++        at::Tensor &weight2,
++        at::Tensor &bias0,
++        at::Tensor &bias1,
++        at::Tensor &bias2) {
++        constexpr int NLAY = 3;
++        vector<at::Tensor> weights = {weight0, weight1, weight2};
++        vector<at::Tensor> biases = {bias0, bias1, bias2};
++        if (check_auto_mix_int8_fp32() && !check_int8_calibration()) {
++            int8_t * x_ptr = nullptr;
++            int8_t *w_ptrs[NLAY] = {nullptr, nullptr, nullptr};
++            int *b_ptrs[NLAY] = {nullptr, nullptr, nullptr};
++            int64_t Batch = x_t.size(0);
++            int64_t M[NLAY] = {Batch, Batch, Batch};
++            int64_t N[NLAY] = {512, 256, 128};
++            int64_t K[NLAY] = {13, 512, 256};
++            vector<vector<float>> scales_l;
++            float out_scale = 1.0f;
++            for (int i = 0; i < NLAY; ++i) {
++                int64_t num_ops_id = Int8OptConfig::fetch_and_add_ops_id();
++                bool quantized =
++                    cpu::dbl::comm::get_int8_quantized_status(num_ops_id);
++                vector<vector<float >> scales =
++                    cpu::dbl::comm::get_int8_scales({x_t}, false, num_ops_id);
++                out_scale = scales[1][0];
++                if (quantized) {
++                    if (i == 0) {
++                        cpu::dbl::comm::reorder_to_int8_for_mix_prec(
++                            x_t, scales[0], false, {}, true);
++                        const dil::tensor x_dt = cpu::dbl::comm::try_gen_dil_tensor(
++                            x_t);
++                        x_ptr = reinterpret_cast<int8_t *>(x_dt.get_data_handle());
++                    }
++                    auto w_dt_type = cpu::dbl::comm::try_gen_dil_tensor(
++                        weights[i]).get_data_type();
++                    if (w_dt_type != dil::data_type::s8) {
++                        cpu::dbl::comm::reorder_to_int8_for_mix_prec(
++                            weights[i], {}, false);
++                    }
++                    const dil::tensor w_dt = cpu::dbl::comm::try_gen_dil_tensor(
++                        weights[i]);
++                    w_ptrs[i] = reinterpret_cast<int8_t *>(w_dt.get_data_handle());
++                    auto b_dt_type = cpu::dbl::comm::try_gen_dil_storage(biases[i]).get_data_type();
++                    if (b_dt_type != dil::data_type::s32) {
++                        auto b_dt = cpu::dbl::comm::try_gen_dil_storage(biases[i]);
++                        auto bt_desc = b_dt.get_desc().to_type(
++                            dil::data_type::s32);
++                        vector<float> bias_scales;
++                        for (auto v : w_dt.get_scale())
++                            bias_scales.push_back(v * scales[0][0]);
++                        cpu::dbl::comm::reorder_to_desc(
++                            biases[i], bt_desc, bias_scales);
++                    }
++                    const dil::tensor b_dt = cpu::dbl::comm::try_gen_dil_tensor(biases[i]);
++                    b_ptrs[i] = reinterpret_cast<int *>(b_dt.get_data_handle());
++                    vector<float> scale_per_l;
++                    for (auto s : w_dt.get_scale()) {
++                        scale_per_l.push_back(scales[1][0] / (scales[0][0] * s));
++                    }
++                    scales_l.push_back(scale_per_l);
++                }
++            }
++            if (not botmlp) {
++                botmlp = std::shared_ptr<fusebotmlp>(new fusebotmlp(N[0], N[1]));
++                botmlp->setup<NLAY>(M, N, K, scales_l, w_ptrs, b_ptrs);
++            } else {
++                botmlp->restMpd<NLAY>(M, N, K);
++            }
++            auto t = _fusebotmlp_dnn<NLAY>(Batch, x_ptr, M, N, K,
++                                           out_scale, scales_l);
++            return t;
++        }
++        assert(0 && "only support int8 inference" &&
++               "calibration should not arrive here");
++        return at::Tensor();
++    }
++
++    at::Tensor fuse_topmlp_forward(
++        const at::Tensor &x_t,
++        at::Tensor &weight0,
++        at::Tensor &weight1,
++        at::Tensor &weight2,
++        at::Tensor &weight3,
++        at::Tensor &weight4,
++        at::Tensor &bias0,
++        at::Tensor &bias1,
++        at::Tensor &bias2,
++        at::Tensor &bias3,
++        at::Tensor &bias4) {
++        constexpr int NLAY = 5;
++        int sigmoid_layer = 4;
++        vector<at::Tensor> weights = {weight0, weight1, weight2, weight3, weight4};
++        vector<at::Tensor> biases = {bias0, bias1, bias2, bias3, bias4};
++        if (check_auto_mix_int8_fp32() && !check_int8_calibration()) {
++            int8_t * x_ptr = nullptr;
++            int8_t *w_ptrs[NLAY] = {nullptr, nullptr, nullptr, nullptr, nullptr};
++            int *b_ptrs[NLAY] = {nullptr, nullptr, nullptr, nullptr, nullptr};
++            int64_t Batch = x_t.size(0);
++            int64_t M[NLAY] = {Batch, Batch, Batch, Batch, Batch};
++            int64_t N[NLAY] = {1024, 1024, 512, 256, 1};
++            int64_t K[NLAY] = {479, 1024, 1024, 512, 256};
++            vector<vector<float>> scales_l;
++            float out_scale = 1.0f;
++            for (int i = 0; i < NLAY; ++i) {
++                int64_t num_ops_id = Int8OptConfig::fetch_and_add_ops_id();
++                bool quantized =
++                    cpu::dbl::comm::get_int8_quantized_status(num_ops_id);
++                vector<vector<float >> scales =
++                    cpu::dbl::comm::get_int8_scales({x_t}, false, num_ops_id);
++                out_scale = scales[1][0];
++                if (quantized) {
++                    if (i == 0) {
++                        cpu::dbl::comm::reorder_to_int8_for_mix_prec(
++                            x_t, scales[0], false, {}, true);
++                        const dil::tensor x_dt = cpu::dbl::comm::try_gen_dil_tensor(
++                            x_t);
++                        x_ptr = reinterpret_cast<int8_t *>(x_dt.get_data_handle());
++                    }
++                    auto w_dt_type = cpu::dbl::comm::try_gen_dil_tensor(
++                        weights[i]).get_data_type();
++                    if (w_dt_type != dil::data_type::s8) {
++                        cpu::dbl::comm::reorder_to_int8_for_mix_prec(
++                            weights[i], {}, false);
++                    }
++                    const dil::tensor w_dt = cpu::dbl::comm::try_gen_dil_tensor(
++                        weights[i]);
++                    w_ptrs[i] = reinterpret_cast<int8_t *>(w_dt.get_data_handle());
++                    auto b_dt_type = cpu::dbl::comm::try_gen_dil_storage(biases[i]).get_data_type();
++                    if (b_dt_type != dil::data_type::s32) {
++                        auto b_dt = cpu::dbl::comm::try_gen_dil_storage(biases[i]);
++                        auto bt_desc = b_dt.get_desc().to_type(
++                            dil::data_type::s32);
++                        vector<float> bias_scales;
++                        for (auto v : w_dt.get_scale())
++                            bias_scales.push_back(v * scales[0][0]);
++                        cpu::dbl::comm::reorder_to_desc(
++                            biases[i], bt_desc, bias_scales);
++                    }
++                    const dil::tensor b_dt = cpu::dbl::comm::try_gen_dil_tensor(biases[i]);
++                    b_ptrs[i] = reinterpret_cast<int *>(b_dt.get_data_handle());
++                    vector<float> scale_per_l;
++                    for (auto s : w_dt.get_scale()) {
++                        scale_per_l.push_back(scales[1][0] / (scales[0][0] * s));
++                    }
++                    scales_l.push_back(scale_per_l);
++                }
++            }
++
++            if (not topmlp) {
++                topmlp = std::shared_ptr<fusetopmlp>(new fusetopmlp(N[0], N[1]));
++                topmlp->setup<NLAY>(M, N, K, scales_l, w_ptrs, b_ptrs, sigmoid_layer);
++            } else {
++                topmlp->restMpd<NLAY>(M, N, K, sigmoid_layer);
++            }
++
++            auto t = _fusetopmlp_dnn<NLAY>(Batch, x_ptr, M, N, K,
++                                           out_scale, scales_l);
++            return t;
++        }
++        assert(0 && "only support int8 inference" &&
++               "calibration should not arrive here");
++        return at::Tensor();
++    }
++
++} // namespace dlrm
++} // namespace mlperf
++} // namespace torch_ipex
+diff --git a/torch_ipex/csrc/cpu/mlperf_kernels/mlperf_kernels.h b/torch_ipex/csrc/cpu/mlperf_kernels/mlperf_kernels.h
+new file mode 100644
+index 0000000..1e30951
+--- /dev/null
++++ b/torch_ipex/csrc/cpu/mlperf_kernels/mlperf_kernels.h
+@@ -0,0 +1,32 @@
++#pragma once
++#include <ATen/Tensor.h>
++namespace torch_ipex{
++    namespace mlperf {
++        namespace dlrm {
++            at::Tensor fuse_embedding_interaction_forward(const at::Tensor &lS_o,
++                                                          const at::Tensor &lS_i,
++                                                          const std::vector<at::Tensor>& emb,
++                                                          const at::Tensor &densex);
++
++            at::Tensor fuse_botmlp_forward(const at::Tensor &x,
++                                           at::Tensor &w0,
++                                           at::Tensor &w1,
++                                           at::Tensor &w2,
++                                           at::Tensor &b0,
++                                           at::Tensor &b1,
++                                           at::Tensor &b2);
++
++            at::Tensor fuse_topmlp_forward(const at::Tensor &x,
++                                           at::Tensor &w0,
++                                           at::Tensor &w1,
++                                           at::Tensor &w2,
++                                           at::Tensor &w3,
++                                           at::Tensor &w4,
++                                           at::Tensor &b0,
++                                           at::Tensor &b1,
++                                           at::Tensor &b2,
++                                           at::Tensor &b3,
++                                           at::Tensor &b4);                            
++        }
++    }
++}
+diff --git a/torch_ipex/csrc/cpu/toolkit/concat.cpp b/torch_ipex/csrc/cpu/toolkit/concat.cpp
+new file mode 100644
+index 0000000..f9ad4fe
+--- /dev/null
++++ b/torch_ipex/csrc/cpu/toolkit/concat.cpp
+@@ -0,0 +1,170 @@
++#include "concat.h"
++#include <ATen/Context.h>
++#include <ATen/Dispatch.h>
++#include <ATen/Parallel.h>
++#include <ATen/Functions.h>
++#include <ATen/Utils.h>
++#include <c10/core/ScalarType.h>
++
++#include "cpu/bf16/vec/bf16_vec_kernel.h"
++#include "cpu/int8/vec/int8_vec_kernel.h"
++//#include <iostream>
++
++namespace toolkit {
++struct InputMeta {
++  void* data_ptr;
++  int64_t inner_size;
++
++  InputMeta() {};
++
++  InputMeta(const at::Tensor& t, int64_t dim, int64_t inner)
++    : data_ptr(t.data_ptr()) , inner_size(t.size(dim) * inner) {}
++};
++
++
++template<typename scalar_t>
++at::Tensor _concat_all_continue(std::vector<at::Tensor>& input_tensors, int64_t dim) {
++  auto first_tensor_mem_format = input_tensors[0].suggest_memory_format();
++  uint32_t input_size = input_tensors.size();
++  int64_t cat_dim_size = 0;
++  for (int i = 0; i < input_size; i++) {
++    auto const &tensor = input_tensors[i];
++    assert(tensor.is_contiguous(first_tensor_mem_format));
++    cat_dim_size += tensor.size(dim);
++  }
++  auto result_size = input_tensors[0].sizes().vec();
++  result_size[dim] = cat_dim_size;
++  at::Tensor result = at::empty(result_size, input_tensors[0].options());
++  int64_t outer = 1;
++  for (int i = 0; i < dim; ++i) {
++    outer *= result_size[i];
++  }
++
++  std::vector<InputMeta> inputs(input_size);
++  int64_t max_inner_size = 0;
++  auto result_dim_stride = result.stride(dim);
++  at::parallel_for(0, input_size, 16, [&](int64_t start, int64_t end) {
++    for (int64_t j = start; j < end; j++) {
++      InputMeta input_meta(input_tensors[j], dim, result_dim_stride);
++      inputs[j] = input_meta;
++      max_inner_size = (inputs[j].inner_size > max_inner_size) ? inputs[j].inner_size : max_inner_size; 
++    }
++  });
++
++  //std::cout << "sizeof (scalar_t) is " << sizeof(scalar_t) << ",  outer is " << outer << std::endl;
++  scalar_t* result_data = result.data_ptr<scalar_t>();
++  auto half_vec_size = (64 / sizeof(scalar_t)) >> 1;
++
++  if (outer == 1) {
++    //std::cout << "max_inner_size is  " << max_inner_size << ", input_size is " << input_size << std::endl;
++    if (max_inner_size < (input_size << 1)) {
++      scalar_t* result_ptr = result_data;
++      std::vector<scalar_t*> results_addr_array(input_size);
++      results_addr_array[0] = result_ptr;
++      result_ptr += inputs[0].inner_size;
++      for (int64_t j = 1; j < input_size; j++) {
++        results_addr_array[j] = result_ptr;
++        result_ptr += inputs[j].inner_size;
++      }
++      at::parallel_for(0, input_size, 64, [&](int64_t start, int64_t end) {
++        for (int64_t j = start; j < end; j++) {
++          int64_t local_inner = inputs[j].inner_size;
++          scalar_t* input_ptr = (scalar_t*)(inputs[j].data_ptr);
++          scalar_t* result_ptr = results_addr_array[j];
++	  if (local_inner < half_vec_size) {
++	    for (auto k = 0; k < local_inner; k++) {
++              result_ptr[k] = input_ptr[k];
++	    }
++	  } else {
++            move_ker(result_ptr, input_ptr, local_inner);
++	  }
++        }
++      });
++    } else {
++      scalar_t* result_ptr = result_data;
++      for (int64_t j = 0; j < input_size; j++) {
++        int64_t local_inner = inputs[j].inner_size;
++        scalar_t* input_ptr = (scalar_t*)(inputs[j].data_ptr);
++        at::parallel_for(0, local_inner, 64, [&](int64_t start, int64_t end) {
++          move_ker(result_ptr + start, input_ptr + start, end - start);
++        });
++        result_ptr += local_inner;
++      }
++    }
++  } else {
++    if (outer > 16){
++      int64_t inner = 1;
++      for (int i = dim + 1; i < int(result_size.size()); ++i) {
++        inner *= result_size[i];
++      }
++      auto outer_stride = inner * cat_dim_size;
++      //std::cout << "outer is " << outer << ", outer_stride is " << outer_stride << ", input_size is " << input_size  <<std::endl;
++      at::parallel_for(0, outer, 1, [&](int64_t start, int64_t end) {
++        for (int o = start; o < end; ++o) {
++          scalar_t* result_ptr = result_data + o * outer_stride;
++          for (int j = 0; j < input_size; ++j) {
++            int64_t local_inner = inputs[j].inner_size;
++            scalar_t* input_ptr = (scalar_t*)(inputs[j].data_ptr) + o * local_inner;
++	    if (local_inner == 1) {
++              result_ptr[0] = input_ptr[0];
++	    } else {
++              move_ker(result_ptr, input_ptr, local_inner);
++	    }
++	    result_ptr += local_inner;
++	  }
++        }
++      });
++    } else {
++      //std::cout << "outer is " << outer << std::endl;
++      int64_t offset = 0;
++      for (int o = 0; o < outer; ++o) {
++        for (int64_t j = 0; j < input_size; j++) {
++          int64_t local_inner = inputs[j].inner_size;
++          scalar_t* input_ptr = (scalar_t*)(inputs[j].data_ptr) + o * local_inner;
++          scalar_t* result_ptr = result_data + offset;
++          at::parallel_for(0, local_inner, 64, [&](int64_t start, int64_t end) {
++            move_ker(result_ptr + start, input_ptr + start, end - start);
++          });
++	  offset += local_inner;
++        }
++      }
++    }
++  }
++  return result;
++}
++
++at::Tensor concat_all_continue(std::vector<at::Tensor> input_tensors, int64_t dim) {
++  auto scalar_type = input_tensors[0].scalar_type();
++  if (scalar_type == at::kFloat) {
++    //std::cout << "Float typei !\n";
++    return _concat_all_continue<float>(input_tensors, dim);
++  } else if (scalar_type == at::kBFloat16) {
++    //std::cout << "BFloat16 type !\n";
++    return _concat_all_continue<at::BFloat16>(input_tensors, dim);
++  } else if (scalar_type == at::kLong) {
++    //std::cout << "Long type !\n";
++    return _concat_all_continue<int64_t>(input_tensors, dim);
++  } else if (scalar_type == at::kInt) {
++    //std::cout << "Int type !\n";
++    return _concat_all_continue<int32_t>(input_tensors, dim);
++  } else if (scalar_type == at::kByte) {
++    //std::cout << "Byte type !\n";
++    return _concat_all_continue<uint8_t>(input_tensors, dim);
++  } else if (scalar_type == at::kChar) {
++    //std::cout << "Char type !\n";
++    return _concat_all_continue<int8_t>(input_tensors, dim);
++  } else if (scalar_type == at::kBool) {
++    //std::cout << "Bool type !\n";
++    return _concat_all_continue<bool>(input_tensors, dim);
++  } else if (scalar_type == at::kShort) {
++    //std::cout << "Short type !\n";
++    return _concat_all_continue<int16_t>(input_tensors, dim);
++  } else {
++    //std::cout << "Unknown type !\n";
++    return at::cat(input_tensors, dim);
++  }
++}
++
++} //toolkit
++
++
+diff --git a/torch_ipex/csrc/cpu/toolkit/concat.h b/torch_ipex/csrc/cpu/toolkit/concat.h
+new file mode 100644
+index 0000000..fee99ec
+--- /dev/null
++++ b/torch_ipex/csrc/cpu/toolkit/concat.h
+@@ -0,0 +1,7 @@
++#pragma once
++#include <ATen/Tensor.h>
++#include <vector>
++
++namespace toolkit {
++  at::Tensor concat_all_continue(std::vector<at::Tensor> tensors, int64_t dim);
++}
+diff --git a/torch_ipex/csrc/cpu/toolkit/sklearn.cpp b/torch_ipex/csrc/cpu/toolkit/sklearn.cpp
+new file mode 100644
+index 0000000..a847514
+--- /dev/null
++++ b/torch_ipex/csrc/cpu/toolkit/sklearn.cpp
+@@ -0,0 +1,94 @@
++#include "sklearn.h"
++#include <ATen/Dispatch.h>
++#include <parallel/algorithm>
++
++namespace toolkit {
++
++template <typename T>
++std::vector<double> roc_auc_score_(at::Tensor self, at::Tensor other, int size, bool only_score=true) {
++  T *actual = self.data_ptr<T>();
++  T *prediction = other.data_ptr<T>();
++  std::vector<T> predictedRank(size, 0.0);
++  int nPos = 0, nNeg = 0;
++#pragma omp parallel for reduction(+:nPos)
++  for(int i = 0; i < size; i++)
++    nPos += (int)actual[i];
++
++  nNeg = size - nPos;
++
++  std::vector<std::pair<T, int> > v_sort(size);
++#pragma omp parallel for
++  for (size_t i = 0; i < size; ++i) {
++    v_sort[i] = std::make_pair(prediction[i], i);
++  }
++
++  __gnu_parallel::sort(v_sort.begin(), v_sort.end(), [](auto &left, auto &right) {
++    return left.first < right.first;
++  });
++
++  int r = 1;
++  int n = 1;
++  size_t i = 0;
++  while (i < size) {
++    size_t j = i;
++    while ((j < (v_sort.size() - 1)) && (v_sort[j].first == v_sort[j + 1].first)) {
++      j++;
++    }
++    n = j - i + 1;
++    for (size_t j = 0; j < n; ++j) {
++      int idx = v_sort[i+j].second;
++      predictedRank[idx] = r + ((n - 1) * 0.5);
++    }
++    r += n;
++    i += n;
++  }
++
++  double filteredRankSum = 0;
++#pragma omp parallel for reduction(+:filteredRankSum)
++  for (size_t i = 0; i < size; ++i) {
++    if (actual[i] == 1) {
++      filteredRankSum += predictedRank[i];
++    }
++  }
++  double score = (filteredRankSum - ((double)nPos * ((nPos + 1.0) / 2.0))) / ((double)nPos * nNeg);
++  double log_loss = 0.0;
++  double accuracy = 0.0;
++  if (not only_score) {
++    double acc = 0.0;
++    double loss = 0.0;
++    #pragma omp parallel for reduction(+:acc,loss)
++    for(int i = 0; i < size; i++) {
++      auto rpred = std::roundf(prediction[i]);
++      if(actual[i] == rpred) acc += 1;
++      loss += (actual[i] * std::log(prediction[i])) + ((1 - actual[i]) * std::log(1 - prediction[i]));
++    }
++    accuracy = acc / size;
++    log_loss = -loss / size;
++  }
++
++  return {score, log_loss, accuracy};
++}
++
++std::vector<double> roc_auc_score(at::Tensor self, at::Tensor other) {
++  TORCH_INTERNAL_ASSERT_DEBUG_ONLY(self.dim() == 1);
++  TORCH_INTERNAL_ASSERT_DEBUG_ONLY(other.dim() == 1);
++  TORCH_INTERNAL_ASSERT_DEBUG_ONLY(self.dtype() == other.dtype());
++  TORCH_INTERNAL_ASSERT_DEBUG_ONLY(self.numel() == other.numel());
++
++  return AT_DISPATCH_FLOATING_TYPES(self.scalar_type(), "roc_auc_score", [&]() {
++    return roc_auc_score_<scalar_t>(self, other, self.numel());
++  });
++}
++
++std::vector<double> roc_auc_score_all(at::Tensor self, at::Tensor other) {
++  TORCH_INTERNAL_ASSERT_DEBUG_ONLY(self.dim() == 1);
++  TORCH_INTERNAL_ASSERT_DEBUG_ONLY(other.dim() == 1);
++  TORCH_INTERNAL_ASSERT_DEBUG_ONLY(self.dtype() == other.dtype());
++  TORCH_INTERNAL_ASSERT_DEBUG_ONLY(self.numel() == other.numel());
++
++  return AT_DISPATCH_FLOATING_TYPES(self.scalar_type(), "roc_auc_score_all", [&]() {
++    return roc_auc_score_<scalar_t>(self, other, self.numel(), false);
++  });
++}
++
++}
+diff --git a/torch_ipex/csrc/cpu/toolkit/sklearn.h b/torch_ipex/csrc/cpu/toolkit/sklearn.h
+new file mode 100644
+index 0000000..3e06e23
+--- /dev/null
++++ b/torch_ipex/csrc/cpu/toolkit/sklearn.h
+@@ -0,0 +1,8 @@
++#pragma once
++#include <ATen/Tensor.h>
++#include <vector>
++
++namespace toolkit {
++  std::vector<double> roc_auc_score(at::Tensor actual, at::Tensor predict);
++  std::vector<double> roc_auc_score_all(at::Tensor actual, at::Tensor predict);
++}
+diff --git a/torch_ipex/csrc/cpu/toolkit/thread.cpp b/torch_ipex/csrc/cpu/toolkit/thread.cpp
+new file mode 100644
+index 0000000..a5f78c3
+--- /dev/null
++++ b/torch_ipex/csrc/cpu/toolkit/thread.cpp
+@@ -0,0 +1,31 @@
++#include "thread.h"
++#include <sched.h>
++#include <omp.h>
++
++extern "C" {
++  typedef void* kmp_affinity_mask_t;
++  void kmp_create_affinity_mask(kmp_affinity_mask_t*);
++  int kmp_set_affinity_mask_proc(int, kmp_affinity_mask_t*);
++  int kmp_set_affinity(kmp_affinity_mask_t*);
++  void kmp_destroy_affinity_mask(kmp_affinity_mask_t*);
++};
++
++namespace toolkit {
++  void thread_bind(int socket_id, int cores_per_socket, int core_id, int num_cores) {
++    int phy_core_start = socket_id * cores_per_socket + core_id;
++    cpu_set_t mask;
++    CPU_ZERO(&mask);
++    CPU_SET(phy_core_start, &mask);
++    omp_set_num_threads(num_cores);
++    #pragma omp parallel
++    {
++      int thread_id = omp_get_thread_num();
++      int phy_core_id = phy_core_start + thread_id;
++      kmp_affinity_mask_t mask;
++      kmp_create_affinity_mask(&mask);
++      kmp_set_affinity_mask_proc(phy_core_id, &mask);
++      kmp_set_affinity(&mask);
++      kmp_destroy_affinity_mask(&mask);
++    }
++  }
++}
+diff --git a/torch_ipex/csrc/cpu/toolkit/thread.h b/torch_ipex/csrc/cpu/toolkit/thread.h
+new file mode 100644
+index 0000000..dd38cc4
+--- /dev/null
++++ b/torch_ipex/csrc/cpu/toolkit/thread.h
+@@ -0,0 +1,4 @@
++#pragma once
++namespace toolkit {
++  void thread_bind(int socket_id, int cores_per_socket, int core_id, int num_cores);
++}
+diff --git a/torch_ipex/csrc/cpu/xsmm/libxsmm_utils.h b/torch_ipex/csrc/cpu/xsmm/libxsmm_utils.h
+index a2ed387..0aac4e6 100644
+--- a/torch_ipex/csrc/cpu/xsmm/libxsmm_utils.h
++++ b/torch_ipex/csrc/cpu/xsmm/libxsmm_utils.h
+@@ -1,3 +1,5 @@
++#pragma once
++
+ #include <libxsmm.h>
+ #include <libxsmm_intrinsics_x86.h>
+ #include <libxsmm_rng.h>
+@@ -18,10 +20,10 @@ template<typename T>
+ using xsmm_dtype = typename xsmmType<T>::dtype;
+ 
+ template<typename T>
+-xsmm_type<T> get_mm_kernel(int32_t M, int32_t N, int32_t K) { }
++inline xsmm_type<T> get_mm_kernel(int32_t M, int32_t N, int32_t K) { }
+ 
+ template<>
+-libxsmm_smmfunction get_mm_kernel<float>(int32_t M, int32_t N, int32_t K) {
++inline libxsmm_smmfunction get_mm_kernel<float>(int32_t M, int32_t N, int32_t K) {
+   float alpha = 1.0;
+   float beta = 0.0;
+   auto flags = LIBXSMM_GEMM_FLAGS('N', 'N');
+@@ -30,7 +32,7 @@ libxsmm_smmfunction get_mm_kernel<float>(int32_t M, int32_t N, int32_t K) {
+ }
+ 
+ template<>
+-libxsmm_bmmfunction get_mm_kernel<at::BFloat16>(int32_t M, int32_t N, int32_t K) {
++inline libxsmm_bmmfunction get_mm_kernel<at::BFloat16>(int32_t M, int32_t N, int32_t K) {
+   float alpha = 1.0;
+   float beta = 0.0;
+   auto flags = LIBXSMM_GEMM_FLAGS('N', 'N') | LIBXSMM_GEMM_FLAG_VNNI_A;
+@@ -38,7 +40,7 @@ libxsmm_bmmfunction get_mm_kernel<at::BFloat16>(int32_t M, int32_t N, int32_t K)
+   return mm_kernel;
+ }
+ 
+-libxsmm_xtransfunction get_tr_kernel(int M, int N, int LDO) {
++static inline libxsmm_xtransfunction get_tr_kernel(int M, int N, int LDO) {
+   libxsmm_xtransfunction tr_kernel;
+   libxsmm_descriptor_blob blob;
+   libxsmm_trans_descriptor *tr_desc;
+@@ -46,4 +48,3 @@ libxsmm_xtransfunction get_tr_kernel(int M, int N, int LDO) {
+   tr_kernel = libxsmm_dispatch_trans(tr_desc);
+   return tr_kernel;
+ }
+-
+diff --git a/torch_ipex/ops/__init__.py b/torch_ipex/ops/__init__.py
+index 3393565..9b017dc 100644
+--- a/torch_ipex/ops/__init__.py
++++ b/torch_ipex/ops/__init__.py
+@@ -1,4 +1,4 @@
+-from .interaction import interaction
++from .interaction import interaction, fuse_embedding_interaction
+ from .embeddingbag import ipex_embedding_bag
+ from .linear import *
+ from .pooling import *
+diff --git a/torch_ipex/ops/embeddingbag.py b/torch_ipex/ops/embeddingbag.py
+index 2a1b64e..cf6fdd2 100644
+--- a/torch_ipex/ops/embeddingbag.py
++++ b/torch_ipex/ops/embeddingbag.py
+@@ -1,9 +1,9 @@
+ import torch
+-from torch import nn
+-from torch.autograd import Function
+ import torch_ipex as ipex
+-import torch_ipex._C as core
+ from typing import Callable, List, Optional, Tuple
++from torch import nn
++from torch.nn import functional as F
++from torch.autograd import Function
+ 
+ # # extension for BF16 fast path only
+ Tensor = torch.Tensor
+@@ -28,3 +28,91 @@ def ipex_embedding_bag(
+         return torch_embedding_bag(weight, input, offsets, scale_grad_by_freq, mode, sparse, per_sample_weights, include_last_offset, padding_idx)
+ 
+ torch.embedding_bag = ipex_embedding_bag
++
++def normal_(tensor, mean=0., std=1.):
++    with torch.no_grad():
++        return tensor.normal_(mean, std)
++
++class _EmbeddingBag(nn.Module):
++    __constants__ = ['num_embeddings', 'embedding_dim', 'max_norm', 'norm_type',
++                     'scale_grad_by_freq', 'mode', 'sparse', 'include_last_offset']
++
++    def __init__(self, num_embeddings, embedding_dim,
++                 max_norm=None, norm_type=2., scale_grad_by_freq=False,
++                 mode='mean', sparse=False, _weight=None, include_last_offset=False, eval_mode=False):
++        super(_EmbeddingBag, self).__init__()
++        self.num_embeddings = num_embeddings
++        self.embedding_dim = embedding_dim
++        self.max_norm = max_norm
++        self.norm_type = norm_type
++        self.scale_grad_by_freq = scale_grad_by_freq
++        self.eval_mode = eval_mode
++        if _weight is None:
++            if self.eval_mode:
++                self.weight = nn.Parameter()
++            else:
++                self.weight = nn.Parameter(torch.Tensor(num_embeddings, embedding_dim))
++                self.reset_parameters()
++        else:
++            assert list(_weight.shape) == [num_embeddings, embedding_dim], \
++                'Shape of weight does not match num_embeddings and embedding_dim'
++            self.weight = Parameter(_weight)
++        self.mode = mode
++        self.sparse = sparse
++        self.include_last_offset = include_last_offset
++
++    def reset_parameters(self):
++        normal_(self.weight)
++
++    def forward(self, input, offsets=None, per_sample_weights=None):
++        # type: (Tensor, Optional[Tensor], Optional[Tensor]) -> Tensor
++        return F.embedding_bag(input, self.weight, offsets,
++                               self.max_norm, self.norm_type,
++                               self.scale_grad_by_freq, self.mode, self.sparse,
++                               per_sample_weights, self.include_last_offset)
++
++    def extra_repr(self):
++        s = '{num_embeddings}, {embedding_dim}'
++        if self.max_norm is not None:
++            s += ', max_norm={max_norm}'
++        if self.norm_type != 2:
++            s += ', norm_type={norm_type}'
++        if self.scale_grad_by_freq is not False:
++            s += ', scale_grad_by_freq={scale_grad_by_freq}'
++        s += ', mode={mode}'
++        return s.format(**self.__dict__)
++
++    def _load_from_state_dict(self, state_dict, prefix, local_metadata, strict,
++                              missing_keys, unexpected_keys, error_msgs):
++
++        if self.eval_mode:
++            for name, param in self._parameters.items():
++                key = prefix + name
++                if key in state_dict:
++                    input_param = state_dict[key]
++
++                    if input_param.shape != (self.num_embeddings, self.embedding_dim):
++                        # local shape should match the one in checkpoint
++                        error_msgs.append('size mismatch for {}: copying a param with shape {} from checkpoint, '
++                                          'the shape in current model is {}.'
++                                          .format(key, input_param.shape, param.shape))
++                        continue
++
++                    self._parameters[name] = input_param
++
++                elif strict:
++                    missing_keys.append(key)
++
++            if strict:
++                for key in state_dict.keys():
++                    if key.startswith(prefix):
++                        input_name = key[len(prefix):]
++                        input_name = input_name.split('.', 1)[0]  # get the name of param/buffer/child
++                        if input_name not in self._modules and input_name not in self._parameters:
++                            unexpected_keys.append(key)
++        else:
++            super(_EmbeddingBag, self)._load_from_state_dict(
++                state_dict, prefix, local_metadata, strict,
++                missing_keys, unexpected_keys, error_msgs)
++
++torch.nn.EmbeddingBag = _EmbeddingBag
+diff --git a/torch_ipex/ops/interaction.py b/torch_ipex/ops/interaction.py
+index 2fc9033..fa245d4 100644
+--- a/torch_ipex/ops/interaction.py
++++ b/torch_ipex/ops/interaction.py
+@@ -1,7 +1,6 @@
+ import torch
+ from torch import nn
+ from torch.autograd import Function
+-import torch_ipex._C as core
+ 
+ def interaction(*args):
+     # Current pytorch dose not support vector<Tensor> input for c++ custom function
+@@ -24,3 +23,6 @@ class InteractionFunc(Function):
+         args = ctx.saved_tensors
+         grad_in = torch.ops.torch_ipex.interaction_backward(grad_out.contiguous(), args)
+         return tuple(grad_in)
++
++def fuse_embedding_interaction(lS_o, lS_i, emb_l, dense_x):
++    return torch.ops.torch_ipex.fuse_embedding_interaction_forward(lS_o, lS_i, emb_l, dense_x)
+diff --git a/torch_ipex/ops/linear.py b/torch_ipex/ops/linear.py
+index b92cf29..b337c8a 100644
+--- a/torch_ipex/ops/linear.py
++++ b/torch_ipex/ops/linear.py
+@@ -1,7 +1,7 @@
+ import torch
+ from torch.autograd import Function
+ import torch.nn.functional as F
+-import torch_ipex._C as core
++import torch.nn as nn
+ from typing import Optional
+ 
+ def linear(input, weight, bias: Optional[torch.Tensor] = None):
+@@ -14,4 +14,42 @@ class LinearRelu(torch.nn.Linear):
+         super(LinearRelu, self).__init__(in_features, out_features, bias)
+ 
+     def forward(self, input):
+-        return torch.ops.torch_ipex.linear_relu(input, self.weight, self.bias)
+\ No newline at end of file
++        return torch.ops.torch_ipex.linear_relu(input, self.weight, self.bias)
++
++class FuseBotMLP(nn.Module):
++    def __init__(self, mlps, bias=True):
++        super(FuseBotMLP, self).__init__()
++        self.register_parameter('weight0', mlps[0].weight)
++        self.register_parameter('weight1', mlps[2].weight)
++        self.register_parameter('weight2', mlps[4].weight)
++        self.register_parameter('bias0', mlps[0].bias)
++        self.register_parameter('bias1', mlps[2].bias)
++        self.register_parameter('bias2', mlps[4].bias)
++        return
++
++    def forward(self, x):
++        return torch.ops.torch_ipex.fuse_botmlp_forward(
++            x, self.weight0.data, self.weight1.data, self.weight2.data,
++            self.bias0.data, self.bias1.data, self.bias2.data)
++
++class FuseTopMLP(nn.Module):
++    def __init__(self, mlps, bias=True):
++        super(FuseTopMLP, self).__init__()
++        self.register_parameter('weight0', mlps[0].weight)
++        self.register_parameter('weight1', mlps[2].weight)
++        self.register_parameter('weight2', mlps[4].weight)
++        self.register_parameter('weight3', mlps[6].weight)
++        self.register_parameter('weight4', mlps[8].weight)
++        self.register_parameter('bias0', mlps[0].bias)
++        self.register_parameter('bias1', mlps[2].bias)
++        self.register_parameter('bias2', mlps[4].bias)
++        self.register_parameter('bias3', mlps[6].bias)
++        self.register_parameter('bias4', mlps[8].bias)
++        return
++
++    def forward(self, x):
++        return torch.ops.torch_ipex.fuse_topmlp_forward(
++            x, self.weight0.data, self.weight1.data, self.weight2.data,
++            self.weight3.data, self.weight4.data,
++            self.bias0.data, self.bias1.data, self.bias2.data,
++            self.bias3.data, self.bias4.data)
+diff --git a/torch_ipex/ops/pooling.py b/torch_ipex/ops/pooling.py
+index b9093c0..7671fc2 100644
+--- a/torch_ipex/ops/pooling.py
++++ b/torch_ipex/ops/pooling.py
+@@ -1,7 +1,6 @@
+ import torch
+ from torch.autograd import Function
+ import torch.nn.functional as F
+-import torch_ipex._C as core
+ from torch.nn.modules.utils import _single, _pair
+ from typing import List
+ 

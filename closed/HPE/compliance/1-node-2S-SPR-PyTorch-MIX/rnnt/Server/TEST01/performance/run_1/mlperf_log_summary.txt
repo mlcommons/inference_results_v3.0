@@ -1,0 +1,56 @@
+================================================
+MLPerf Results Summary
+================================================
+SUT name : RNN-T_Server_SUT
+Scenario : Server
+Mode     : PerformanceOnly
+Scheduled samples per second : 4101.58
+Result is : VALID
+  Performance constraints satisfied : Yes
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+Early Stopping Result:
+ * Run successful.
+
+================================================
+Additional Stats
+================================================
+Completed samples per second    : 4100.43
+
+Min latency (ns)                : 89191452
+Max latency (ns)                : 600966205630
+Mean latency (ns)               : 2424699134
+50.00 percentile latency (ns)   : 338934628
+90.00 percentile latency (ns)   : 645086333
+95.00 percentile latency (ns)   : 731961656
+97.00 percentile latency (ns)   : 792895195
+99.00 percentile latency (ns)   : 854407605
+99.90 percentile latency (ns)   : 513315801078
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 1
+target_qps : 4100
+target_latency (ns): 1000000000
+max_async_queries : 0
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 270336
+max_query_count : 0
+qsl_rng_seed : 10003631887983097364
+sample_index_rng_seed : 17183018601990103738
+schedule_rng_seed : 12134888396634371638
+accuracy_log_rng_seed : 720381539243781796
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 4096
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 2513
+
+1 warning encountered. See detailed log.
+
+No errors encountered during test.

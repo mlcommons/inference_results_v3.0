@@ -1,0 +1,290 @@
+make[1]: Entering directory '/work'
+TEST01 trial 1
+make[2]: Entering directory '/work'
+benchmark : Benchmark.DLRM
+buffer_manager_thread_count : 0
+check_contiguity : True
+coalesced_tensor : True
+complete_threads : 1
+data_dir : /home/ubuntu/mlpinf-v3/v3.0.3-partner-drop/data
+deque_timeout_usec : 1
+enable_interleaved_top_mlp : False
+gpu_batch_size : 315000
+gpu_copy_streams : 1
+gpu_inference_streams : 1
+gpu_num_bundles : 2
+input_dtype : int8
+input_format : chw4
+log_dir : build/compliance_logs/TEST01
+max_pairs_per_staging_thread : 262100
+num_staging_batches : 8
+num_staging_threads : 8
+numa_config : 0:0-7,32-39&1:8-15,40-47&2:16-23,48-55&3:24-31,56-63
+offline_expected_qps : 1140000.0
+output_padding_granularity : 128
+precision : int8
+preprocessed_data_dir : /home/ubuntu/mlpinf-v3/v3.0.3-partner-drop/preprocessed_data
+sample_partition_path : build/preprocessed_data/criteo/full_recalib/sample_partition.npy
+scenario : Scenario.Offline
+system : SystemConfiguration(host_cpu_conf=CPUConfiguration(layout={CPU(name='Intel(R) Xeon(R) Gold 6444Y', architecture=<CPUArchitecture.x86_64: AliasedName(name='x86_64', aliases=(), patterns=())>, core_count=16, threads_per_core=2): 2}), host_mem_conf=MemoryConfiguration(host_memory_capacity=Memory(quantity=528.06514, byte_suffix=<ByteSuffix.GB: (1000, 3)>, _num_bytes=528065140000), comparison_tolerance=0.05), accelerator_conf=AcceleratorConfiguration(layout=defaultdict(<class 'int'>, {GPU(name='NVIDIA A100 80GB PCIe', accelerator_type=<AcceleratorType.Discrete: AliasedName(name='Discrete', aliases=(), patterns=())>, vram=Memory(quantity=80.0, byte_suffix=<ByteSuffix.GiB: (1024, 3)>, _num_bytes=85899345920), max_power_limit=300.0, pci_id='0x20B510DE', compute_sm=80): 4})), numa_conf=NUMAConfiguration(numa_nodes={0: NUMANode(index=0, cpus=[Interval(start=0, end=7), Interval(start=32, end=39)], gpus=[0]), 1: NUMANode(index=1, cpus=[Interval(start=8, end=15), Interval(start=40, end=47)], gpus=[1]), 2: NUMANode(index=2, cpus=[Interval(start=16, end=23), Interval(start=48, end=55)], gpus=[2]), 3: NUMANode(index=3, cpus=[Interval(start=24, end=31), Interval(start=56, end=63)], gpus=[3])}, num_numa_nodes=4), system_id='A100X4_751GE')
+tensor_path : build/preprocessed_data/criteo/full_recalib/numeric_int8_chw4.npy,build/preprocessed_data/criteo/full_recalib/categorical_int32.npy
+use_graphs : False
+use_jemalloc : True
+use_small_tile_gemm_plugin : True
+system_id : A100X4_751GE
+config_name : A100X4_751GE_dlrm_Offline
+workload_setting : WorkloadSetting(HarnessType.Custom, AccuracyTarget.k_99, PowerSetting.MaxP)
+optimization_level : plugin-enabled
+use_cpu : False
+use_inferentia : False
+config_ver : custom_k_99_MaxP
+accuracy_level : 99%
+inference_server : custom
+audit_test_name : TEST01
+skip_file_checks : False
+power_limit : None
+cpu_freq : None
+&&&& RUNNING DLRM_HARNESS # ./build/bin/harness_dlrm
+[I] [TRT] Loaded engine size: 2 MiB
+[I] [TRT] Loaded engine size: 2 MiB
+[I] [TRT] Loaded engine size: 2 MiB
+[I] [TRT] Loaded engine size: 2 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +370, now: CPU 0, GPU 1360 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +372, now: CPU 0, GPU 948 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +372, now: CPU 0, GPU 948 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +372, now: CPU 0, GPU 948 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +58, now: CPU 0, GPU 1418 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +56, now: CPU 0, GPU 1004 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +56, now: CPU 0, GPU 1004 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +56, now: CPU 0, GPU 1004 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 0 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 0, GPU 23920 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 0 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 0, GPU 23928 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 0, GPU 24334 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 0 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 0, GPU 23920 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 0, GPU 24342 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 0, GPU 23928 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 0 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 0, GPU 23920 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 0, GPU 23928 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +646, now: CPU 0, GPU 646 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +1293, now: CPU 0, GPU 1293 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +1939, now: CPU 0, GPU 1939 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +2586, now: CPU 0, GPU 2586 (MiB)
+================================================
+MLPerf Results Summary
+================================================
+SUT name : DLRM SERVER
+Scenario : Offline
+Mode     : PerformanceOnly
+Samples per second: 1.11574e+06
+Result is : VALID
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+
+================================================
+Additional Stats
+================================================
+Min latency (ns)                : 5205552954
+Max latency (ns)                : 674351505841
+Mean latency (ns)               : 18765384140
+50.00 percentile latency (ns)   : 337083854224
+90.00 percentile latency (ns)   : 604432530948
+95.00 percentile latency (ns)   : 637697581921
+97.00 percentile latency (ns)   : 650988432658
+99.00 percentile latency (ns)   : 664274485120
+99.90 percentile latency (ns)   : 672095324239
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 752400000
+target_qps : 1.14e+06
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 1
+max_query_count : 0
+qsl_rng_seed : 10003631887983097364
+sample_index_rng_seed : 17183018601990103738
+schedule_rng_seed : 12134888396634371638
+accuracy_log_rng_seed : 720381539243781796
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 4096
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 204800
+
+5 warnings encountered. See detailed log.
+
+No errors encountered during test.
+User-item pairs per second: 301314800.635
+Verifying accuracy. This might take a while...
+Reading accuracy mode results...
+Reading performance mode results...
+num_acc_log_entries = 330067
+num_acc_log_duplicate_keys = 0
+num_acc_log_data_mismatch = 0
+num_perf_log_entries = 4116
+num_perf_log_qsl_idx_match = 4116
+num_perf_log_data_mismatch = 3
+num_missing_qsl_idxs = 0
+TEST FAIL
+
+Parsing arguments.
+Created a baseline accuracy file: mlperf_log_accuracy_baseline.json
+Assuming loadgen accuracy log does not contain ground truth labels.
+Parsing loadgen accuracy log...
+Parsing aggregation trace file...
+make[2]: Leaving directory '/work'
+TEST01 trial 2
+make[2]: Entering directory '/work'
+benchmark : Benchmark.DLRM
+buffer_manager_thread_count : 0
+check_contiguity : True
+coalesced_tensor : True
+complete_threads : 1
+data_dir : /home/ubuntu/mlpinf-v3/v3.0.3-partner-drop/data
+deque_timeout_usec : 1
+enable_interleaved_top_mlp : False
+gpu_batch_size : 315000
+gpu_copy_streams : 1
+gpu_inference_streams : 1
+gpu_num_bundles : 2
+input_dtype : int8
+input_format : chw4
+log_dir : build/compliance_logs/TEST01
+max_pairs_per_staging_thread : 262100
+num_staging_batches : 8
+num_staging_threads : 8
+numa_config : 0:0-7,32-39&1:8-15,40-47&2:16-23,48-55&3:24-31,56-63
+offline_expected_qps : 1140000.0
+output_padding_granularity : 128
+precision : int8
+preprocessed_data_dir : /home/ubuntu/mlpinf-v3/v3.0.3-partner-drop/preprocessed_data
+sample_partition_path : build/preprocessed_data/criteo/full_recalib/sample_partition.npy
+scenario : Scenario.Offline
+system : SystemConfiguration(host_cpu_conf=CPUConfiguration(layout={CPU(name='Intel(R) Xeon(R) Gold 6444Y', architecture=<CPUArchitecture.x86_64: AliasedName(name='x86_64', aliases=(), patterns=())>, core_count=16, threads_per_core=2): 2}), host_mem_conf=MemoryConfiguration(host_memory_capacity=Memory(quantity=528.06514, byte_suffix=<ByteSuffix.GB: (1000, 3)>, _num_bytes=528065140000), comparison_tolerance=0.05), accelerator_conf=AcceleratorConfiguration(layout=defaultdict(<class 'int'>, {GPU(name='NVIDIA A100 80GB PCIe', accelerator_type=<AcceleratorType.Discrete: AliasedName(name='Discrete', aliases=(), patterns=())>, vram=Memory(quantity=80.0, byte_suffix=<ByteSuffix.GiB: (1024, 3)>, _num_bytes=85899345920), max_power_limit=300.0, pci_id='0x20B510DE', compute_sm=80): 4})), numa_conf=NUMAConfiguration(numa_nodes={0: NUMANode(index=0, cpus=[Interval(start=0, end=7), Interval(start=32, end=39)], gpus=[0]), 1: NUMANode(index=1, cpus=[Interval(start=8, end=15), Interval(start=40, end=47)], gpus=[1]), 2: NUMANode(index=2, cpus=[Interval(start=16, end=23), Interval(start=48, end=55)], gpus=[2]), 3: NUMANode(index=3, cpus=[Interval(start=24, end=31), Interval(start=56, end=63)], gpus=[3])}, num_numa_nodes=4), system_id='A100X4_751GE')
+tensor_path : build/preprocessed_data/criteo/full_recalib/numeric_int8_chw4.npy,build/preprocessed_data/criteo/full_recalib/categorical_int32.npy
+use_graphs : False
+use_jemalloc : True
+use_small_tile_gemm_plugin : True
+system_id : A100X4_751GE
+config_name : A100X4_751GE_dlrm_Offline
+workload_setting : WorkloadSetting(HarnessType.Custom, AccuracyTarget.k_99, PowerSetting.MaxP)
+optimization_level : plugin-enabled
+use_cpu : False
+use_inferentia : False
+config_ver : custom_k_99_MaxP
+accuracy_level : 99%
+inference_server : custom
+audit_test_name : TEST01
+skip_file_checks : False
+power_limit : None
+cpu_freq : None
+&&&& RUNNING DLRM_HARNESS # ./build/bin/harness_dlrm
+[I] [TRT] Loaded engine size: 2 MiB
+[I] [TRT] Loaded engine size: 2 MiB
+[I] [TRT] Loaded engine size: 2 MiB
+[I] [TRT] Loaded engine size: 2 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +370, now: CPU 0, GPU 1360 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +372, now: CPU 0, GPU 948 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +376, now: CPU 0, GPU 952 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +378, now: CPU 0, GPU 954 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +58, now: CPU 0, GPU 1418 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +56, now: CPU 0, GPU 1004 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +50, now: CPU 0, GPU 1004 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +52, now: CPU 0, GPU 1004 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 0 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 0 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 0, GPU 24334 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 0, GPU 23920 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 0, GPU 24342 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 0, GPU 23928 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 0 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 0, GPU 23920 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 0, GPU 23928 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 0 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 0, GPU 23920 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 0, GPU 23928 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +646, now: CPU 0, GPU 646 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +1293, now: CPU 0, GPU 1293 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +1939, now: CPU 0, GPU 1939 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +2586, now: CPU 0, GPU 2586 (MiB)
+================================================
+MLPerf Results Summary
+================================================
+SUT name : DLRM SERVER
+Scenario : Offline
+Mode     : PerformanceOnly
+Samples per second: 1.11735e+06
+Result is : VALID
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+
+================================================
+Additional Stats
+================================================
+Min latency (ns)                : 5238655451
+Max latency (ns)                : 673377994470
+Mean latency (ns)               : 18201484915
+50.00 percentile latency (ns)   : 336306663930
+90.00 percentile latency (ns)   : 603809382009
+95.00 percentile latency (ns)   : 637193127561
+97.00 percentile latency (ns)   : 650536108290
+99.00 percentile latency (ns)   : 663867830193
+99.90 percentile latency (ns)   : 671941737636
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 752400000
+target_qps : 1.14e+06
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 1
+max_query_count : 0
+qsl_rng_seed : 10003631887983097364
+sample_index_rng_seed : 17183018601990103738
+schedule_rng_seed : 12134888396634371638
+accuracy_log_rng_seed : 720381539243781796
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 4096
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 204800
+
+5 warnings encountered. See detailed log.
+
+No errors encountered during test.
+User-item pairs per second: 301749594.430
+Verifying accuracy. This might take a while...
+Reading accuracy mode results...
+Reading performance mode results...
+num_acc_log_entries = 330067
+num_acc_log_duplicate_keys = 0
+num_acc_log_data_mismatch = 0
+num_perf_log_entries = 4116
+num_perf_log_qsl_idx_match = 4116
+num_perf_log_data_mismatch = 3
+num_missing_qsl_idxs = 0
+TEST FAIL
+
+Parsing arguments.
+Created a baseline accuracy file: mlperf_log_accuracy_baseline.json
+Assuming loadgen accuracy log does not contain ground truth labels.
+Parsing loadgen accuracy log...
+Parsing aggregation trace file...
+make[2]: Leaving directory '/work'
+make[1]: Leaving directory '/work'

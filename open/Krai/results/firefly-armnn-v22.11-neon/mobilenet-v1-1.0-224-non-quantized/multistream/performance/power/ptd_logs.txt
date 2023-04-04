@@ -1,0 +1,2869 @@
+Selected power meter 'Yokogawa WT310' from wt310.cpp
+  ****************************************************************************
+                      ***********************************                     
+                               SPEC PTDaemon Tool                             
+                        Version 1.10.0-ed9a21d2-20220817                     
+                      ***********************************                     
+                     Licensed Materials - Property of SPEC
+     Copyright 2006-2022 Standard Performance Evaluation Corporation (SPEC)
+                              All Rights Reserved.
+  For use with benchmark products from SPEC and authorized organizations only.
+  ****************************************************************************
+
+
+Redirecting data output to file /tmp/tmpu4v721n6/ptd_logfile.txt
+Calculated PTD CRC: 0xed9a21d2, 7188608
+02-26-2023 02:26:54.999: Attempting to connect to measurement device type 49...
+02-26-2023 02:26:55.599: Analyzer identity response of 33 bytes: YOKOGAWA,WT310E,C3XA04010E,F1.04
+
+02-26-2023 02:26:55.599: WT3XX enhanced model detected.
+02-26-2023 02:27:11.908: Uncertainty checking for YokogawaWT310E is activated
+02-26-2023 02:27:11.908: Connected to YokogawaWT310E successfully
+02-26-2023 02:27:11.908: Establishing the listener on port 8888...
+02-26-2023 02:27:11.908: Waiting for a connection...
+02-26-2023 02:27:11.942: Accepted connection from 127.0.0.1:33776
+02-26-2023 02:27:11.943: Response to client sent: Hello, PTDaemon here!
+02-26-2023 02:27:11.944: Response to client sent: YokogawaWT310E,1000,1,1,1,1,0,1,1,version=1.10.0-ed9a21d2-20220817,OS=Linux 5.15.0-60-generic #66~20.04.1-Ubuntu SMP Wed Jan 25 09:41:30 UTC 2023 x86_64,mode=power,1,1,1,0,0,no_cal_date,YOKOGAWA;WT310E;C3XA04010E;F1.04
+02-26-2023 02:27:11.944: Response to client sent: Ranges,0,0.100000,0,300.000000
+02-26-2023 02:27:11.945: Volt range set to Auto
+02-26-2023 02:27:12.447: Response to client sent: Range V changed
+02-26-2023 02:27:12.447: Ampere range set to Auto
+02-26-2023 02:27:12.949: Response to client sent: Range A changed
+02-26-2023 02:27:22.960: Go with mark '2023-02-26_02-26-54_ranging'
+02-26-2023 02:27:22.960: Response to client sent: Starting untimed measurement, maximum 500000 samples at 1000ms with 0 rampup samples
+02-26-2023 02:27:23.262: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:23.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:24.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:24.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:25.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:25.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:26.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:26.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:27.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:27.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:28.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:28.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:29.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:29.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:30.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:30.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:31.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:31.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:32.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:32.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:33.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:33.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:34.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:34.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:35.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:35.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:36.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:36.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:37.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:37.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:38.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:38.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:39.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:39.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:40.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:40.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:41.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:41.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:41.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:41.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:41.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:41.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:42.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:42.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:42.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:42.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:42.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:42.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:43.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:43.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:44.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:44.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:45.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:45.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:46.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:46.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:47.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:47.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:48.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:48.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:49.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:49.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:50.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:50.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:51.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:51.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:52.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:52.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:53.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:53.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:54.264: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:54.264: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:54.264: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:54.264: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:54.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:54.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:55.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:55.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:56.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:56.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:57.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:57.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:57.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:57.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:27:57.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:57.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:58.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:58.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:27:59.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:27:59.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:00.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:00.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:01.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:01.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:02.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:02.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:03.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:03.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:04.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:04.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:05.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:05.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:06.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:06.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:07.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:07.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:08.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:08.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:09.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:09.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:10.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:10.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:11.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:11.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:12.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:12.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:13.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:13.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:14.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:14.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:15.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:15.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:16.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:16.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:17.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:17.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:18.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:18.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:19.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:19.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:20.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:20.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:21.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:21.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:22.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:22.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:23.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:23.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:24.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:24.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:25.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:25.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:26.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:26.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:27.268: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:27.268: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:28.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:28.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:28.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:28.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:28.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:28.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:29.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:29.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:29.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:29.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:29.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:29.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:30.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:30.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:31.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:31.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:32.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:32.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:33.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:33.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:34.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:34.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:35.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:35.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:36.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:36.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:37.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:37.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:38.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:38.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:39.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:39.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:40.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:40.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:41.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:41.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:42.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:42.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:43.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:43.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:44.264: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:44.264: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:44.264: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:44.264: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:44.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:44.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:45.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:45.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:45.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:45.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:45.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:45.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:46.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:46.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:47.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:47.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:48.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:48.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:49.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:49.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:50.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:50.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:51.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:51.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:52.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:52.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:53.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:53.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:54.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:54.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:55.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:55.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:56.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:56.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:57.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:57.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:58.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:58.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:28:59.265: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:59.265: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:59.265: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:59.265: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:28:59.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:28:59.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:00.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:00.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:01.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:01.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:01.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:01.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:01.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:01.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:02.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:02.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:03.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:03.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:04.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:04.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:05.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:05.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:06.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:06.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:07.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:07.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:08.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:08.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:09.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:09.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:10.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:10.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:11.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:11.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:12.264: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:12.264: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:12.264: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:12.264: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:12.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:12.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:13.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:13.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:14.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:14.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:14.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:14.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:14.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:14.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:15.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:15.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:16.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:16.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:17.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:17.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:18.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:18.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:19.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:19.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:20.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:20.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:21.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:21.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:22.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:22.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:23.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:23.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:24.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:24.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:25.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:25.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:26.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:26.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:27.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:27.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:28.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:28.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:29.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:29.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:30.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:30.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:31.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:31.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:32.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:32.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:33.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:33.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:33.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:33.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:33.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:33.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:34.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:34.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:34.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:34.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:34.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:34.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:35.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:35.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:36.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:36.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:37.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:37.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:37.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:37.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:37.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:37.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:38.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:38.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:39.265: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:39.265: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:39.265: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:39.265: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:39.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:39.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:40.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:40.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:41.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:41.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:42.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:42.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:43.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:43.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:44.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:44.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:45.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:45.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:46.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:46.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:47.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:47.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:48.264: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:48.264: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:48.264: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:48.264: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:48.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:48.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:49.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:49.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:49.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:49.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:49.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:49.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:50.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:50.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:51.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:51.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:52.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:52.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:53.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:53.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:54.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:54.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:55.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:55.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:55.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:55.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:55.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:55.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:56.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:56.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:56.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:56.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:29:56.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:56.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:57.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:57.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:58.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:58.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:29:59.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:29:59.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:00.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:00.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:01.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:01.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:02.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:02.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:03.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:03.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:04.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:04.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:05.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:05.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:05.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:05.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:05.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:05.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:06.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:06.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:06.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:06.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:06.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:06.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:07.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:07.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:08.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:08.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:09.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:09.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:09.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:09.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:09.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:09.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:10.264: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:10.264: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:10.264: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:10.264: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:10.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:10.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:11.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:11.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:12.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:12.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:13.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:13.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:14.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:14.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:15.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:15.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:16.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:16.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:17.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:17.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:18.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:18.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:19.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:19.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:20.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:20.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:21.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:21.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:22.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:22.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:23.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:23.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:23.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:23.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:23.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:23.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:24.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:24.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:25.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:25.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:26.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:26.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:26.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:26.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:26.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:26.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:27.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:27.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:28.264: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:28.264: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:28.264: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:28.264: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:28.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:28.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:29.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:29.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:29.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:29.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:29.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:29.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:30.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:30.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:31.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:31.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:32.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:32.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:33.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:33.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:34.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:34.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:35.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:35.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:35.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:35.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:35.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:35.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:36.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:36.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:36.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:36.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:36.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:36.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:37.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:37.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:37.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:37.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:37.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:37.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:38.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:38.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:39.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:39.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:40.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:40.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:40.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:40.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:40.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:40.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:41.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:41.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:42.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:42.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:43.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:43.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:44.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:44.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:45.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:45.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:45.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:45.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:45.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:45.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:46.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:46.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:46.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:46.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:46.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:46.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:47.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:47.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:48.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:48.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:49.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:49.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:49.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:49.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:49.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:49.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:50.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:50.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:50.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:50.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:50.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:50.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:51.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:51.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:51.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:51.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:51.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:51.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:52.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:52.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:53.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:53.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:53.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:53.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:30:53.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:53.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:54.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:54.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:55.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:55.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:56.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:56.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:57.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:57.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:58.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:58.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:30:59.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:30:59.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:00.270: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:00.270: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:01.265: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:01.265: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:01.265: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:01.265: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:01.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:01.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:02.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:02.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:02.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:02.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:02.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:02.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:03.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:03.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:03.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:03.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:03.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:03.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:04.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:04.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:04.264: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:04.264: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:04.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:04.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:05.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:05.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:05.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:05.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:05.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:05.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:06.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:06.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:07.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:07.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:07.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:07.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:07.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:07.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:08.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:08.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:09.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:09.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:10.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:10.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:10.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:10.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:10.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:10.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:11.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:11.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:11.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:11.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:11.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:11.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:12.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:12.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:13.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:13.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:13.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:13.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:13.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:13.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:14.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:14.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:14.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:14.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:14.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:14.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:15.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:15.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:15.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:15.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:15.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:15.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:16.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:16.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:16.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:16.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:16.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:16.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:17.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:17.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:18.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:18.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:19.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:19.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:20.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:20.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:21.266: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:21.266: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:22.264: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:22.264: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:22.264: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:22.264: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:22.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:22.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:23.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:23.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:24.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:24.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:24.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:24.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:24.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:24.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:25.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:25.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:25.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:25.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:25.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:25.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:26.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:26.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:27.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:27.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:28.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:28.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:28.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:28.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:28.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:28.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:29.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:29.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:30.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:30.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:31.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:31.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:32.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:32.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:33.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:33.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:34.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:34.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:35.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:35.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:36.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:36.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:37.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:37.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:38.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:38.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:39.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:39.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:40.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:40.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:41.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:41.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:41.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:41.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:41.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:41.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:42.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:42.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:43.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:43.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:43.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:43.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:43.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:43.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:44.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:44.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:45.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:45.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:46.269: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:46.269: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:46.269: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:46.269: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:46.269: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:46.269: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:47.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:47.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:47.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:47.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:47.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:47.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:48.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:48.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:49.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:49.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:49.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:49.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:49.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:49.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:50.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:50.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:51.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:51.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:52.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:52.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:53.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:53.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:53.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:53.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:31:53.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:53.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:54.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:54.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:55.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:55.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:56.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:56.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:57.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:57.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:58.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:58.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:31:59.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:31:59.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:00.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:00.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:01.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:01.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:02.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:02.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:02.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:02.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:02.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:02.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:03.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:03.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:04.264: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:04.264: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:04.265: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:04.265: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:04.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:04.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:05.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:05.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:06.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:06.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:07.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:07.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:08.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:08.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:09.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:09.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:10.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:10.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:11.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:11.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:11.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:11.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:11.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:11.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:12.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:12.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:12.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:12.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:12.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:12.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:13.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:13.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:14.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:14.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:15.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:15.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:16.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:16.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:17.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:17.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:17.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:17.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:17.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:17.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:18.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:18.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:19.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:19.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:19.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:19.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:19.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:19.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:20.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:20.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:21.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:21.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:22.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:22.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:23.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:23.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:24.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:24.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:25.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:25.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:26.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:26.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:26.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:26.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:26.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:26.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:27.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:27.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:28.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:28.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:28.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:28.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:28.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:28.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:29.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:29.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:30.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:30.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:31.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:31.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:31.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:31.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:31.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:31.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:32.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:32.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:33.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:33.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:33.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:33.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:33.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:33.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:34.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:34.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:35.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:35.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:35.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:35.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:35.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:35.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:36.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:36.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:37.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:37.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:37.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:37.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:37.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:37.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:38.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:38.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:39.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:39.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:40.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:40.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:41.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:41.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:42.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:42.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:43.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:43.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:44.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:44.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:45.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:45.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:46.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:46.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:47.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:47.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:48.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:48.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:48.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:48.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:48.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:48.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:49.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:49.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:50.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:50.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:50.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:50.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:32:50.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:50.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:51.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:51.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:52.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:52.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:53.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:53.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:54.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:54.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:55.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:55.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:56.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:56.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:57.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:57.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:58.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:58.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:32:59.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:32:59.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:00.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:00.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:01.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:01.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:02.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:02.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:03.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:03.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:04.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:04.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:05.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:05.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:06.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:06.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:07.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:07.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:08.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:08.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:09.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:09.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:10.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:10.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:11.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:11.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:12.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:12.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:12.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:12.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:12.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:12.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:13.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:13.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:13.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:13.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:13.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:13.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:14.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:14.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:15.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:15.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:16.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:16.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:17.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:17.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:18.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:18.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:19.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:19.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:20.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:20.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:21.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:21.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:22.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:22.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:23.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:23.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:24.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:24.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:25.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:25.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:26.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:26.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:26.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:26.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:26.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:26.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:27.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:27.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:27.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:27.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:27.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:27.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:28.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:28.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:29.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:29.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:30.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:30.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:31.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:31.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:32.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:32.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:33.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:33.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:34.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:34.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:35.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:35.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:36.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:36.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:37.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:37.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:37.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:37.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:37.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:37.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:38.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:38.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:39.264: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:39.264: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:39.264: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:39.264: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:39.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:39.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:40.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:40.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:40.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:40.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:40.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:40.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:41.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:41.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:41.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:41.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:41.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:41.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:42.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:42.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:42.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:42.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:42.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:42.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:43.264: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:43.264: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:43.264: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:43.264: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:43.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:43.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:44.269: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:44.269: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:45.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:45.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:46.264: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:46.264: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:46.264: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:46.264: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:46.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:46.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:47.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:47.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:47.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:47.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:47.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:47.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:48.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:48.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:48.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:48.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:48.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:48.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:49.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:49.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:50.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:50.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:50.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:50.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:50.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:50.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:51.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:51.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:51.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:51.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:51.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:51.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:52.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:52.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:53.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:53.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:54.272: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:54.272: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:54.272: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:54.272: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:54.272: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:54.272: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:55.267: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:55.267: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:55.267: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:55.267: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:33:55.267: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:55.267: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:56.267: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:56.267: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:57.267: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:57.267: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:58.267: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:58.267: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:33:59.267: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:33:59.267: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:00.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:00.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:00.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:00.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:00.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:00.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:01.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:01.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:01.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:01.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:01.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:01.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:02.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:02.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:02.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:02.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:02.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:02.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:03.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:03.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:03.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:03.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:03.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:03.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:04.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:04.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:05.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:05.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:06.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:06.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:07.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:07.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:08.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:08.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:09.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:09.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:10.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:10.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:11.264: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:11.264: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:11.264: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:11.264: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:11.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:11.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:12.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:12.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:12.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:12.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:12.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:12.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:13.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:13.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:14.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:14.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:15.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:15.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:16.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:16.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:17.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:17.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:17.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:17.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:17.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:17.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:18.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:18.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:18.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:18.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:18.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:18.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:19.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:19.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:20.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:20.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:21.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:21.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:21.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:21.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:21.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:21.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:22.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:22.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:22.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:22.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:22.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:22.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:23.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:23.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:24.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:24.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:25.268: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:25.268: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:25.268: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:25.268: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:25.268: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:25.268: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:26.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:26.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:26.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:26.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:26.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:26.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:27.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:27.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:28.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:28.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:29.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:29.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:30.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:30.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:31.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:31.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:32.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:32.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:32.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:32.264: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:32.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:32.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:33.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:33.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:34.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:34.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:35.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:35.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:36.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:36.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:36.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:36.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:36.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:36.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:37.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:37.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:38.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:38.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:39.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:39.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:40.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:40.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:41.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:41.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:42.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:42.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:43.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:43.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:44.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:44.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:45.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:45.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:46.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:46.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:47.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:47.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:48.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:48.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:49.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:49.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:50.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:50.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:51.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:51.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:52.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:52.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:53.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:53.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:54.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:54.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:55.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:55.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:55.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:55.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:55.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:55.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:56.265: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:56.265: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:56.265: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:56.265: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:34:56.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:56.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:57.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:57.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:58.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:58.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:34:59.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:34:59.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:00.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:00.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:01.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:01.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:02.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:02.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:03.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:03.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:04.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:04.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:04.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:04.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:04.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:04.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:05.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:05.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:05.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:05.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:05.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:05.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:06.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:06.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:07.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:07.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:08.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:08.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:09.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:09.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:10.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:10.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:10.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:10.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:10.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:10.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:11.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:11.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:12.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:12.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:12.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:12.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:12.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:12.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:13.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:13.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:14.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:14.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:15.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:15.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:16.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:16.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:17.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:17.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:18.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:18.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:19.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:19.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:20.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:20.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:21.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:21.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:22.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:22.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:23.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:23.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:24.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:24.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:25.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:25.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:26.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:26.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:27.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:27.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:28.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:28.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:29.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:29.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:30.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:30.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:31.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:31.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:32.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:32.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:33.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:33.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:34.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:34.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:35.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:35.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:35.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:35.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:35.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:35.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:36.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:36.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:37.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:37.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:37.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:37.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:37.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:37.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:38.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:38.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:39.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:39.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:40.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:40.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:41.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:41.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:42.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:42.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:43.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:43.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:44.265: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:44.265: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:45.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:45.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:45.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:45.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:45.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:45.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:46.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:46.264: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:46.264: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:46.264: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:46.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:46.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:47.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:47.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:48.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:48.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:49.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:49.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:50.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:50.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:51.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:51.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:52.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:52.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:53.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:53.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:54.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:54.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:54.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:54.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:54.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:54.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:55.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:55.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:55.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:55.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:35:55.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:55.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:56.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:56.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:57.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:57.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:58.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:58.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:35:59.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:35:59.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:00.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:00.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:01.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:01.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:02.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:02.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:03.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:03.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:04.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:04.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:05.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:05.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:06.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:06.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:07.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:07.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:08.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:08.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:09.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:09.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:10.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:10.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:11.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:11.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:12.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:12.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:12.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:12.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:12.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:12.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:13.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:13.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:14.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:14.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:14.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:14.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:14.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:14.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:15.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:15.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:15.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:15.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:15.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:15.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:16.264: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:16.264: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:16.264: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:16.264: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:16.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:16.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:17.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:17.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:18.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:18.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:19.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:19.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:20.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:20.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:21.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:21.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:22.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:22.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:23.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:23.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:24.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:24.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:25.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:25.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:26.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:26.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:27.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:27.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:28.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:28.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:29.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:29.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:30.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:30.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:31.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:31.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:32.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:32.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:33.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:33.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:34.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:34.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:35.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:35.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:36.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:36.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:37.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:37.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:38.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:38.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:39.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:39.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:40.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:40.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:41.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:41.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:42.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:42.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:43.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:43.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:44.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:44.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:45.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:45.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:46.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:46.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:47.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:47.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:48.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:48.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:49.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:49.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:50.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:50.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:51.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:51.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:52.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:52.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:53.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:53.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:53.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:53.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:53.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:53.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:54.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:54.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:55.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:55.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:55.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:55.264: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:55.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:55.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:56.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:56.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:56.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:56.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:36:56.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:56.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:57.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:57.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:58.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:58.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:36:59.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:36:59.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:00.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:00.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:00.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:00.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:00.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:00.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:01.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:01.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:02.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:02.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:03.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:03.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:04.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:04.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:05.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:05.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:06.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:06.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:07.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:07.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:08.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:08.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:09.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:09.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:10.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:10.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:11.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:11.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:12.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:12.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:13.263: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:13.263: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:13.263: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:13.263: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:13.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:13.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:14.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:14.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:15.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:15.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:16.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:16.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:16.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:16.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:16.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:16.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:17.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:17.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:18.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:18.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:19.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:19.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:20.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:20.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:21.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:21.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:22.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:22.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:23.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:23.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:24.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:24.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:25.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:25.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:26.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:26.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:27.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:27.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:28.264: ERROR: Bad watts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:28.264: ERROR: Bad amps reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:28.264: ERROR: Bad pf reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:28.264: ERROR: Bad volts reading nan from WT310
+Buffer was 200.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:28.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:28.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:29.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:29.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:30.263: ERROR: Bad watts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:30.263: ERROR: Bad amps reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:30.263: ERROR: Bad pf reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:30.263: ERROR: Bad volts reading nan from WT310
+Buffer was 100.0E-03;1;300.0E+00;1
+
+02-26-2023 02:37:30.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:30.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:31.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:31.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:32.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:32.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:33.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:33.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:34.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:34.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:35.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:35.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:36.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:36.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:37.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:37.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:38.264: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:38.264: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:39.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:39.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:40.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:40.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:41.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:41.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:42.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:42.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:43.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:43.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:44.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:44.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:45.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:45.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:46.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:46.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:47.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:47.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:48.132: Response to client sent: Stopping untimed measurement
+02-26-2023 02:37:48.263: ERROR: Can't evaluate uncertainty of this sample!
+02-26-2023 02:37:48.263: WARNING: Uncertainty unknown for the last measurement sample!
+02-26-2023 02:37:48.961: Completed test
+02-26-2023 02:37:48.961: Avg watts 5.197002, min watts 2.118000, max watts 6.101000, samples 626, errors 129, valid 497
+02-26-2023 02:37:48.961: Volt range set to 300.000000V
+02-26-2023 02:37:50.462: Response to client sent: Range V changed
+02-26-2023 02:37:50.463: Amp range set to 0.100000A
+02-26-2023 02:37:51.964: Response to client sent: Range A changed
+02-26-2023 02:38:01.975: Go with mark '2023-02-26_02-26-54_testing'
+02-26-2023 02:38:01.975: Response to client sent: Starting untimed measurement, maximum 500000 samples at 1000ms with 0 rampup samples
+02-26-2023 02:38:02.277: WARNING: Uncertainty 1.03%, which is above 1.00% limit for the last sample!
+02-26-2023 02:38:05.277: WARNING: Uncertainty 1.02%, which is above 1.00% limit for the last sample!
+02-26-2023 02:38:06.277: WARNING: Uncertainty 1.02%, which is above 1.00% limit for the last sample!
+02-26-2023 02:38:07.277: WARNING: Uncertainty 1.03%, which is above 1.00% limit for the last sample!
+02-26-2023 02:38:08.277: WARNING: Uncertainty 1.04%, which is above 1.00% limit for the last sample!
+02-26-2023 02:38:10.277: WARNING: Uncertainty 1.02%, which is above 1.00% limit for the last sample!
+02-26-2023 02:48:19.277: WARNING: Uncertainty 1.03%, which is above 1.00% limit for the last sample!
+02-26-2023 02:48:20.278: WARNING: Uncertainty 1.03%, which is above 1.00% limit for the last sample!
+02-26-2023 02:48:21.277: WARNING: Uncertainty 1.03%, which is above 1.00% limit for the last sample!
+02-26-2023 02:48:22.277: WARNING: Uncertainty 1.02%, which is above 1.00% limit for the last sample!
+02-26-2023 02:48:23.277: WARNING: Uncertainty 1.03%, which is above 1.00% limit for the last sample!
+02-26-2023 02:48:24.277: WARNING: Uncertainty 1.03%, which is above 1.00% limit for the last sample!
+02-26-2023 02:48:25.277: WARNING: Uncertainty 1.03%, which is above 1.00% limit for the last sample!
+02-26-2023 02:48:26.277: WARNING: Uncertainty 1.04%, which is above 1.00% limit for the last sample!
+02-26-2023 02:48:27.220: Response to client sent: Stopping untimed measurement
+02-26-2023 02:48:27.277: WARNING: Uncertainty 1.03%, which is above 1.00% limit for the last sample!
+02-26-2023 02:48:27.975: Completed test
+02-26-2023 02:48:27.975: Avg watts 5.292436, min watts 2.155000, max watts 6.211000, samples 626, errors 0, valid 626
+02-26-2023 02:48:27.975: Response to client sent: Error: no measurement to stop
+02-26-2023 02:48:27.976: Volt range set to 300.000000V
+02-26-2023 02:48:29.477: Response to client sent: Range V changed
+02-26-2023 02:48:29.478: Amp range set to 0.100000A
+02-26-2023 02:48:30.979: Response to client sent: Range A changed
+02-26-2023 02:48:30.979: No data returned by socket read.
+02-26-2023 02:48:30.979: Shutting connection down...
+02-26-2023 02:48:30.979: Connection is down.
+02-26-2023 02:48:30.980: Waiting for a connection...

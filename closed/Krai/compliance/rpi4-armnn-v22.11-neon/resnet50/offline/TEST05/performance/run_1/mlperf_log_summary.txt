@@ -1,0 +1,59 @@
+================================================
+MLPerf Results Summary
+================================================
+SUT name : ArmNN_TFLite_SUT
+Scenario : SingleStream
+Mode     : PerformanceOnly
+90th percentile latency (ns) : 318907993
+Result is : VALID
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+Early Stopping Result:
+ * Processed at least 64 queries (1957).
+ * Would discard 163 highest latency queries.
+ * Early stopping 90th percentile estimate: 319877282
+ * Early stopping 99th percentile estimate: 384681847
+
+================================================
+Additional Stats
+================================================
+QPS w/ loadgen overhead         : 3.26
+QPS w/o loadgen overhead        : 3.26
+
+Min latency (ns)                : 292515114
+Max latency (ns)                : 440092657
+Mean latency (ns)               : 306730519
+50.00 percentile latency (ns)   : 305975710
+90.00 percentile latency (ns)   : 318907993
+95.00 percentile latency (ns)   : 325024644
+97.00 percentile latency (ns)   : 329282863
+99.00 percentile latency (ns)   : 339354618
+99.90 percentile latency (ns)   : 435464282
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 1
+target_qps : 3.22581
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 1024
+max_query_count : 0
+qsl_rng_seed : 14646058500348515648
+sample_index_rng_seed : 1207248993894122914
+schedule_rng_seed : 11879132697760422006
+accuracy_log_rng_seed : 0
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 0
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 1024
+
+2 warnings encountered. See detailed log.
+
+No errors encountered during test.

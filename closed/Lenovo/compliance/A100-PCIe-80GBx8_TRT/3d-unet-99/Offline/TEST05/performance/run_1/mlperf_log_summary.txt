@@ -1,0 +1,51 @@
+================================================
+MLPerf Results Summary
+================================================
+SUT name : Server_3DUNet
+Scenario : Offline
+Mode     : PerformanceOnly
+Samples per second: 28.5963
+Result is : VALID
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+
+================================================
+Additional Stats
+================================================
+Min latency (ns)                : 67843670
+Max latency (ns)                : 860111056160
+Mean latency (ns)               : 429801434665
+50.00 percentile latency (ns)   : 429777976263
+90.00 percentile latency (ns)   : 774051379353
+95.00 percentile latency (ns)   : 817180618122
+97.00 percentile latency (ns)   : 834357312838
+99.00 percentile latency (ns)   : 851494526239
+99.90 percentile latency (ns)   : 859192018271
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 24576
+target_qps : 28
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 1
+max_query_count : 0
+qsl_rng_seed : 14646058500348515648
+sample_index_rng_seed : 1207248993894122914
+schedule_rng_seed : 11879132697760422006
+accuracy_log_rng_seed : 0
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 0
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 43
+
+2 warnings encountered. See detailed log.
+
+No errors encountered during test.

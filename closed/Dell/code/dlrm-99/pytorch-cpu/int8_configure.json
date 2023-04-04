@@ -1,0 +1,227 @@
+[
+    {
+        "id": 0,
+        "name": "LinearFuseEltwise",
+        "algorithm": "min_max",
+        "weight_granularity": "per_channel",
+        "inputs_scale": [
+            8.556900024414062
+        ],
+        "outputs_scale": [
+            8.357013702392578
+        ],
+        "inputs_zero_point": [
+            128
+        ],
+        "outputs_zero_point": [
+            128
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 1,
+        "name": "LinearFuseEltwise",
+        "algorithm": "min_max",
+        "weight_granularity": "per_channel",
+        "inputs_scale": [
+            8.357013702392578
+        ],
+        "outputs_scale": [
+            16.566802978515625
+        ],
+        "inputs_zero_point": [
+            128
+        ],
+        "outputs_zero_point": [
+            128
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 2,
+        "name": "LinearFuseEltwise",
+        "algorithm": "min_max",
+        "weight_granularity": "per_channel",
+        "inputs_scale": [
+            16.566802978515625
+        ],
+        "outputs_scale": [
+            25.050329208374023
+        ],
+        "inputs_zero_point": [
+            128
+        ],
+        "outputs_zero_point": [
+            128
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 3,
+        "name": "fuse_embedding_interaction",
+        "algorithm": "min_max",
+        "weight_granularity": "per_channel",
+        "inputs_scale": [
+            25.050329208374023
+        ],
+        "outputs_scale": [
+            25.050329208374023
+        ],
+        "inputs_zero_point": [
+            128
+        ],
+        "outputs_zero_point": [
+            128
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 4,
+        "name": "LinearFuseEltwise",
+        "algorithm": "min_max",
+        "weight_granularity": "per_channel",
+        "inputs_scale": [
+            25.050329208374023
+        ],
+        "outputs_scale": [
+            24.18439483642578
+        ],
+        "inputs_zero_point": [
+            128
+        ],
+        "outputs_zero_point": [
+            128
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 5,
+        "name": "LinearFuseEltwise",
+        "algorithm": "min_max",
+        "weight_granularity": "per_channel",
+        "inputs_scale": [
+            24.18439483642578
+        ],
+        "outputs_scale": [
+            29.01119613647461
+        ],
+        "inputs_zero_point": [
+            128
+        ],
+        "outputs_zero_point": [
+            128
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 6,
+        "name": "LinearFuseEltwise",
+        "algorithm": "min_max",
+        "weight_granularity": "per_channel",
+        "inputs_scale": [
+            29.01119613647461
+        ],
+        "outputs_scale": [
+            34.23401641845703
+        ],
+        "inputs_zero_point": [
+            128
+        ],
+        "outputs_zero_point": [
+            128
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 7,
+        "name": "LinearFuseEltwise",
+        "algorithm": "min_max",
+        "weight_granularity": "per_channel",
+        "inputs_scale": [
+            34.23401641845703
+        ],
+        "outputs_scale": [
+            35.30814743041992
+        ],
+        "inputs_zero_point": [
+            128
+        ],
+        "outputs_zero_point": [
+            128
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 8,
+        "name": "Linear",
+        "algorithm": "min_max",
+        "weight_granularity": "per_channel",
+        "inputs_scale": [
+            35.30814743041992
+        ],
+        "outputs_scale": [
+            10.125483512878418
+        ],
+        "inputs_zero_point": [
+            128
+        ],
+        "outputs_zero_point": [
+            128
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    }
+]

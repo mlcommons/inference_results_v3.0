@@ -1,0 +1,51 @@
+================================================
+MLPerf Results Summary
+================================================
+SUT name : BERT_Triton_Server
+Scenario : Offline
+Mode     : PerformanceOnly
+Samples per second: 17050.9
+Result is : VALID
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+
+================================================
+Additional Stats
+================================================
+Min latency (ns)                : 3789075821
+Max latency (ns)                : 706027217296
+Mean latency (ns)               : 429485247684
+50.00 percentile latency (ns)   : 456407692504
+90.00 percentile latency (ns)   : 673601196413
+95.00 percentile latency (ns)   : 692602634318
+97.00 percentile latency (ns)   : 698926818034
+99.00 percentile latency (ns)   : 704017357361
+99.90 percentile latency (ns)   : 705877552065
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 12038400
+target_qps : 18240
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 1
+max_query_count : 0
+qsl_rng_seed : 14646058500348515648
+sample_index_rng_seed : 1207248993894122914
+schedule_rng_seed : 11879132697760422006
+accuracy_log_rng_seed : 0
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 0
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 10833
+
+12 warnings encountered. See detailed log.
+
+No errors encountered during test.

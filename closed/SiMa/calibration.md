@@ -1,0 +1,3 @@
+## SiMa Resnet50 Calibration
+ResNet50 v1.5 onnx torchvision is quantized and calibrated to INT8 using a subset of the ImageNet validation dataset (35 images) specified by cal_map.txt. Using this calibration data, we perform affine quantization on the weights of our model per-channel and symmetric while activations are quantized asymmetricaly per tensor. The quantization and calibration is performed using SiMa Palette (https://sima.ai/palette-software/) which is currently available to any customer. Affine quantization is the same as used in Tensorflow lite or pytorch, with scales and zero-point as integers; the quantized model contains no floating point values and inference has no floating point computations.  
+

@@ -1,0 +1,141 @@
+diff --git a/closed/NVIDIA/Makefile.build b/closed/NVIDIA/Makefile.build
+index 2a65dca0831..7ea0daf0c92 100644
+--- a/closed/NVIDIA/Makefile.build
++++ b/closed/NVIDIA/Makefile.build
+@@ -198,6 +198,7 @@ clone_loadgen:
+ 		&& git submodule update --init language/bert/DeepLearningExamples \
+ 		&& git submodule update --init vision/medical_imaging/3d-unet-brats19/nnUnet
+ 
++# TODO: Need temporaray fix to support multi-gpu
+ .PHONY: clone_faster_transformer
+ clone_faster_transformer:
+ ifeq ($(IS_HOPPER), 1)
+@@ -208,7 +209,10 @@ ifeq ($(IS_HOPPER), 1)
+ 	@echo "Updating FasterTransformer" \
+ 		&& cd $(FT_DIR) \
+ 		&& git fetch \
+-		&& git checkout $(FT_HASH)
++		&& git reset --hard HEAD \
++		&& git checkout $(FT_HASH) \
++		&& echo "Patching FasterTransformer" \
++		&& patch -p1 < ../../scripts/ft-multigpu.patch
+ endif
+ 
+ # Build Triton.
+@@ -235,7 +239,6 @@ endif
+ endif
+ 
+ # Build FasterTransformer.
+-# TODO: Need temporaray fix to support Hopper multigpu
+ .PHONY: build_faster_transformer
+ build_faster_transformer: clone_faster_transformer
+ ifeq ($(IS_HOPPER), 1)
+@@ -243,13 +246,12 @@ ifeq ($(IS_HOPPER), 1)
+ 	@if [ ! -e $(FT_BUILD_DIR) ]; then \
+ 		mkdir $(FT_BUILD_DIR); \
+ 	fi
+-	@echo "Patching FasterTransformer..."
+-	patch $(FT_DIR)/3rdparty/fp8_qgmma_1x1/sharedCubinLoader.h scripts/ft-multigpu.patch
+ 	@cd $(FT_BUILD_DIR) \
+ 		&& cmake -DSM=90 -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -DBUILD_TRT=ON -DENABLE_FP8=1 -DUSE_NVTX=$(FT_USE_NVTX) .. \
+ 		&& cmake --build . --target bert_fp8_plugin -j
+ endif
+ 
++
+ # Build TensorRT plugins.
+ .PHONY: build_plugins
+ build_plugins: $(PLUGIN_TARGETS)
+diff --git a/closed/NVIDIA/code/harness/harness_bert/bert_core_vs.cc b/closed/NVIDIA/code/harness/harness_bert/bert_core_vs.cc
+index 83b21e40d60..d25dffc1da5 100644
+--- a/closed/NVIDIA/code/harness/harness_bert/bert_core_vs.cc
++++ b/closed/NVIDIA/code/harness/harness_bert/bert_core_vs.cc
+@@ -363,6 +363,7 @@ BERTCoreVS::BERTCoreVS(const std::vector<std::shared_ptr<nvinfer1::ICudaEngine>>
+     {
+         mBERTModel.reset(new BERTModelFT{});
+         CHECK_EQ(useGraphs, false);
++        mUseFp8 = true;
+     }
+     else
+     {
+@@ -728,12 +729,25 @@ void BERTCoreVS::WarmUp()
+     auto context = GetContext(mMaxBatchSize, BERT_MAX_SEQ_LENGTH);
+     mBERTModel->setInputShapes(context.get(), mMaxBatchSize * BERT_MAX_SEQ_LENGTH, mMaxBatchSize, BERT_MAX_SEQ_LENGTH);
+ 
+-    GetBufferInputIds().memsetD(0);
+-    GetBufferSegmentIds().memsetD(0);
+-    // note that this sets each BYTE to 0
++    this->GetBufferInputIds().memsetD(0);
++    this->GetBufferSegmentIds().memsetD(0);
++
++    // note that we set each BYTE to 0
+     // and FT doesn't support 0 length sequences
+     // need to modify memsetD to set seq len buf to nonzero seq len
+-    GetBufferInputMask().memsetD(0);
++    if (mUseFp8)
++    {
++        LOG(INFO) << "Warming up FasterTransformer BERT FP8.\n";
++        // Initate the sequence lengths to max batch size x max sequence length.
++        std::vector<int> seqlens(mBERTModel->getSeqLenSize(mMaxBatchSize), BERT_MAX_SEQ_LENGTH);
++        this->GetBufferInputMask().H2H(seqlens.data(), 0, seqlens.size());
++        this->GetBufferInputMask().H2DAsync(mBERTModel->getSeqLenSize(mMaxBatchSize), mStream);
++    }
++    else
++    {
++        this->GetBufferInputMask().memsetD(0);
++    }
++
+     void** bindings = mBindings[0].data();
+     CHECK_EQ(context->enqueueV2(bindings, mStream, nullptr), true);
+     CHECK_EQ(cudaStreamSynchronize(mStream), cudaSuccess);
+diff --git a/closed/NVIDIA/code/harness/harness_bert/bert_core_vs.h b/closed/NVIDIA/code/harness/harness_bert/bert_core_vs.h
+index f7f99694887..5925ae4c9d2 100644
+--- a/closed/NVIDIA/code/harness/harness_bert/bert_core_vs.h
++++ b/closed/NVIDIA/code/harness/harness_bert/bert_core_vs.h
+@@ -294,6 +294,7 @@ private:
+     size_t mMaxBatchSize;
+     cudaStream_t mStream; // compute stream
+     int mDeviceId;
++    bool mUseFp8;
+ 
+     // data members to support CUDA Graphs
+     bool mUseGraphs;
+diff --git a/closed/NVIDIA/code/harness/harness_bert/bert_server.cc b/closed/NVIDIA/code/harness/harness_bert/bert_server.cc
+index 6a72575e12d..a880d64ad90 100644
+--- a/closed/NVIDIA/code/harness/harness_bert/bert_server.cc
++++ b/closed/NVIDIA/code/harness/harness_bert/bert_server.cc
+@@ -340,8 +340,7 @@ BERTServer::BERTServer(const std::string name, const std::string enginePath, std
+         for (int profileIdx = 0; profileIdx < numBERTCores; ++profileIdx)
+         {
+             auto bertCore = tmpBERTCores[idx][profileIdx];
+-            if (!useFp8) // MLPINF-1950: WarmUp impl sets seq lens to 0 which FT does not support
+-                bertCore->WarmUp();
++            bertCore->WarmUp();
+             CHECK_EQ(mMaxBatchSize <= bertCore->GetMaxBatchSize(), true);
+             mWorkerThreads.emplace_back(&BERTServer::ProcessTasks<BERTCoreVS>, this, bertCore, deviceId, qThreadIdx);
+ 
+diff --git a/closed/NVIDIA/scripts/ft-multigpu.patch b/closed/NVIDIA/scripts/ft-multigpu.patch
+index 99f541f9a1f..c1ad3a18a94 100644
+--- a/closed/NVIDIA/scripts/ft-multigpu.patch
++++ b/closed/NVIDIA/scripts/ft-multigpu.patch
+@@ -15,3 +15,21 @@ index 97eeb80..644973b 100755
+      }
+  
+      std::unordered_map<uint64_t, std::unique_ptr<TKernelList> const> mKernels;
++diff --git a/src/fastertransformer/utils/allocator.h b/src/fastertransformer/utils/allocator.h
++index d7a1421..3ce774e 100644
++--- a/src/fastertransformer/utils/allocator.h
+++++ b/src/fastertransformer/utils/allocator.h
++@@ -85,13 +85,6 @@ public:
++                 free((void**)(&void_ptr), is_host);
++                 return malloc(size, is_set_zero, is_host);
++             }
++-#if !defined(CUDA_MEMORY_POOL_DISABLED)
++-            else if (realloc_type == ReallocType::DECREASE) {
++-                FT_LOG_DEBUG("ReMalloc the buffer %p to release unused memory to memory pools.", void_ptr);
++-                free((void**)(&void_ptr), is_host);
++-                return malloc(size, is_set_zero, is_host);
++-            }
++-#endif
++             else {
++                 FT_LOG_DEBUG("Reuse original buffer %p with size %d and do nothing for reMalloc.", void_ptr, size);
++                 if (is_set_zero) {

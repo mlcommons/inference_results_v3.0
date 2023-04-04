@@ -1,0 +1,36 @@
+{
+  "model_param": {
+    "model_path": "./model/optimized_resnet.rknn",
+    "input_layer_name": "input_0",
+    "output_layer_name": "Identity"
+  },
+  "dataset_param": {
+    "dataset": "../../../imagenet_val_in_one",
+    "image_list": "../data_maps/val_map.txt",
+    "image_size": 224,
+    "batch_size": 1,
+    "layout": "NHWC",
+    "precision": "float32",
+    "scale": 0.018658408895134926,
+    "offset": 14
+  },
+  "mlperf_param": {
+    "workload": "resnet50",
+    "scenario": "MultiStream",
+    "mode": "performance",
+    "total_sample_count": 1024,
+    "mlperf_conf": "../measurements/ACS_SINIAN_RKNN_EDGE/resnet50/MultiStream/mlperf.conf",
+    "user_conf": "../measurements/ACS_SINIAN_RKNN_EDGE/resnet50/MultiStream/user.conf",
+    "output_logs": "./output_logs/"
+  },
+  "system_param": {
+    "total_cpu_cores": 8,
+    "num_instance": 2,
+    "core_per_instance": 4,
+    "num_worker_per_instance": 4,
+    "core_per_worker": 1,
+    "warmup": 100,
+    "cores_offset": 0,
+    "backend": "rknn"
+  }
+}

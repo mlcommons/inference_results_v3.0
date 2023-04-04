@@ -1,0 +1,207 @@
+{
+    "version": "1.0",
+    "timezone": 0,
+    "modules": {
+        "ptd_client_server.lib.common": "lib/common.py",
+        "ptd_client_server.lib.external.ntplib": "lib/external/ntplib.py",
+        "ptd_client_server.lib.server": "lib/server.py",
+        "ptd_client_server.lib.source_hashes": "lib/source_hashes.py",
+        "ptd_client_server.lib.summary": "lib/summary.py",
+        "ptd_client_server.lib.time_sync": "lib/time_sync.py"
+    },
+    "sources": {
+        "__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+        "client.py": "33ca4f26368777ac06e01f9567b714a4b8063886",
+        "lib/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+        "lib/client.py": "4c2b78fb4849a7e5b584ef792d82aaed20b17f57",
+        "lib/common.py": "624d0c0acc7c39aaff3674f0b99d6a09da53d1dc",
+        "lib/external/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+        "lib/external/ntplib.py": "4da8f970656505a40483206ef2b5d3dd5e81711d",
+        "lib/server.py": "cda0cdfaee9bfa1249c64a7dd4f89b7bf1b279f0",
+        "lib/source_hashes.py": "60a2e02193209e8d392803326208d5466342da18",
+        "lib/summary.py": "aa92f0a3f975eecd44d3c0cd0236342ccc9f941d",
+        "lib/time_sync.py": "3210db56eb0ff0df57bf4293dc4d4b03fffd46f1",
+        "server.py": "c3f90f2f7eeb4db30727556d0c815ebc89b3d28b",
+        "tests/unit/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+        "tests/unit/test_server.py": "99ae15aef722f2000ee6ed1ae1523637bf1ae42b",
+        "tests/unit/test_source_hashes.py": "00468a2907583c593e6574a1f6b404e4651c221a"
+    },
+    "messages": [
+        {
+            "cmd": "mlcommons/power client v3",
+            "cmd_time": 1676204667.2387824,
+            "reply": "mlcommons/power server v3",
+            "reply_time": 1676204667.238784
+        },
+        {
+            "cmd": "time",
+            "cmd_time": 1676204667.2784438,
+            "reply": "1676204667.278918",
+            "reply_time": 1676204667.2791781
+        },
+        {
+            "cmd": "new,,edb886cf-c7a8-4238-8265-fc5488cc9479",
+            "cmd_time": 1676204667.2826529,
+            "reply": "OK 2023-02-12_12-24-27,72ff986f-382a-478e-a069-5704acaf90e5",
+            "reply_time": 1676204667.2841992
+        },
+        {
+            "cmd": "time",
+            "cmd_time": 1676204667.308576,
+            "reply": "1676204667.3089888",
+            "reply_time": 1676204667.309266
+        },
+        {
+            "cmd": "session,2023-02-12_12-24-27,start,ranging",
+            "cmd_time": 1676204667.3129237,
+            "reply": "OK",
+            "reply_time": 1676204695.4305968
+        },
+        {
+            "cmd": "session,2023-02-12_12-24-27,stop,ranging",
+            "cmd_time": 1676205296.772413,
+            "reply": "OK",
+            "reply_time": 1676205306.835034
+        },
+        {
+            "cmd": "time",
+            "cmd_time": 1676205306.8933737,
+            "reply": "1676205306.893524",
+            "reply_time": 1676205306.893587
+        },
+        {
+            "cmd": "session,2023-02-12_12-24-27,start,testing",
+            "cmd_time": 1676205306.8971741,
+            "reply": "OK",
+            "reply_time": 1676205320.4435682
+        },
+        {
+            "cmd": "session,2023-02-12_12-24-27,stop,testing",
+            "cmd_time": 1676205921.7420332,
+            "reply": "OK",
+            "reply_time": 1676205931.7853577
+        }
+    ],
+    "uuid": {
+        "client": "edb886cf-c7a8-4238-8265-fc5488cc9479",
+        "server": "72ff986f-382a-478e-a069-5704acaf90e5"
+    },
+    "session_name": "2023-02-12_12-24-27",
+    "results": {
+        "power/ptd_logs.txt": "846e6b1fa89a52beeb1ad86b43f7fe7127a3f8ff",
+        "power/server.log": "249df72f9cc4c03829a1a297fdf9c0f743297318",
+        "ranging/spl.txt": "a39e188039a74123b2f6e2c2db6605ca8c71d3f0",
+        "run_1/spl.txt": "53a3a81216c2a1cd649f5878a60d163da2bd57f5"
+    },
+    "phases": {
+        "ranging": [
+            [
+                1676204667.31344,
+                3939407.582286992
+            ],
+            [
+                1676204695.430384,
+                3939435.699230489
+            ],
+            [
+                1676205296.772877,
+                3940037.041723922
+            ],
+            [
+                1676205306.8349724,
+                3940047.103818013
+            ]
+        ],
+        "testing": [
+            [
+                1676205306.8973472,
+                3940047.166193372
+            ],
+            [
+                1676205320.443273,
+                3940060.712120448
+            ],
+            [
+                1676205921.742224,
+                3940662.011069736
+            ],
+            [
+                1676205931.7852287,
+                3940672.054075151
+            ]
+        ]
+    },
+    "ptd_messages": [
+        {
+            "cmd": "Hello",
+            "reply": "Hello, PTDaemon here!"
+        },
+        {
+            "cmd": "Identify",
+            "reply": "YokogawaWT310E,1000,1,1,1,1,0,1,1,version=1.10.0-ed9a21d2-20220817,OS=Linux 5.15.0-56-generic #62-Ubuntu SMP Tue Nov 22 19:54:14 UTC 2022 x86_64,mode=power,1,1,1,0,0,no_cal_date,YOKOGAWA;WT310E;C3YD21068E;F1.04"
+        },
+        {
+            "cmd": "RR",
+            "reply": "Ranges,0,0.100000,0,600.000000"
+        },
+        {
+            "cmd": "SR,V,Auto",
+            "reply": "Range V changed"
+        },
+        {
+            "cmd": "SR,A,Auto",
+            "reply": "Range A changed"
+        },
+        {
+            "cmd": "Go,1000,0,2023-02-12_12-24-27_ranging",
+            "reply": "Starting untimed measurement, maximum 500000 samples at 1000ms with 0 rampup samples"
+        },
+        {
+            "cmd": "Stop",
+            "reply": "Stopping untimed measurement"
+        },
+        {
+            "cmd": "SR,V,247.900000",
+            "reply": "Range V changed"
+        },
+        {
+            "cmd": "SR,A,0.198290",
+            "reply": "Range A changed"
+        },
+        {
+            "cmd": "Go,1000,0,2023-02-12_12-24-27_testing",
+            "reply": "Starting untimed measurement, maximum 500000 samples at 1000ms with 0 rampup samples"
+        },
+        {
+            "cmd": "Stop",
+            "reply": "Stopping untimed measurement"
+        },
+        {
+            "cmd": "Stop",
+            "reply": "Error: no measurement to stop"
+        },
+        {
+            "cmd": "SR,V,600.000000",
+            "reply": "Range V changed"
+        },
+        {
+            "cmd": "SR,A,0.100000",
+            "reply": "Range A changed"
+        }
+    ],
+    "ptd_config": {
+        "command": [
+            "/media/arjun/T7_Touch/hp-envy/CM/repos/local/cache/9b3695ca8255492a/power/inference_v1.0/ptd-linux-x86",
+            "-l",
+            "/tmp/tmp6_9o2crq/ptd_logfile.txt",
+            "-p",
+            "8888",
+            "49",
+            "/dev/usbtmc0"
+        ],
+        "device_type": 49,
+        "interface_flag": "",
+        "device_port": "/dev/usbtmc0",
+        "channel": null
+    }
+}

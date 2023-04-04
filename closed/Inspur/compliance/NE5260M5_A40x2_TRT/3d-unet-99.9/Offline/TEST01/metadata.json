@@ -1,0 +1,18 @@
+{
+    "audit_success": true,
+    "audit_test": "TEST01",
+    "benchmark_full": "3d-unet-99.9",
+    "benchmark_short": "3d-unet",
+    "config_name": "NE5260M5_A40x2_TRT-custom_k_99_9_MaxP-Offline",
+    "detected_system": "SystemConfiguration(host_cpu_conf=CPUConfiguration(layout={CPU(name=\"Intel(R) Xeon(R) Gold 6258R CPU @ 2.70GHz\", architecture=CPUArchitecture.x86_64, core_count=28, threads_per_core=2): 2}), host_mem_conf=MemoryConfiguration(host_memory_capacity=Memory(quantity=1.055444176, byte_suffix=ByteSuffix.TB), comparison_tolerance=0.05), accelerator_conf=AcceleratorConfiguration(layout={GPU(name=\"NVIDIA A40\", accelerator_type=AcceleratorType.Discrete, vram=Memory(quantity=44.98828125, byte_suffix=ByteSuffix.GiB), max_power_limit=300.0, pci_id=\"0x223510DE\", compute_sm=86): 2}), numa_conf=NUMAConfiguration(numa_nodes={0: NUMANode(index=0, cpus=[Interval(start=0, end=27), Interval(start=56, end=83)], gpus=[0]), 1: NUMANode(index=1, cpus=[Interval(start=28, end=55), Interval(start=84, end=111)], gpus=[1])}, num_numa_nodes=2), system_id=\"NE5260M5_A40x2\")",
+    "early_stopping_met": true,
+    "result_samples_per_second": 3.85226,
+    "result_validity": "VALID",
+    "satisfies_query_constraint": false,
+    "scenario": "Offline",
+    "scenario_key": "result_samples_per_second",
+    "summary_string": "result_samples_per_second: 3.85226, Result is VALID",
+    "system_name": "NE5260M5_A40x2_TRT",
+    "tensorrt_version": "8.6.0",
+    "test_mode": "PerformanceOnly"
+}

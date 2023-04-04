@@ -1,0 +1,18 @@
+{
+    "audit_success": true,
+    "audit_test": "TEST01",
+    "benchmark_full": "3d-unet-99.9",
+    "benchmark_short": "3d-unet",
+    "config_name": "NF5468M6_A40x8_TRT-custom_k_99_9_MaxP-Offline",
+    "detected_system": "SystemConfiguration(host_cpu_conf=CPUConfiguration(layout={CPU(name=\"Intel(R) Xeon(R) Platinum 8380 CPU @ 2.30GHz\", architecture=CPUArchitecture.x86_64, core_count=40, threads_per_core=2): 2}), host_mem_conf=MemoryConfiguration(host_memory_capacity=Memory(quantity=2.113442368, byte_suffix=ByteSuffix.TB), comparison_tolerance=0.05), accelerator_conf=AcceleratorConfiguration(layout={GPU(name=\"NVIDIA A40\", accelerator_type=AcceleratorType.Discrete, vram=Memory(quantity=44.98828125, byte_suffix=ByteSuffix.GiB), max_power_limit=300.0, pci_id=\"0x223510DE\", compute_sm=86): 8}), numa_conf=NUMAConfiguration(numa_nodes={0: NUMANode(index=0, cpus=[Interval(start=0, end=39), Interval(start=80, end=119)], gpus=[0, 1, 2, 3]), 1: NUMANode(index=1, cpus=[Interval(start=40, end=79), Interval(start=120, end=159)], gpus=[4, 5, 6, 7])}, num_numa_nodes=2), system_id=\"NF5468M6_A40x8\")",
+    "early_stopping_met": true,
+    "result_samples_per_second": 14.8143,
+    "result_validity": "VALID",
+    "satisfies_query_constraint": false,
+    "scenario": "Offline",
+    "scenario_key": "result_samples_per_second",
+    "summary_string": "result_samples_per_second: 14.8143, Result is VALID",
+    "system_name": "NF5468M6_A40x8_TRT",
+    "tensorrt_version": "8.6.0",
+    "test_mode": "PerformanceOnly"
+}

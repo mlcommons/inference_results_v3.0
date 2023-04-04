@@ -1,0 +1,123 @@
+cmake_minimum_required(VERSION 3.2)
+SET(LOADGEN_INCLUDE_DIR /Users/victor.bittorf/src/inference/loadgen/build/libmlperf_loadgen.a)
+unset(LOADGEN_LIB CACHE)
+# find_library(LOADGEN_LIB NAMES libmlperf_loadgen.a PATHS ${LOADGEN_LIB_DIR})
+
+SET(LOADGEN_LIB  /Users/victor.bittorf/src/inference/loadgen/build/libmlperf_loadgen.a)
+
+SET(GST_INCLUDE_DIRS  /opt/homebrew/include/gstreamer-1.0/)
+SET(GST_LIBRARIES /opt/homebrew/lib)
+set(CMAKE_VERBOSE_MAKEFILE ON)
+set(VERBOSE ON)
+
+
+# set(CMAKE_OSX_ARCHITECTURES "x86_64")
+# set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE INTERNAL "" FORCE)
+
+
+
+message( ${LOADGEN_LIB})
+
+add_compile_definitions(PACKAGE="mlpserfsrc")
+
+add_compile_definitions(GST_LICENSE="APACHE")
+add_compile_definitions(PACKAGE_VERSION="0.1")
+add_compile_definitions(GST_PACKAGE_ORIGIN="GST_PACKAGE_ORIGIN")
+add_compile_definitions(GST_PACKAGE_NAME="mlperfsrc")
+
+SET(CMAKE_CXX_FLAGS "-O3 -std=c++11")
+project( loadgen_plugin )
+include_directories( ../../../inference/loadgen/ )
+# find_package( mlperf_loadgen REQUIRED )
+# add_executable( test_drive test_drive.cpp )
+
+link_directories(${GST_LIBRARIES})
+link_directories(/opt/homebrew/lib/gstreamer-1.0)
+link_directories(/opt/homebrew/opt/gst-plugins-base/lib)
+
+# add_library(gstmlperfsrc SHARED mlperfsrc.cc)
+# add_library(gstmlperfsrc SHARED gstplugin.c)
+add_library(imagenet_data imagenet_data.cc)
+add_library(loadgen_plugin SHARED loadgen_plugin.cc)
+add_library(gstmlperfsrc SHARED mlperfsrc.cc)
+add_library(gstmlperfsink SHARED mlperfsink.cc)
+# add_library(gstmlperfsrc STATIC mlperfsrc.cc)
+
+TARGET_LINK_LIBRARIES(loadgen_plugin ${LOADGEN_LIB} imagenet_data)
+TARGET_LINK_LIBRARIES(gstmlperfsrc loadgen_plugin)
+TARGET_LINK_LIBRARIES(gstmlperfsink loadgen_plugin)
+
+
+target_include_directories(gstmlperfsrc PRIVATE ${GST_INCLUDE_DIRS})
+target_include_directories(gstmlperfsrc PRIVATE /opt/homebrew/include/glib-2.0)
+target_include_directories(gstmlperfsrc PRIVATE /opt/homebrew/lib/glib-2.0/include/)
+target_include_directories(gstmlperfsrc PRIVATE /opt/homebrew/lib/glib-2.0/include/)
+target_link_directories(gstmlperfsrc PRIVATE ${GST_LIBRARIES})
+target_link_directories(gstmlperfsrc PRIVATE /opt/homebrew/lib/gstreamer-1.0)
+target_link_directories(gstmlperfsrc PRIVATE /opt/homebrew/opt/gst-plugins-base/lib)
+target_link_directories(gstmlperfsrc PRIVATE /opt/homebrew/opt/gstreamer/lib)
+target_link_directories(gstmlperfsrc PRIVATE /opt/homebrew/opt/gst-devtools/lib)
+target_link_directories(gstmlperfsrc PRIVATE /opt/homebrew/Cellar/gst-plugins-base/1.20.3/lib/)
+target_link_directories(gstmlperfsrc PRIVATE /opt/homebrew/Cellar/gst-plugins-base/1.20.3/lib/gstreamer-1.0/)
+target_link_directories(gstmlperfsrc PRIVATE /opt/homebrew/Cellar/gst-plugins-base/1.20.3/lib/)
+target_link_directories(gstmlperfsrc PRIVATE /opt/homebrew/Cellar/gstreamer/1.20.4/lib/)
+target_link_directories(gstmlperfsrc PRIVATE /opt/homebrew/Cellar/gst-devtools/1.20.3_1/lib/)
+target_link_directories(gstmlperfsrc PRIVATE /opt/homebrew//Cellar/glib/2.74.0/lib/)
+
+TARGET_LINK_LIBRARIES(gstmlperfsrc
+  gstreamer-1.0
+  gstaudio-1.0
+  gstvideo-1.0
+  gstbase-1.0
+  glib-2.0
+  gobject-2.0
+  imagenet_data
+
+  # debug strmbasd
+  # optimized strmbase
+  # rpcrt4
+  # uuid
+  # winmm
+  # dmoguids
+  # wmcodecdspuuid
+  # msdmo
+)
+
+target_include_directories(gstmlperfsink PRIVATE ${GST_INCLUDE_DIRS})
+target_include_directories(gstmlperfsink PRIVATE /opt/homebrew/include/glib-2.0)
+target_include_directories(gstmlperfsink PRIVATE /opt/homebrew/lib/glib-2.0/include/)
+target_include_directories(gstmlperfsink PRIVATE /opt/homebrew/lib/glib-2.0/include/)
+target_link_directories(gstmlperfsink PRIVATE ${GST_LIBRARIES})
+target_link_directories(gstmlperfsink PRIVATE /opt/homebrew/lib/gstreamer-1.0)
+target_link_directories(gstmlperfsink PRIVATE /opt/homebrew/opt/gst-plugins-base/lib)
+target_link_directories(gstmlperfsink PRIVATE /opt/homebrew/opt/gstreamer/lib)
+target_link_directories(gstmlperfsink PRIVATE /opt/homebrew/opt/gst-devtools/lib)
+target_link_directories(gstmlperfsink PRIVATE /opt/homebrew/Cellar/gst-plugins-base/1.20.3/lib/)
+target_link_directories(gstmlperfsink PRIVATE /opt/homebrew/Cellar/gst-plugins-base/1.20.3/lib/gstreamer-1.0/)
+target_link_directories(gstmlperfsink PRIVATE /opt/homebrew/Cellar/gst-plugins-base/1.20.3/lib/)
+target_link_directories(gstmlperfsink PRIVATE /opt/homebrew/Cellar/gstreamer/1.20.4/lib/)
+target_link_directories(gstmlperfsink PRIVATE /opt/homebrew/Cellar/gst-devtools/1.20.3_1/lib/)
+target_link_directories(gstmlperfsink PRIVATE /opt/homebrew//Cellar/glib/2.74.0/lib/)
+
+TARGET_LINK_LIBRARIES(gstmlperfsink
+  gstreamer-1.0
+  gstaudio-1.0
+  gstvideo-1.0
+  gstbase-1.0
+  glib-2.0
+  gobject-2.0
+  imagenet_data
+
+  # debug strmbasd
+  # optimized strmbase
+  # rpcrt4
+  # uuid
+  # winmm
+  # dmoguids
+  # wmcodecdspuuid
+  # msdmo
+)
+
+
+# target_link_libraries(test_drive ${LOADGEN_LIB})
+

@@ -1,0 +1,37 @@
+client 2023-02-21 14:55:54,679 [INFO] Creating output directory '/home/arjun/orin_results/valid_results/arjun_orin-cpp-cpu-onnxruntime-vdefault-default_config/resnet50/offline/performance/tmp_power'
+client 2023-02-21 14:55:54,739 [INFO] Sending command to the server: 'mlcommons/power client v3'
+client 2023-02-21 14:55:54,742 [INFO] Got response: 'mlcommons/power server v3'
+client 2023-02-21 14:55:54,742 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-02-21 14:55:54,864 [INFO] NTP:offset = -0.004 s, delay = 0.012 s 
+client 2023-02-21 14:55:54,865 [INFO] Sending command to the server: 'time'
+client 2023-02-21 14:55:54,868 [INFO] Got response: '1676991354.8644016'
+client 2023-02-21 14:55:54,868 [INFO] The time difference between the client and the server is within range 0.930 ms..4.460 ms
+client 2023-02-21 14:55:54,869 [INFO] Sending command to the server: 'new,,de06fd73-cfa0-48b0-a931-29962b97933a'
+client 2023-02-21 14:55:54,873 [INFO] Got response: 'OK 2023-02-21_14-55-54,996821ed-83f3-4eb1-ad1e-cda73ff521a4'
+client 2023-02-21 14:55:54,873 [INFO] Session id is '2023-02-21_14-55-54'
+client 2023-02-21 14:55:54,873 [INFO] Sources: {"sources": {"__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "client.py": "33ca4f26368777ac06e01f9567b714a4b8063886", "lib/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/client.py": "4c2b78fb4849a7e5b584ef792d82aaed20b17f57", "lib/common.py": "624d0c0acc7c39aaff3674f0b99d6a09da53d1dc", "lib/external/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/external/ntplib.py": "4da8f970656505a40483206ef2b5d3dd5e81711d", "lib/server.py": "cda0cdfaee9bfa1249c64a7dd4f89b7bf1b279f0", "lib/source_hashes.py": "60a2e02193209e8d392803326208d5466342da18", "lib/summary.py": "aa92f0a3f975eecd44d3c0cd0236342ccc9f941d", "lib/time_sync.py": "3210db56eb0ff0df57bf4293dc4d4b03fffd46f1", "server.py": "c3f90f2f7eeb4db30727556d0c815ebc89b3d28b", "tests/unit/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "tests/unit/test_server.py": "99ae15aef722f2000ee6ed1ae1523637bf1ae42b", "tests/unit/test_source_hashes.py": "00468a2907583c593e6574a1f6b404e4651c221a"}, "modules": {"ptd_client_server.lib.client": "lib/client.py", "ptd_client_server.lib.common": "lib/common.py", "ptd_client_server.lib.external.ntplib": "lib/external/ntplib.py", "ptd_client_server.lib.source_hashes": "lib/source_hashes.py", "ptd_client_server.lib.summary": "lib/summary.py", "ptd_client_server.lib.time_sync": "lib/time_sync.py"}}
+client 2023-02-21 14:55:54,874 [INFO] Running workload in ranging mode
+client 2023-02-21 14:55:54,874 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-02-21 14:55:54,896 [INFO] NTP:offset = -0.004 s, delay = 0.020 s 
+client 2023-02-21 14:55:54,896 [INFO] Sending command to the server: 'time'
+client 2023-02-21 14:55:54,903 [INFO] Got response: '1676991354.8964436'
+client 2023-02-21 14:55:54,903 [INFO] The time difference between the client and the server is within range 0.393 ms..7.060 ms
+client 2023-02-21 14:55:54,903 [INFO] Sending command to the server: 'session,2023-02-21_14-55-54,start,ranging'
+client 2023-02-21 14:56:23,030 [INFO] Got response: 'OK'
+client 2023-02-21 14:56:23,031 [INFO] Running the workload '/home/arjun/run.out'
+client 2023-02-21 15:27:52,550 [INFO] Sending command to the server: 'session,2023-02-21_14-55-54,stop,ranging'
+client 2023-02-21 15:28:02,745 [INFO] Got response: 'OK'
+client 2023-02-21 15:28:02,795 [INFO] Copying loadgen logs from '/home/arjun/orin_results/valid_results/arjun_orin-cpp-cpu-onnxruntime-vdefault-default_config/resnet50/offline/performance/run_1' to '/home/arjun/orin_results/valid_results/arjun_orin-cpp-cpu-onnxruntime-vdefault-default_config/resnet50/offline/performance/tmp_power/ranging'
+client 2023-02-21 15:28:02,797 [INFO] Running workload in testing mode
+client 2023-02-21 15:28:02,797 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-02-21 15:28:02,832 [INFO] NTP:offset = 0.004 s, delay = 0.019 s 
+client 2023-02-21 15:28:02,833 [INFO] Sending command to the server: 'time'
+client 2023-02-21 15:28:02,836 [INFO] Got response: '1676993282.837974'
+client 2023-02-21 15:28:02,836 [INFO] The time difference between the client and the server is within range -4.941 ms..-1.675 ms
+client 2023-02-21 15:28:02,836 [INFO] Sending command to the server: 'session,2023-02-21_14-55-54,start,testing'
+client 2023-02-21 15:28:16,047 [INFO] Got response: 'OK'
+client 2023-02-21 15:28:16,048 [INFO] Running the workload '/home/arjun/run.out'
+client 2023-02-21 15:59:29,495 [INFO] Sending command to the server: 'session,2023-02-21_14-55-54,stop,testing'
+client 2023-02-21 15:59:39,559 [INFO] Got response: 'OK'
+client 2023-02-21 15:59:39,563 [INFO] Copying loadgen logs from '/home/arjun/orin_results/valid_results/arjun_orin-cpp-cpu-onnxruntime-vdefault-default_config/resnet50/offline/performance/run_1' to '/home/arjun/orin_results/valid_results/arjun_orin-cpp-cpu-onnxruntime-vdefault-default_config/resnet50/offline/performance/tmp_power/run_1'
+client 2023-02-21 15:59:39,565 [INFO] Done runs

@@ -1,0 +1,135 @@
+{
+    "version": "1.0",
+    "timezone": 0,
+    "modules": {
+        "ptd_client_server.lib.client": "lib/client.py",
+        "ptd_client_server.lib.common": "lib/common.py",
+        "ptd_client_server.lib.external.ntplib": "lib/external/ntplib.py",
+        "ptd_client_server.lib.source_hashes": "lib/source_hashes.py",
+        "ptd_client_server.lib.summary": "lib/summary.py",
+        "ptd_client_server.lib.time_sync": "lib/time_sync.py"
+    },
+    "sources": {
+        "__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+        "client.py": "33ca4f26368777ac06e01f9567b714a4b8063886",
+        "lib/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+        "lib/client.py": "4c2b78fb4849a7e5b584ef792d82aaed20b17f57",
+        "lib/common.py": "624d0c0acc7c39aaff3674f0b99d6a09da53d1dc",
+        "lib/external/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+        "lib/external/ntplib.py": "4da8f970656505a40483206ef2b5d3dd5e81711d",
+        "lib/server.py": "cda0cdfaee9bfa1249c64a7dd4f89b7bf1b279f0",
+        "lib/source_hashes.py": "60a2e02193209e8d392803326208d5466342da18",
+        "lib/summary.py": "aa92f0a3f975eecd44d3c0cd0236342ccc9f941d",
+        "lib/time_sync.py": "3210db56eb0ff0df57bf4293dc4d4b03fffd46f1",
+        "server.py": "c3f90f2f7eeb4db30727556d0c815ebc89b3d28b",
+        "tests/unit/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+        "tests/unit/test_server.py": "99ae15aef722f2000ee6ed1ae1523637bf1ae42b",
+        "tests/unit/test_source_hashes.py": "00468a2907583c593e6574a1f6b404e4651c221a"
+    },
+    "messages": [
+        {
+            "cmd": "mlcommons/power client v3",
+            "cmd_time": 1677551994.3437905,
+            "reply": "mlcommons/power server v3",
+            "reply_time": 1677551994.3444676
+        },
+        {
+            "cmd": "time",
+            "cmd_time": 1677551994.4113693,
+            "reply": "1677551994.4109313",
+            "reply_time": 1677551994.4126608
+        },
+        {
+            "cmd": "new,,ae692c84-dd94-405f-b46c-f51416d0b196",
+            "cmd_time": 1677551994.4132931,
+            "reply": "OK 2023-02-28_02-39-54,3cd2e437-10ae-463a-a7a4-5b48824b4799",
+            "reply_time": 1677551994.414941
+        },
+        {
+            "cmd": "time",
+            "cmd_time": 1677551994.4409108,
+            "reply": "1677551994.440462",
+            "reply_time": 1677551994.4419277
+        },
+        {
+            "cmd": "session,2023-02-28_02-39-54,start,ranging",
+            "cmd_time": 1677551994.4432185,
+            "reply": "OK",
+            "reply_time": 1677552022.5497959
+        },
+        {
+            "cmd": "session,2023-02-28_02-39-54,stop,ranging",
+            "cmd_time": 1677552640.1482542,
+            "reply": "OK",
+            "reply_time": 1677552650.5643864
+        },
+        {
+            "cmd": "time",
+            "cmd_time": 1677552650.65417,
+            "reply": "1677552650.653737",
+            "reply_time": 1677552650.655366
+        },
+        {
+            "cmd": "session,2023-02-28_02-39-54,start,testing",
+            "cmd_time": 1677552650.6573536,
+            "reply": "OK",
+            "reply_time": 1677552663.672817
+        },
+        {
+            "cmd": "session,2023-02-28_02-39-54,stop,testing",
+            "cmd_time": 1677553281.2854557,
+            "reply": "OK",
+            "reply_time": 1677553291.5062423
+        }
+    ],
+    "uuid": {
+        "client": "ae692c84-dd94-405f-b46c-f51416d0b196",
+        "server": "3cd2e437-10ae-463a-a7a4-5b48824b4799"
+    },
+    "session_name": "2023-02-28_02-39-54",
+    "results": {
+        "power/client.log": "290c01408670c494257ad091d047b372cdf366ac",
+        "ranging/mlperf_log_detail.txt": "6c0e58782e77df8c22821d72b5a7e10db7f2a572",
+        "ranging/mlperf_log_summary.txt": "bfc35d8a82925d144a94087c8ec8b9db7908d054",
+        "run_1/mlperf_log_detail.txt": "2c6fc552aaaa15c4711c28696296b7cf3cce233f",
+        "run_1/mlperf_log_summary.txt": "f8e1e12c60e78074c5053fb604904ae4217d46a2"
+    },
+    "phases": {
+        "ranging": [
+            [
+                1677551994.442908,
+                95760.524107179
+            ],
+            [
+                1677552022.5511124,
+                95788.632314622
+            ],
+            [
+                1677552640.147246,
+                96406.228447397
+            ],
+            [
+                1677552650.5654516,
+                96416.646651363
+            ]
+        ],
+        "testing": [
+            [
+                1677552650.656808,
+                96416.738008083
+            ],
+            [
+                1677552663.6738076,
+                96429.755007011
+            ],
+            [
+                1677553281.284336,
+                97047.365537937
+            ],
+            [
+                1677553291.5075505,
+                97057.588752637
+            ]
+        ]
+    }
+}

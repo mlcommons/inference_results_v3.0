@@ -1,0 +1,56 @@
+================================================
+MLPerf Results Summary
+================================================
+SUT name : Network SUT
+Scenario : Server
+Mode     : PerformanceOnly
+Scheduled samples per second : 11998.17
+Result is : VALID
+  Performance constraints satisfied : Yes
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+Early Stopping Result:
+ * Run successful.
+
+================================================
+Additional Stats
+================================================
+Completed samples per second    : 11997.18
+
+Min latency (ns)                : 36186155
+Max latency (ns)                : 295279165
+Mean latency (ns)               : 52429872
+50.00 percentile latency (ns)   : 52335220
+90.00 percentile latency (ns)   : 60349938
+95.00 percentile latency (ns)   : 62395984
+97.00 percentile latency (ns)   : 63537325
+99.00 percentile latency (ns)   : 65501153
+99.90 percentile latency (ns)   : 91115379
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 1
+target_qps : 12000
+target_latency (ns): 130000000
+max_async_queries : 0
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 270336
+max_query_count : 0
+qsl_rng_seed : 10003631887983097364
+sample_index_rng_seed : 17183018601990103738
+schedule_rng_seed : 12134888396634371638
+accuracy_log_rng_seed : 720381539243781796
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 4096
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 10833
+
+2 warnings encountered. See detailed log.
+
+No errors encountered during test.

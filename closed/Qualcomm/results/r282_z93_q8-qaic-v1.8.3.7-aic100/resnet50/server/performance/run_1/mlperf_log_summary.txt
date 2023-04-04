@@ -1,0 +1,56 @@
+================================================
+MLPerf Results Summary
+================================================
+SUT name : KILT_SERVER
+Scenario : Server
+Mode     : PerformanceOnly
+Scheduled samples per second : 173191.01
+Result is : VALID
+  Performance constraints satisfied : Yes
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+Early Stopping Result:
+ * Run successful.
+
+================================================
+Additional Stats
+================================================
+Completed samples per second    : 173190.23
+
+Min latency (ns)                : 2592021
+Max latency (ns)                : 63049504
+Mean latency (ns)               : 3293539
+50.00 percentile latency (ns)   : 2904030
+90.00 percentile latency (ns)   : 3718425
+95.00 percentile latency (ns)   : 4410510
+97.00 percentile latency (ns)   : 4989907
+99.00 percentile latency (ns)   : 10490921
+99.90 percentile latency (ns)   : 34295755
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 1
+target_qps : 173175
+target_latency (ns): 15000000
+max_async_queries : 0
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 270336
+max_query_count : 0
+qsl_rng_seed : 10003631887983097364
+sample_index_rng_seed : 17183018601990103738
+schedule_rng_seed : 12134888396634371638
+accuracy_log_rng_seed : 0
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 0
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 1024
+
+13 warnings encountered. See detailed log.
+
+No errors encountered during test.

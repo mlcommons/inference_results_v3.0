@@ -1,0 +1,37 @@
+client 2023-02-28 23:13:57,360 [INFO] Creating output directory '/home/arjun/mobilenet_results/valid_results/arjun_orin-tflite_armnn_cpp-cpu-armnn_tflite-v22.11-using_neon/efficientnet-int8-lite4/singlestream/performance/tmp_power'
+client 2023-02-28 23:13:57,622 [INFO] Sending command to the server: 'mlcommons/power client v3'
+client 2023-02-28 23:13:57,625 [INFO] Got response: 'mlcommons/power server v3'
+client 2023-02-28 23:13:57,625 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-02-28 23:13:57,660 [INFO] NTP:offset = -0.004 s, delay = 0.026 s 
+client 2023-02-28 23:13:57,660 [INFO] Sending command to the server: 'time'
+client 2023-02-28 23:13:57,664 [INFO] Got response: '1677626037.665152'
+client 2023-02-28 23:13:57,665 [INFO] The time difference between the client and the server is within range -4.596 ms..-0.152 ms
+client 2023-02-28 23:13:57,665 [INFO] Sending command to the server: 'new,,dc55a974-d3e2-450b-8d97-07a2a9091e5a'
+client 2023-02-28 23:13:57,669 [INFO] Got response: 'OK 2023-02-28_23-13-57,cec40e4c-19f9-4d6b-bd95-51b1ecb79e13'
+client 2023-02-28 23:13:57,669 [INFO] Session id is '2023-02-28_23-13-57'
+client 2023-02-28 23:13:57,670 [INFO] Sources: {"sources": {"__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "client.py": "33ca4f26368777ac06e01f9567b714a4b8063886", "lib/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/client.py": "4c2b78fb4849a7e5b584ef792d82aaed20b17f57", "lib/common.py": "624d0c0acc7c39aaff3674f0b99d6a09da53d1dc", "lib/external/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/external/ntplib.py": "4da8f970656505a40483206ef2b5d3dd5e81711d", "lib/server.py": "cda0cdfaee9bfa1249c64a7dd4f89b7bf1b279f0", "lib/source_hashes.py": "60a2e02193209e8d392803326208d5466342da18", "lib/summary.py": "aa92f0a3f975eecd44d3c0cd0236342ccc9f941d", "lib/time_sync.py": "3210db56eb0ff0df57bf4293dc4d4b03fffd46f1", "server.py": "c3f90f2f7eeb4db30727556d0c815ebc89b3d28b", "tests/unit/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "tests/unit/test_server.py": "99ae15aef722f2000ee6ed1ae1523637bf1ae42b", "tests/unit/test_source_hashes.py": "00468a2907583c593e6574a1f6b404e4651c221a"}, "modules": {"ptd_client_server.lib.client": "lib/client.py", "ptd_client_server.lib.common": "lib/common.py", "ptd_client_server.lib.external.ntplib": "lib/external/ntplib.py", "ptd_client_server.lib.source_hashes": "lib/source_hashes.py", "ptd_client_server.lib.summary": "lib/summary.py", "ptd_client_server.lib.time_sync": "lib/time_sync.py"}}
+client 2023-02-28 23:13:57,670 [INFO] Running workload in ranging mode
+client 2023-02-28 23:13:57,670 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-02-28 23:13:57,703 [INFO] NTP:offset = -0.005 s, delay = 0.029 s 
+client 2023-02-28 23:13:57,703 [INFO] Sending command to the server: 'time'
+client 2023-02-28 23:13:57,707 [INFO] Got response: '1677626037.708283'
+client 2023-02-28 23:13:57,707 [INFO] The time difference between the client and the server is within range -4.566 ms..-0.979 ms
+client 2023-02-28 23:13:57,707 [INFO] Sending command to the server: 'session,2023-02-28_23-13-57,start,ranging'
+client 2023-02-28 23:14:25,844 [INFO] Got response: 'OK'
+client 2023-02-28 23:14:25,845 [INFO] Running the workload '/home/arjun/run.out'
+client 2023-02-28 23:26:29,883 [INFO] Sending command to the server: 'session,2023-02-28_23-13-57,stop,ranging'
+client 2023-02-28 23:26:40,421 [INFO] Got response: 'OK'
+client 2023-02-28 23:26:40,432 [INFO] Copying loadgen logs from '/home/arjun/mobilenet_results/valid_results/arjun_orin-tflite_armnn_cpp-cpu-armnn_tflite-v22.11-using_neon/efficientnet-int8-lite4/singlestream/performance/run_1' to '/home/arjun/mobilenet_results/valid_results/arjun_orin-tflite_armnn_cpp-cpu-armnn_tflite-v22.11-using_neon/efficientnet-int8-lite4/singlestream/performance/tmp_power/ranging'
+client 2023-02-28 23:26:40,433 [INFO] Running workload in testing mode
+client 2023-02-28 23:26:40,433 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-02-28 23:26:40,450 [INFO] NTP:offset = 0.002 s, delay = 0.015 s 
+client 2023-02-28 23:26:40,450 [INFO] Sending command to the server: 'time'
+client 2023-02-28 23:26:40,452 [INFO] Got response: '1677626800.4533145'
+client 2023-02-28 23:26:40,452 [INFO] The time difference between the client and the server is within range -2.915 ms..-0.784 ms
+client 2023-02-28 23:26:40,452 [INFO] Sending command to the server: 'session,2023-02-28_23-13-57,start,testing'
+client 2023-02-28 23:26:53,864 [INFO] Got response: 'OK'
+client 2023-02-28 23:26:53,865 [INFO] Running the workload '/home/arjun/run.out'
+client 2023-02-28 23:39:06,636 [INFO] Sending command to the server: 'session,2023-02-28_23-13-57,stop,testing'
+client 2023-02-28 23:39:16,876 [INFO] Got response: 'OK'
+client 2023-02-28 23:39:16,881 [INFO] Copying loadgen logs from '/home/arjun/mobilenet_results/valid_results/arjun_orin-tflite_armnn_cpp-cpu-armnn_tflite-v22.11-using_neon/efficientnet-int8-lite4/singlestream/performance/run_1' to '/home/arjun/mobilenet_results/valid_results/arjun_orin-tflite_armnn_cpp-cpu-armnn_tflite-v22.11-using_neon/efficientnet-int8-lite4/singlestream/performance/tmp_power/run_1'
+client 2023-02-28 23:39:16,883 [INFO] Done runs

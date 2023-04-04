@@ -1,0 +1,279 @@
+# Copyright (c) 2022, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# This Makefile includes all the variables and targets used to set up NVIDIA's MLPerf Inference docker environment
+
+
+include $(CURDIR)/Makefile.const
+
+
+USE_NIGHTLY ?= 0
+USE_NGC ?= 1
+
+# Docker is supported for all non-xavier x86/aarch64 system.
+SUPPORT_DOCKER := 0
+ifeq ($(ARCH), $(filter $(ARCH), x86_64 aarch64))
+ifneq ($(IS_SOC), 1)
+    SUPPORT_DOCKER = 1
+else
+    ifeq ($(SOC_SM), 87)
+        # Docker is supported for Orin.
+        SUPPORT_DOCKER = 1
+    endif
+endif
+endif
+
+# Conditional Docker flags
+ifndef DOCKER_DETACH
+    DOCKER_DETACH := 0
+endif
+ifndef DOCKER_TAG
+    DOCKER_TAG := $(UNAME)-$(ARCH)
+endif
+
+DOCKER_NAME := mlperf-inference-$(DOCKER_TAG)
+
+DOCKER_BUILDKIT ?= 1
+HOST_VOL ?= ${PWD}
+CONTAINER_VOL ?= /work
+NO_DOCKER_PULL ?= 0
+NO_BUILD ?= 0
+
+
+# The below paths are for internal use only.
+# If any extra mounting path is needed, please use DOCKER_ARGS environment variables
+ifneq ($(wildcard /home/scratch.mlperf_inference),)
+    DOCKER_MOUNTS += -v /home/scratch.mlperf_inference:/home/scratch.mlperf_inference
+endif
+ifneq ($(wildcard /home/scratch.svc_compute_arch),)
+    DOCKER_MOUNTS += -v /home/scratch.svc_compute_arch:/home/scratch.svc_compute_arch
+endif
+ifneq ($(wildcard /home/scratch.computelab/sudo),)
+    DOCKER_MOUNTS += -v /home/scratch.computelab/sudo:/home/scratch.computelab/sudo
+endif
+ifneq ($(wildcard /home/scratch.dlsim),)
+    DOCKER_MOUNTS += -v /home/scratch.dlsim:/home/scratch.dlsim
+endif
+ifneq ($(wildcard $(PROJECT_ROOT)/../../regression),)
+    DOCKER_MOUNTS += -v $(PROJECT_ROOT)/../../regression:/regression
+endif
+ifdef MLPERF_SCRATCH_PATH
+    ifneq ($(wildcard $(MLPERF_SCRATCH_PATH)),)
+        DOCKER_MOUNTS += -v $(MLPERF_SCRATCH_PATH):$(MLPERF_SCRATCH_PATH)
+    else
+        $(error Path set in MLPERF_SCRATCH_PATH does not exist!)
+    endif
+endif
+
+# Handle different nvidia-docker version. Do not use nvidia-docker when running with CPUs
+ifeq ($(USE_CPU), 1)
+    DOCKER_RUN_CMD := docker run
+else ifeq ($(USE_INFERENTIA)), 1)
+    DOCKER_RUN_CMD := docker run
+else ifneq ($(wildcard /usr/bin/nvidia-docker),)
+    DOCKER_RUN_CMD := nvidia-docker run
+    # Set Environment variables to fix docker client and server version mismatch
+    # Related issue: https://github.com/kubernetes-sigs/kubespray/issues/6160
+    export DOCKER_API_VERSION=1.40
+else
+    DOCKER_RUN_CMD := docker run --gpus=all --runtime=nvidia
+endif
+
+
+# If specific DOCKER_COMMAND is not passed, launch interactive docker container session.
+ifeq ($(DOCKER_COMMAND),)
+    DOCKER_INTERACTIVE_FLAGS = -it
+else
+    DOCKER_INTERACTIVE_FLAGS =
+endif
+
+# Determine docker base image
+ifneq ($(IS_SOC), 1)
+    DOCKER_IMAGE_NAME := base-cuda$(CUDA_VER)-$(ARCH)-ubuntu20.04
+    DOCKER_IMAGE_NGC_PARTNER := mlpinf-v3.0.2-cuda$(CUDA_VER)-cudnn8.8-$(ARCH)-ubuntu20.04-partner
+    ifeq ($(USE_NGC), 1)
+        BASE_IMAGE ?= nvcr.io/yrleydyexu3y/mlpinf-partner/mlperf-inference:$(DOCKER_IMAGE_NGC_PARTNER)
+    else
+        # Check if we are on intranet
+        ifeq ($(IS_INTRANET), 0)
+            BASE_IMAGE ?= gitlab-master.nvidia.com/compute/mlperf-inference:$(DOCKER_IMAGE_NAME)
+        else
+            ifeq ($(CUDA_VER), 12.0)
+                ifeq ($(TARGET_X86_64), 1)
+                    BASE_IMAGE ?= nvidia/cuda:12.0.0-devel-ubuntu20.04@sha256:25208888402b0087116e5c9c858ff48b8e3b9b612c70da216fcb66d0c6ad5ddd
+                else ifeq ($(TARGET_AARCH64), 1)
+                    BASE_IMAGE ?= nvidia/cuda:12.0.0-devel-ubuntu20.04@sha256:6d831f963dbe570878859fa67c2efd522a3d3a3d194f491fb61f46c1ed2f7690
+                else
+                    $(error MLPerf Inference only supports x86 and aarch64 system now.)
+                endif
+            else
+                $(error MLPerf Inference v3.0 code requires cuda version 12.0 on Non-SOC systems)
+            endif
+        endif
+    endif # check_intranet
+else
+    CUDA_VER := 11.4
+    DOCKER_IMAGE_NAME := base-cuda$(CUDA_VER)-$(ARCH)-orin
+    ifeq ($(SOC_SM), 87) # orin check
+        ifeq ($(IS_INTRANET), 0)
+            BASE_IMAGE ?= gitlab-master.nvidia.com/compute/mlperf-inference:$(DOCKER_IMAGE_NAME)
+        else
+            BASE_IMAGE ?= nvcr.io/nvidia/l4t-base:r35.2.1
+        endif
+    else
+        $(error MLPerf Inference SOC only supports Orin system now.)
+    endif
+endif # soc check
+
+DOCKER_FILENAME := Dockerfile.$(ARCH)
+ifeq ($(IS_SOC), 1)
+    ifeq ($(SOC_SM), 87)
+        DOCKER_FILENAME = Dockerfile.orin
+    endif
+endif
+
+
+# Small helper to check if nvidia-docker is installed correctly.
+.PHONY: docker_sanity
+docker_sanity:
+	docker pull nvcr.io/nvidia/cuda:11.0.3-runtime-ubuntu18.04
+	$(DOCKER_RUN_CMD) --rm \
+		-e NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES} \
+		nvcr.io/nvidia/cuda:11.0.3-runtime-ubuntu18.04 nvidia-smi
+	@echo "Nvidia-docker is installed correctly!"
+
+
+# Build the docker image and launch an interactive container.
+# For CPU builds, first build the backend libraries and copy them into the working directory
+.PHONY: prebuild
+prebuild:
+	@$(MAKE) -f Makefile.build build_triton_backends
+	@$(MAKE) -f Makefile.docker build_docker NO_BUILD?=1
+ifneq ($(strip ${DOCKER_DETACH}), 1)
+	@$(MAKE) -f Makefile.docker configure_mig MIG_CONF=$(MIG_CONF)
+	@$(MAKE) -f Makefile.docker attach_docker || true
+	@$(MAKE) -f Makefile.docker teardown_mig MIG_CONF=$(MIG_CONF)
+endif
+
+
+# Configure MIG
+.PHONY: configure_mig
+configure_mig:
+	if [ $(MIG_CONF) != "OFF" ]; then MIG_CONF=$(MIG_CONF) ./scripts/mig_configure.sh; fi
+
+
+# Tear down MIG
+.PHONY: teardown_mig
+teardown_mig:
+	if [ $(MIG_CONF) != "OFF" ]; then ./scripts/mig_teardown.sh; fi
+
+
+# Build the docker image for x86 and aarch64 non-xavier systems.
+.PHONY: build_docker
+build_docker:
+ifeq ($(SUPPORT_DOCKER), 1)
+	@echo "Building Docker image"
+ifeq ($(NO_DOCKER_PULL), 0)
+ifneq ($(USE_CPU), 1)
+	docker pull $(BASE_IMAGE)
+endif
+endif
+	DOCKER_BUILDKIT=$(DOCKER_BUILDKIT) docker build -t mlperf-inference:$(DOCKER_TAG)-latest \
+		--build-arg BASE_IMAGE=$(BASE_IMAGE) \
+		--build-arg CUDA_VER=$(CUDA_VER) \
+		--build-arg DRIVER_VER_MAJOR=$(DRIVER_VER_MAJOR) \
+		--build-arg USE_CPU=$(USE_CPU) \
+		--build-arg USE_NIGHTLY=$(USE_NIGHTLY) \
+		--build-arg USE_NGC=$(USE_NGC) \
+		--build-arg IS_HOPPER=$(IS_HOPPER) \
+		--build-arg IS_INTRANET=$(IS_INTRANET) \
+		--network host \
+		-f docker/$(DOCKER_FILENAME) docker
+ifeq ($(NO_BUILD), 0)
+	DOCKER_BUILDKIT=$(DOCKER_BUILDKIT) docker build -t mlperf-inference:$(DOCKER_TAG)-latest --no-cache --network host \
+		--build-arg BASE_IMAGE=mlperf-inference:$(DOCKER_TAG)-latest \
+		-f docker/Dockerfile.build .
+endif # NO_BUILD
+endif # OS/xavier check
+
+
+# Add current user into docker image.
+.PHONY: docker_add_user
+docker_add_user:
+ifeq ($(SUPPORT_DOCKER), 1)
+	@echo "Adding user account into image"
+	DOCKER_BUILDKIT=$(DOCKER_BUILDKIT) docker build -t mlperf-inference:$(DOCKER_TAG) --network host \
+		--build-arg BASE_IMAGE=mlperf-inference:$(DOCKER_TAG)-latest \
+		--build-arg GID=$(GROUPID) --build-arg UID=$(UID) --build-arg GROUP=$(GROUPNAME) --build-arg USER=$(UNAME) \
+		- < docker/Dockerfile.user
+endif
+
+
+# Add user and launch an interactive container session.
+.PHONY: attach_docker
+attach_docker:
+	@$(MAKE) -f Makefile.docker docker_add_user
+ifneq ($(USE_INFERENTIA), 1)
+	@$(MAKE) -f Makefile.docker launch_docker
+endif
+ifeq ($(USE_INFERENTIA), 1)
+	@$(MAKE) -f Makefile.docker launch_inferentia_docker
+endif
+
+
+# Launch a container session for inferentia.
+.PHONY: launch_inferentia_docker
+launch_inferentia_docker:
+	@echo "Launching inferentia docker"
+	docker run --rm $(DOCKER_INTERACTIVE_FLAGS) -w /work \
+		-v $(HOST_VOL):$(CONTAINER_VOL) -v ${HOME}:/${HOME}:rw \
+		$(shell scripts/get_inferentia_device_list.sh) \
+		--cap-add SYS_ADMIN --cap-add SYS_TIME \
+		-e "AWS_NEURON_VISIBLE_DEVICES=ALL" \
+		-e "USE_INFERENTIA=1" \
+		--shm-size=32gb \
+		-v /lib/udev:/mylib/udev \
+		-v /etc/timezone:/etc/timezone:ro -v /etc/localtime:/etc/localtime:ro \
+		--security-opt apparmor=unconfined --security-opt seccomp=unconfined \
+		--name $(DOCKER_NAME) -h $(shell echo $(DOCKER_NAME) | cut -c -64) --add-host $(DOCKER_NAME):127.0.0.1 \
+		--cpuset-cpus $(shell taskset -c -p $$$$ | awk '{print $$NF}') \
+		--user $(UID):$(GROUPID) --net host --device /dev/fuse \
+		--ulimit memlock=-1 \
+		$(DOCKER_ARGS) \
+		-e MLPERF_SCRATCH_PATH=/home/ubuntu/mlperf_scratch \
+		-e HOST_HOSTNAME=$(HOSTNAME) \
+		mlperf-inference:$(DOCKER_TAG) $(DOCKER_COMMAND)
+
+
+# Launch a container session.
+.PHONY: launch_docker
+launch_docker:
+ifeq ($(SUPPORT_DOCKER), 1)
+	$(DOCKER_RUN_CMD) --rm $(DOCKER_INTERACTIVE_FLAGS) -w /work \
+		-v $(HOST_VOL):$(CONTAINER_VOL) -v ${HOME}:/mnt/${HOME} \
+		--cap-add SYS_ADMIN --cap-add SYS_TIME \
+		-e NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES} \
+		-e HISTFILE=/mnt/${HOME}/.mlperf_bash_history \
+		--shm-size=32gb \
+		-v /etc/timezone:/etc/timezone:ro -v /etc/localtime:/etc/localtime:ro \
+		--security-opt apparmor=unconfined --security-opt seccomp=unconfined \
+		--name $(DOCKER_NAME) -h $(shell echo $(DOCKER_NAME) | cut -c -64) --add-host $(DOCKER_NAME):127.0.0.1 \
+		--cpuset-cpus $(shell taskset -c -p $$$$ | awk '{print $$NF}') \
+		--user $(UID) --net host --device /dev/fuse \
+		$(DOCKER_MOUNTS) $(DOCKER_ARGS) \
+		-e MLPERF_SCRATCH_PATH=$(MLPERF_SCRATCH_PATH) \
+		-e HOST_HOSTNAME=$(HOSTNAME) \
+		$(shell if [ $(MIG_CONF) == "ALL" ]; then echo "--gpus all -e NVIDIA_MIG_CONFIG_DEVICES=all"; elif [ $(MIG_CONF) != "OFF" ]; then echo "--gpus '\"device=`bash scripts/mig_get_uuid.sh`\"'"; fi) \
+		mlperf-inference:$(DOCKER_TAG) $(DOCKER_COMMAND)
+endif

@@ -1,0 +1,137 @@
+diff --git a/intel_extension_for_pytorch/csrc/jit/codegen/onednn/prepare_dequant.cpp b/intel_extension_for_pytorch/csrc/jit/codegen/onednn/prepare_dequant.cpp
+index d054024..d6833f4 100644
+--- a/intel_extension_for_pytorch/csrc/jit/codegen/onednn/prepare_dequant.cpp
++++ b/intel_extension_for_pytorch/csrc/jit/codegen/onednn/prepare_dequant.cpp
+@@ -88,7 +88,7 @@ void PrepareDequantForLLGA(std::shared_ptr<Graph>& graph) {
+ }
+ 
+ void addInformationForDequant(Node* node, Node* input_node) {
+-  if (input_node->kind() == Symbol::aten("quantize_per_tensor")) {
++  if ((input_node->kind() == Symbol::aten("quantize_per_tensor")) || (input_node->kind() == Symbol::aten("_make_per_tensor_quantized_tensor"))) {
+     node->s_(Symbol::attr("qtype"), std::string("per_tensor"));
+ 
+     std::vector<int64_t> zps_vector = Operator::IntToVector(input_node, 2);
+@@ -154,7 +154,8 @@ void DequantInformationSave(Node* node) {
+   TORCH_CHECK(
+       input_node->kind() == prim::Constant ||
+           input_node->kind() == Symbol::aten("quantize_per_tensor") ||
+-          input_node->kind() == Symbol::aten("quantize_per_channel"),
++          input_node->kind() == Symbol::aten("quantize_per_channel") || 
++          input_node->kind() == Symbol::aten("_make_per_tensor_quantized_tensor"),
+       "Unsupported input node kind to dequant ",
+       input_node->kind().toQualString());
+   addInformationForDequant(node, input_node);
+diff --git a/intel_extension_for_pytorch/quantization/_quantize_utils.py b/intel_extension_for_pytorch/quantization/_quantize_utils.py
+index 94b7194..41bd323 100644
+--- a/intel_extension_for_pytorch/quantization/_quantize_utils.py
++++ b/intel_extension_for_pytorch/quantization/_quantize_utils.py
+@@ -10,7 +10,7 @@ from torch.quantization.qconfig import QConfig
+ from ._utils import get_torch_function_hook_type, HookType, get_module_hook_type, OpQuantizeabilityType, \
+     attach_op_convert_info_to_model, save_quant_state, attach_scale_zp_values_to_model, convert_quant_state_map_to_nodes, \
+         sync_pool_and_lstm_input_output_scale_zp, module_call_to_function_call, quantized_modules_has_weights, \
+-        load_qconf_summary_to_model, get_fqn_valid_for_module_dict_key
++        load_qconf_summary_to_model, get_fqn_valid_for_module_dict_key, sync_add_relu_input_output_scale_zp
+ from ._quantization_state import AutoQuantizationState, AutoQuantizationStateModuleDict, init_model_quant_state
+ from ._recipe import get_default_recipe
+ from ._module_swap_utils import swap_child_modules
+@@ -321,6 +321,7 @@ def auto_prepare(
+                 nodes = convert_quant_state_map_to_nodes(quant_state_map)
+                 # pooling and lstm's input and output should have same scale_zp.
+                 sync_pool_and_lstm_input_output_scale_zp(quant_state_map, nodes)
++                sync_add_relu_input_output_scale_zp(quant_state_map, nodes)
+                 get_default_recipe(nodes)
+             # Setting model qconf_summary attr which can be easily to check the whether the scale/zp has been computed.
+             self._qconf_summary = qconf_summary
+@@ -560,6 +561,7 @@ def auto_convert(
+         nodes = convert_quant_state_map_to_nodes(quant_state_map)
+         # pooling and lstm's input and output should have same scale_zp.
+         sync_pool_and_lstm_input_output_scale_zp(quant_state_map, nodes)
++        sync_add_relu_input_output_scale_zp(quant_state_map, nodes)
+         get_default_recipe(nodes)
+     else:
+         # Clear observer if module have, this will works when the user's json setting is loaded.
+diff --git a/intel_extension_for_pytorch/quantization/_recipe.py b/intel_extension_for_pytorch/quantization/_recipe.py
+index 33e8201..fd47ce4 100644
+--- a/intel_extension_for_pytorch/quantization/_recipe.py
++++ b/intel_extension_for_pytorch/quantization/_recipe.py
+@@ -309,7 +309,7 @@ def get_default_recipe(nodes):
+             if node.type in add_ops:
+                 # gemm+add fusion
+                 _add_recipe(node)
+-            elif node.type in  elt_wise_q_ops:
++            elif node.type in elt_wise_q_ops:
+                 # don't have a pre_node, we can say it doesn't have a pre quantizable node.
+                 has_pre_quantized_node = True
+                 # If Has gemm(add) pre_op can be fused, not insert fake quant.
+@@ -338,3 +338,10 @@ def get_default_recipe(nodes):
+                     node.input_tensor_force_inf_dtype[0] = node.input_tensor_infos[0].inf_dtype
+ 
+     set_node_output_quantized(nodes)
++    
++    for node in nodes:
++        if isinstance(node, ParentNode):
++            continue
++        if node.type in elt_wise_q_ops:
++            # disable relu quantized for accuracy issue.
++            node.input_tensor_force_inf_dtype[0] = node.input_tensor_infos[0].orig_dtype
+diff --git a/intel_extension_for_pytorch/quantization/_utils.py b/intel_extension_for_pytorch/quantization/_utils.py
+index 08a4302..ab9b205 100644
+--- a/intel_extension_for_pytorch/quantization/_utils.py
++++ b/intel_extension_for_pytorch/quantization/_utils.py
+@@ -320,6 +320,56 @@ def sync_pool_and_lstm_input_output_scale_zp(quant_state_map, nodes):
+                 _sync_scale_zp_given_id(quant_state_map, id, scale_zp)
+ 
+ 
++
++def sync_add_relu_input_output_scale_zp(quant_state_map, nodes):
++    relu_op = [str(nn.ReLU), str(torch.relu), str(F.relu), str(torch.Tensor.relu)]
++    add_op = [str(torch.add), str(torch.Tensor.add)]
++
++    def _sync_scale_zp_given_id(quant_state_map, id, scale_zp):
++        for _, v in quant_state_map.items():
++            if id in v.tensor_id_to_scale_zp:
++                v.tensor_id_to_scale_zp[id] = scale_zp
++    def _get_scale_zp_given_id(quant_state_map, id):
++        for _, v in quant_state_map.items():
++            if id in v.tensor_id_to_scale_zp:
++                return v.tensor_id_to_scale_zp[id]
++    for node in nodes:
++        if isinstance(node, ParentNode):
++            continue
++        # add+relu
++        if node.qconfig is not None and node.type in add_op and len(node.post_nodes) == 1 and node.post_nodes[0].type in relu_op:
++            tensor_ids = [node.input_tensor_infos[0].id, node.input_tensor_infos[1].id, node.output_tensor_infos[0].id]
++            last_relu_output_id = node.post_nodes[0].output_tensor_infos[0].id 
++            add_relu_next_node = node.post_nodes[0].post_nodes
++
++            while add_relu_next_node is not None and len(add_relu_next_node) > 0:
++                # add_relu_next_node is add_relu
++                if add_relu_next_node[0].type in add_op and \
++                        (len(add_relu_next_node[0].post_nodes) == 1 and add_relu_next_node[0].post_nodes[0].type in relu_op):
++                    tensor_ids.append(add_relu_next_node[0].input_tensor_infos[0].id)
++                    tensor_ids.append(add_relu_next_node[0].input_tensor_infos[1].id)
++                    tensor_ids.append(add_relu_next_node[0].output_tensor_infos[0].id)
++                    last_relu_output_id = add_relu_next_node[0].post_nodes[0].output_tensor_infos[0].id
++                    add_relu_next_node = add_relu_next_node[0].post_nodes[0].post_nodes
++                elif len(add_relu_next_node) == 2 and add_relu_next_node[1].type in add_op and \
++                        (len(add_relu_next_node[1].post_nodes) == 1 and add_relu_next_node[1].post_nodes[0].type in relu_op):
++                    tensor_ids.append(add_relu_next_node[1].input_tensor_infos[0].id)
++                    tensor_ids.append(add_relu_next_node[1].input_tensor_infos[1].id)
++                    tensor_ids.append(add_relu_next_node[1].output_tensor_infos[0].id)
++                    last_relu_output_id = add_relu_next_node[1].post_nodes[0].output_tensor_infos[0].id
++                    add_relu_next_node = add_relu_next_node[1].post_nodes[0].post_nodes
++                else:
++                    add_relu_next_node = None
++            # last add+relu output's scales
++            scale_zp = _get_scale_zp_given_id(quant_state_map, last_relu_output_id)
++            for id in tensor_ids:
++                _sync_scale_zp_given_id(quant_state_map, id, scale_zp)
++
++
++
++
++
++
+ def _check_after_nodes_all_quantized_give_node(node):
+     r"""
+     This function is about check whether given node's post nodes are all quantized,

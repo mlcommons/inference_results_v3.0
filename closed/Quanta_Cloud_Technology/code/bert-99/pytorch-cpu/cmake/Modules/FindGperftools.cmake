@@ -1,0 +1,14 @@
+# Find TCMalloc Library and Include
+# TCMALLOC_INCLUDE_DIR
+# TCMALLOC_LIBRARY
+
+find_path(TCMALLOC_INCLUDE_DIRS
+  NAMES malloc_extension.h
+  PATH_SUFFIXES gperftools)
+find_library(TCMALLOC_LIBRARIES NAMES tcmalloc)
+
+if (TCMALLOC_LIBRARIES)
+  set(GPERFTOOLS_LIBRARIES ${TCMALLOC_LIBRARIES})
+  set(GPERFTOOLS_INCLUDE_DIRS ${TCMALLOC_INCLUDE_DIRS})
+  set(Gperftools_FOUND TRUE)
+endif()

@@ -1,0 +1,41 @@
+# Copyright (c) 2023, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# This Makefile includes all targets related to CI/CD tests for NVIDIA's MLPerf Inference codebase
+
+
+include $(CURDIR)/Makefile.const
+
+MINIMAL_REGRESSION_PRESUBMIT ?= 0
+TEST_FLAGS := --ignore=internal/test_data --ignore=internal/correlation --ignore=internal/__pycache__ -s --durations 0 -vv -rXfw
+
+
+.PHONY: unit_tests
+unit_tests:
+	@$(MAKE) -f Makefile.build clone_loadgen  # Necessary, as some unit tests import from MLCommons submission checker
+	@$(PYTHON3_CMD) -m pytest $(TEST_FLAGS) --ignore=internal/e2e internal $(RUN_ARGS) # All unit tests (non-End-to-End)
+
+.PHONY: e2e_tests
+e2e_tests:
+ifeq ($(MINIMAL_REGRESSION_PRESUBMIT), 0)
+	@$(PYTHON3_CMD) -m pytest $(TEST_FLAGS) internal/e2e/checkin -k "generate_engines"
+	@$(PYTHON3_CMD) -m pytest $(TEST_FLAGS) internal/e2e/checkin -k "run_harness"
+	@$(PYTHON3_CMD) -m pytest $(TEST_FLAGS) internal/e2e/checkin -k "accuracy"
+endif
+	@$(PYTHON3_CMD) -m pytest $(TEST_FLAGS) internal/e2e/checkin -k "functionality"
+
+.PHONY: regression_presubmit
+regression_presubmit:
+	@$(MAKE) -f Makefile.tests unit_tests
+	@$(MAKE) -f Makefile.tests e2e_tests

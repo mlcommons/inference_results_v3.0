@@ -1,0 +1,652 @@
+make[1]: Entering directory '/work'
+TEST01 trial 1
+make[2]: Entering directory '/work'
+audio_batch_size : 1024
+audio_buffer_num_lines : 4096
+benchmark : Benchmark.RNNT
+buffer_manager_thread_count : 0
+dali_batches_issue_ahead : 0
+dali_pipeline_depth : 1
+data_dir : /home/ubuntu/mlpinf-v3/v3.0.3-partner-drop/data
+gpu_batch_size : 2048
+gpu_copy_streams : 1
+gpu_inference_streams : 1
+input_dtype : fp16
+input_format : linear
+log_dir : build/compliance_logs/TEST01
+map_path : data_maps/rnnt_dev_clean_512/val_map.txt
+num_warmups : 40480
+offline_expected_qps : 53200
+precision : fp16
+preprocessed_data_dir : /home/ubuntu/mlpinf-v3/v3.0.3-partner-drop/preprocessed_data
+scenario : Scenario.Offline
+system : SystemConfiguration(host_cpu_conf=CPUConfiguration(layout={CPU(name='Intel(R) Xeon(R) Gold 6444Y', architecture=<CPUArchitecture.x86_64: AliasedName(name='x86_64', aliases=(), patterns=())>, core_count=16, threads_per_core=2): 2}), host_mem_conf=MemoryConfiguration(host_memory_capacity=Memory(quantity=528.06514, byte_suffix=<ByteSuffix.GB: (1000, 3)>, _num_bytes=528065140000), comparison_tolerance=0.05), accelerator_conf=AcceleratorConfiguration(layout=defaultdict(<class 'int'>, {GPU(name='NVIDIA A100 80GB PCIe', accelerator_type=<AcceleratorType.Discrete: AliasedName(name='Discrete', aliases=(), patterns=())>, vram=Memory(quantity=80.0, byte_suffix=<ByteSuffix.GiB: (1024, 3)>, _num_bytes=85899345920), max_power_limit=300.0, pci_id='0x20B510DE', compute_sm=80): 4})), numa_conf=NUMAConfiguration(numa_nodes={0: NUMANode(index=0, cpus=[Interval(start=0, end=7), Interval(start=32, end=39)], gpus=[0]), 1: NUMANode(index=1, cpus=[Interval(start=8, end=15), Interval(start=40, end=47)], gpus=[1]), 2: NUMANode(index=2, cpus=[Interval(start=16, end=23), Interval(start=48, end=55)], gpus=[2]), 3: NUMANode(index=3, cpus=[Interval(start=24, end=31), Interval(start=56, end=63)], gpus=[3])}, num_numa_nodes=4), system_id='A100X4_751GE')
+tensor_path : build/preprocessed_data/rnnt_dev_clean_512/fp16
+use_graphs : True
+system_id : A100X4_751GE
+config_name : A100X4_751GE_rnnt_Offline
+workload_setting : WorkloadSetting(HarnessType.Custom, AccuracyTarget.k_99, PowerSetting.MaxP)
+optimization_level : plugin-enabled
+use_cpu : False
+use_inferentia : False
+config_ver : custom_k_99_MaxP
+accuracy_level : 99%
+inference_server : custom
+audit_test_name : TEST01
+skip_file_checks : False
+power_limit : None
+cpu_freq : None
+&&&& RUNNING RNN-T_Harness # ./build/bin/harness_rnnt
+[I] Starting creating QSL.
+[I] Finished creating QSL.
+[I] Starting creating SUT.
+[I] Set to device 0
+Dali pipeline creating..
+Dali pipeline created
+[I] Creating stream 0/1
+[I] [TRT] Loaded engine size: 81 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +1446, GPU +370, now: CPU 2067, GPU 3222 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +206, GPU +58, now: CPU 2273, GPU 3280 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 0 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2306, GPU 3340 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 2306, GPU 3348 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +4174, now: CPU 0, GPU 4174 (MiB)
+[I] Created RnntEncoder runner: encoder
+[I] [TRT] Loaded engine size: 3 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2313, GPU 7532 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 2313, GPU 7542 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 4174 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2313, GPU 7598 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 2313, GPU 7606 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +18, now: CPU 0, GPU 4192 (MiB)
+[I] Created RnntDecoder runner: decoder
+[I] [TRT] Loaded engine size: 1 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +1, now: CPU 0, GPU 4193 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 4193 (MiB)
+[I] Created RnntJointFc1 runner: fc1_a
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +1, now: CPU 0, GPU 4194 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 4194 (MiB)
+[I] Created RnntJointFc1 runner: fc1_b
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 4194 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +2, now: CPU 0, GPU 4196 (MiB)
+[I] Created RnntJointBackend runner: joint_backend
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2316, GPU 7644 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 2316, GPU 7654 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 4196 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2316, GPU 7646 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 2316, GPU 7654 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 4196 (MiB)
+[I] Created RnntIsel runner: isel
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 4196 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +260, now: CPU 0, GPU 4456 (MiB)
+[I] Created RnntIgather runner: igather
+[I] Instantiated RnntEngineContainer runner
+cudaMemcpy blocking 
+cudaMemcpy blocking 
+[I] Instantiated RnntTensorContainer host memory
+Stream::Stream sampleSize: 61440
+Stream::Stream singleSampleSize: 480
+Stream::Stream fullseqSampleSize: 61440
+Stream::Stream mBatchSize: 2048
+[I] Set to device 1
+Dali pipeline creating..
+Dali pipeline created
+[I] Creating stream 0/1
+[I] [TRT] Loaded engine size: 81 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +5, GPU +8, now: CPU 2722, GPU 2918 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +2, GPU +10, now: CPU 2724, GPU 2928 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 4456 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2724, GPU 2978 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 2724, GPU 2986 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +4174, now: CPU 0, GPU 8630 (MiB)
+[I] Created RnntEncoder runner: encoder
+[I] [TRT] Loaded engine size: 3 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2731, GPU 7170 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 2731, GPU 7180 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 8630 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2731, GPU 7184 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 2731, GPU 7192 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +19, now: CPU 0, GPU 8649 (MiB)
+[I] Created RnntDecoder runner: decoder
+[I] [TRT] Loaded engine size: 1 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +1, now: CPU 0, GPU 8650 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 8650 (MiB)
+[I] Created RnntJointFc1 runner: fc1_a
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 8650 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 8650 (MiB)
+[I] Created RnntJointFc1 runner: fc1_b
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 8650 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +2, now: CPU 0, GPU 8652 (MiB)
+[I] Created RnntJointBackend runner: joint_backend
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2734, GPU 7230 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 2734, GPU 7240 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 8652 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2734, GPU 7232 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 2734, GPU 7240 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 8652 (MiB)
+[I] Created RnntIsel runner: isel
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 8652 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +260, now: CPU 0, GPU 8912 (MiB)
+[I] Created RnntIgather runner: igather
+[I] Instantiated RnntEngineContainer runner
+cudaMemcpy blocking 
+cudaMemcpy blocking 
+[I] Instantiated RnntTensorContainer host memory
+Stream::Stream sampleSize: 61440
+Stream::Stream singleSampleSize: 480
+Stream::Stream fullseqSampleSize: 61440
+Stream::Stream mBatchSize: 2048
+[I] Set to device 2
+Dali pipeline creating..
+Dali pipeline created
+[I] Creating stream 0/1
+[I] [TRT] Loaded engine size: 81 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +5, GPU +8, now: CPU 3140, GPU 2918 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +1, GPU +10, now: CPU 3141, GPU 2928 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 8912 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3142, GPU 2978 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 3142, GPU 2986 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +4174, now: CPU 0, GPU 13086 (MiB)
+[I] Created RnntEncoder runner: encoder
+[I] [TRT] Loaded engine size: 3 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3148, GPU 7170 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +1, GPU +10, now: CPU 3149, GPU 7180 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 13086 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3149, GPU 7184 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 3149, GPU 7192 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +19, now: CPU 0, GPU 13105 (MiB)
+[I] Created RnntDecoder runner: decoder
+[I] [TRT] Loaded engine size: 1 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +1, now: CPU 0, GPU 13106 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 13106 (MiB)
+[I] Created RnntJointFc1 runner: fc1_a
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 13106 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 13106 (MiB)
+[I] Created RnntJointFc1 runner: fc1_b
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 13106 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +2, now: CPU 0, GPU 13108 (MiB)
+[I] Created RnntJointBackend runner: joint_backend
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3151, GPU 7230 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 3151, GPU 7240 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 13108 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3151, GPU 7232 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 3151, GPU 7240 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 13108 (MiB)
+[I] Created RnntIsel runner: isel
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 13108 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +260, now: CPU 0, GPU 13368 (MiB)
+[I] Created RnntIgather runner: igather
+[I] Instantiated RnntEngineContainer runner
+cudaMemcpy blocking 
+cudaMemcpy blocking 
+[I] Instantiated RnntTensorContainer host memory
+Stream::Stream sampleSize: 61440
+Stream::Stream singleSampleSize: 480
+Stream::Stream fullseqSampleSize: 61440
+Stream::Stream mBatchSize: 2048
+[I] Set to device 3
+Dali pipeline creating..
+Dali pipeline created
+[I] Creating stream 0/1
+[I] [TRT] Loaded engine size: 81 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +5, GPU +8, now: CPU 3558, GPU 2920 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +1, GPU +10, now: CPU 3559, GPU 2930 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 13368 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3559, GPU 2980 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +1, GPU +8, now: CPU 3560, GPU 2988 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +4174, now: CPU 0, GPU 17542 (MiB)
+[I] Created RnntEncoder runner: encoder
+[I] [TRT] Loaded engine size: 3 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3566, GPU 7172 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +1, GPU +10, now: CPU 3567, GPU 7182 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +1, now: CPU 0, GPU 17543 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3566, GPU 7186 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +1, GPU +8, now: CPU 3567, GPU 7194 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +18, now: CPU 0, GPU 17561 (MiB)
+[I] Created RnntDecoder runner: decoder
+[I] [TRT] Loaded engine size: 1 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +1, now: CPU 0, GPU 17562 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 17562 (MiB)
+[I] Created RnntJointFc1 runner: fc1_a
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +1, now: CPU 0, GPU 17563 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 17563 (MiB)
+[I] Created RnntJointFc1 runner: fc1_b
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 17563 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +2, now: CPU 0, GPU 17565 (MiB)
+[I] Created RnntJointBackend runner: joint_backend
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3569, GPU 7232 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 3569, GPU 7242 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 17565 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3569, GPU 7234 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 3569, GPU 7242 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 17565 (MiB)
+[I] Created RnntIsel runner: isel
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 17565 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +260, now: CPU 0, GPU 17825 (MiB)
+[I] Created RnntIgather runner: igather
+[I] Instantiated RnntEngineContainer runner
+cudaMemcpy blocking 
+cudaMemcpy blocking 
+[I] Instantiated RnntTensorContainer host memory
+Stream::Stream sampleSize: 61440
+Stream::Stream singleSampleSize: 480
+Stream::Stream fullseqSampleSize: 61440
+Stream::Stream mBatchSize: 2048
+[I] Finished creating SUT.
+[I] Starting warming up SUT.
+[I] Finished warming up SUT.
+[I] Starting running actual test.
+================================================
+MLPerf Results Summary
+================================================
+SUT name : RNNT SERVER
+Scenario : Offline
+Mode     : PerformanceOnly
+Samples per second: 52535.4
+Result is : VALID
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+
+================================================
+Additional Stats
+================================================
+Min latency (ns)                : 5204125543
+Max latency (ns)                : 668349876177
+Mean latency (ns)               : 425611966688
+50.00 percentile latency (ns)   : 464487827340
+90.00 percentile latency (ns)   : 642091067186
+95.00 percentile latency (ns)   : 655718088113
+97.00 percentile latency (ns)   : 660901776641
+99.00 percentile latency (ns)   : 665934368337
+99.90 percentile latency (ns)   : 668108930807
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 35112000
+target_qps : 53200
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 1
+max_query_count : 0
+qsl_rng_seed : 10003631887983097364
+sample_index_rng_seed : 17183018601990103738
+schedule_rng_seed : 12134888396634371638
+accuracy_log_rng_seed : 720381539243781796
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 4096
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 2513
+
+5 warnings encountered. See detailed log.
+
+No errors encountered during test.
+[I] Finished running actual test.
+&&&& PASSED RNN-T_Harness # ./build/bin/harness_rnnt
+Verifying accuracy. This might take a while...
+Reading accuracy mode results...
+Reading performance mode results...
+num_acc_log_entries = 2513
+num_acc_log_duplicate_keys = 0
+num_acc_log_data_mismatch = 0
+num_perf_log_entries = 4150
+num_perf_log_qsl_idx_match = 4150
+num_perf_log_data_mismatch = 0
+num_missing_qsl_idxs = 0
+TEST PASS
+
+Verifying performance.
+reference score = 52979.7
+test score = 52535.4
+TEST PASS
+Parsing arguments.
+Accuracy check pass: True
+Performance check pass: True
+TEST01 verification complete
+make[2]: Leaving directory '/work'
+make[1]: Leaving directory '/work'
+make[1]: Entering directory '/work'
+TEST04 trial 1
+make[2]: Entering directory '/work'
+Sleep to reset thermal state before TEST04...
+make[2]: Leaving directory '/work'
+make[1]: Leaving directory '/work'
+make[1]: Entering directory '/work'
+TEST05 trial 1
+make[2]: Entering directory '/work'
+Sleep to reset thermal state before TEST05...
+audio_batch_size : 1024
+audio_buffer_num_lines : 4096
+benchmark : Benchmark.RNNT
+buffer_manager_thread_count : 0
+dali_batches_issue_ahead : 0
+dali_pipeline_depth : 1
+data_dir : /home/ubuntu/mlpinf-v3/v3.0.3-partner-drop/data
+gpu_batch_size : 2048
+gpu_copy_streams : 1
+gpu_inference_streams : 1
+input_dtype : fp16
+input_format : linear
+log_dir : build/compliance_logs/TEST05
+map_path : data_maps/rnnt_dev_clean_512/val_map.txt
+num_warmups : 40480
+offline_expected_qps : 53200
+precision : fp16
+preprocessed_data_dir : /home/ubuntu/mlpinf-v3/v3.0.3-partner-drop/preprocessed_data
+scenario : Scenario.Offline
+system : SystemConfiguration(host_cpu_conf=CPUConfiguration(layout={CPU(name='Intel(R) Xeon(R) Gold 6444Y', architecture=<CPUArchitecture.x86_64: AliasedName(name='x86_64', aliases=(), patterns=())>, core_count=16, threads_per_core=2): 2}), host_mem_conf=MemoryConfiguration(host_memory_capacity=Memory(quantity=528.06514, byte_suffix=<ByteSuffix.GB: (1000, 3)>, _num_bytes=528065140000), comparison_tolerance=0.05), accelerator_conf=AcceleratorConfiguration(layout=defaultdict(<class 'int'>, {GPU(name='NVIDIA A100 80GB PCIe', accelerator_type=<AcceleratorType.Discrete: AliasedName(name='Discrete', aliases=(), patterns=())>, vram=Memory(quantity=80.0, byte_suffix=<ByteSuffix.GiB: (1024, 3)>, _num_bytes=85899345920), max_power_limit=300.0, pci_id='0x20B510DE', compute_sm=80): 4})), numa_conf=NUMAConfiguration(numa_nodes={0: NUMANode(index=0, cpus=[Interval(start=0, end=7), Interval(start=32, end=39)], gpus=[0]), 1: NUMANode(index=1, cpus=[Interval(start=8, end=15), Interval(start=40, end=47)], gpus=[1]), 2: NUMANode(index=2, cpus=[Interval(start=16, end=23), Interval(start=48, end=55)], gpus=[2]), 3: NUMANode(index=3, cpus=[Interval(start=24, end=31), Interval(start=56, end=63)], gpus=[3])}, num_numa_nodes=4), system_id='A100X4_751GE')
+tensor_path : build/preprocessed_data/rnnt_dev_clean_512/fp16
+use_graphs : True
+system_id : A100X4_751GE
+config_name : A100X4_751GE_rnnt_Offline
+workload_setting : WorkloadSetting(HarnessType.Custom, AccuracyTarget.k_99, PowerSetting.MaxP)
+optimization_level : plugin-enabled
+use_cpu : False
+use_inferentia : False
+config_ver : custom_k_99_MaxP
+accuracy_level : 99%
+inference_server : custom
+audit_test_name : TEST05
+skip_file_checks : False
+power_limit : None
+cpu_freq : None
+&&&& RUNNING RNN-T_Harness # ./build/bin/harness_rnnt
+[I] Starting creating QSL.
+[I] Finished creating QSL.
+[I] Starting creating SUT.
+[I] Set to device 0
+Dali pipeline creating..
+Dali pipeline created
+[I] Creating stream 0/1
+[I] [TRT] Loaded engine size: 81 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +1446, GPU +370, now: CPU 2067, GPU 3222 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +206, GPU +58, now: CPU 2273, GPU 3280 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 0 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2306, GPU 3340 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 2306, GPU 3348 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +4174, now: CPU 0, GPU 4174 (MiB)
+[I] Created RnntEncoder runner: encoder
+[I] [TRT] Loaded engine size: 3 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2313, GPU 7532 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 2313, GPU 7542 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 4174 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2313, GPU 7598 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 2313, GPU 7606 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +18, now: CPU 0, GPU 4192 (MiB)
+[I] Created RnntDecoder runner: decoder
+[I] [TRT] Loaded engine size: 1 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +1, now: CPU 0, GPU 4193 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 4193 (MiB)
+[I] Created RnntJointFc1 runner: fc1_a
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +1, now: CPU 0, GPU 4194 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 4194 (MiB)
+[I] Created RnntJointFc1 runner: fc1_b
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 4194 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +2, now: CPU 0, GPU 4196 (MiB)
+[I] Created RnntJointBackend runner: joint_backend
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2316, GPU 7644 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 2316, GPU 7654 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 4196 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2316, GPU 7646 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 2316, GPU 7654 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 4196 (MiB)
+[I] Created RnntIsel runner: isel
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 4196 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +260, now: CPU 0, GPU 4456 (MiB)
+[I] Created RnntIgather runner: igather
+[I] Instantiated RnntEngineContainer runner
+cudaMemcpy blocking 
+cudaMemcpy blocking 
+[I] Instantiated RnntTensorContainer host memory
+Stream::Stream sampleSize: 61440
+Stream::Stream singleSampleSize: 480
+Stream::Stream fullseqSampleSize: 61440
+Stream::Stream mBatchSize: 2048
+[I] Set to device 1
+Dali pipeline creating..
+Dali pipeline created
+[I] Creating stream 0/1
+[I] [TRT] Loaded engine size: 81 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +5, GPU +8, now: CPU 2722, GPU 2918 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +2, GPU +10, now: CPU 2724, GPU 2928 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 4456 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2724, GPU 2978 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 2724, GPU 2986 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +4174, now: CPU 0, GPU 8630 (MiB)
+[I] Created RnntEncoder runner: encoder
+[I] [TRT] Loaded engine size: 3 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2731, GPU 7170 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 2731, GPU 7180 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 8630 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2731, GPU 7184 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 2731, GPU 7192 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +19, now: CPU 0, GPU 8649 (MiB)
+[I] Created RnntDecoder runner: decoder
+[I] [TRT] Loaded engine size: 1 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +1, now: CPU 0, GPU 8650 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 8650 (MiB)
+[I] Created RnntJointFc1 runner: fc1_a
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 8650 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 8650 (MiB)
+[I] Created RnntJointFc1 runner: fc1_b
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 8650 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +2, now: CPU 0, GPU 8652 (MiB)
+[I] Created RnntJointBackend runner: joint_backend
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2734, GPU 7230 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 2734, GPU 7240 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 8652 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 2734, GPU 7232 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 2734, GPU 7240 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 8652 (MiB)
+[I] Created RnntIsel runner: isel
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 8652 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +260, now: CPU 0, GPU 8912 (MiB)
+[I] Created RnntIgather runner: igather
+[I] Instantiated RnntEngineContainer runner
+cudaMemcpy blocking 
+cudaMemcpy blocking 
+[I] Instantiated RnntTensorContainer host memory
+Stream::Stream sampleSize: 61440
+Stream::Stream singleSampleSize: 480
+Stream::Stream fullseqSampleSize: 61440
+Stream::Stream mBatchSize: 2048
+[I] Set to device 2
+Dali pipeline creating..
+Dali pipeline created
+[I] Creating stream 0/1
+[I] [TRT] Loaded engine size: 81 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +5, GPU +8, now: CPU 3140, GPU 2918 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +1, GPU +10, now: CPU 3141, GPU 2928 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 8912 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3142, GPU 2978 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 3142, GPU 2986 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +4174, now: CPU 0, GPU 13086 (MiB)
+[I] Created RnntEncoder runner: encoder
+[I] [TRT] Loaded engine size: 3 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +1, GPU +8, now: CPU 3149, GPU 7170 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 3149, GPU 7180 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 13086 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3149, GPU 7184 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 3149, GPU 7192 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +19, now: CPU 0, GPU 13105 (MiB)
+[I] Created RnntDecoder runner: decoder
+[I] [TRT] Loaded engine size: 1 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +1, now: CPU 0, GPU 13106 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 13106 (MiB)
+[I] Created RnntJointFc1 runner: fc1_a
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 13106 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 13106 (MiB)
+[I] Created RnntJointFc1 runner: fc1_b
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 13106 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +2, now: CPU 0, GPU 13108 (MiB)
+[I] Created RnntJointBackend runner: joint_backend
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3151, GPU 7230 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 3151, GPU 7240 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 13108 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3151, GPU 7232 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 3151, GPU 7240 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 13108 (MiB)
+[I] Created RnntIsel runner: isel
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 13108 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +260, now: CPU 0, GPU 13368 (MiB)
+[I] Created RnntIgather runner: igather
+[I] Instantiated RnntEngineContainer runner
+cudaMemcpy blocking 
+cudaMemcpy blocking 
+[I] Instantiated RnntTensorContainer host memory
+Stream::Stream sampleSize: 61440
+Stream::Stream singleSampleSize: 480
+Stream::Stream fullseqSampleSize: 61440
+Stream::Stream mBatchSize: 2048
+[I] Set to device 3
+Dali pipeline creating..
+Dali pipeline created
+[I] Creating stream 0/1
+[I] [TRT] Loaded engine size: 81 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +5, GPU +8, now: CPU 3558, GPU 2920 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +1, GPU +10, now: CPU 3559, GPU 2930 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 13368 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3559, GPU 2980 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +1, GPU +8, now: CPU 3560, GPU 2988 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +4174, now: CPU 0, GPU 17542 (MiB)
+[I] Created RnntEncoder runner: encoder
+[I] [TRT] Loaded engine size: 3 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3566, GPU 7172 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +1, GPU +10, now: CPU 3567, GPU 7182 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +1, now: CPU 0, GPU 17543 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3566, GPU 7186 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +1, GPU +8, now: CPU 3567, GPU 7194 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +18, now: CPU 0, GPU 17561 (MiB)
+[I] Created RnntDecoder runner: decoder
+[I] [TRT] Loaded engine size: 1 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +1, now: CPU 0, GPU 17562 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 17562 (MiB)
+[I] Created RnntJointFc1 runner: fc1_a
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +1, now: CPU 0, GPU 17563 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 17563 (MiB)
+[I] Created RnntJointFc1 runner: fc1_b
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 17563 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +2, now: CPU 0, GPU 17565 (MiB)
+[I] Created RnntJointBackend runner: joint_backend
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3569, GPU 7232 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +10, now: CPU 3569, GPU 7242 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 17565 (MiB)
+[I] [TRT] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 3569, GPU 7234 (MiB)
+[I] [TRT] [MemUsageChange] Init cuDNN: CPU +0, GPU +8, now: CPU 3569, GPU 7242 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +0, now: CPU 0, GPU 17565 (MiB)
+[I] Created RnntIsel runner: isel
+[I] [TRT] Loaded engine size: 0 MiB
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +0, now: CPU 0, GPU 17565 (MiB)
+[I] [TRT] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +260, now: CPU 0, GPU 17825 (MiB)
+[I] Created RnntIgather runner: igather
+[I] Instantiated RnntEngineContainer runner
+cudaMemcpy blocking 
+cudaMemcpy blocking 
+[I] Instantiated RnntTensorContainer host memory
+Stream::Stream sampleSize: 61440
+Stream::Stream singleSampleSize: 480
+Stream::Stream fullseqSampleSize: 61440
+Stream::Stream mBatchSize: 2048
+[I] Finished creating SUT.
+[I] Starting warming up SUT.
+[I] Finished warming up SUT.
+[I] Starting running actual test.
+================================================
+MLPerf Results Summary
+================================================
+SUT name : RNNT SERVER
+Scenario : Offline
+Mode     : PerformanceOnly
+Samples per second: 52434.8
+Result is : VALID
+  Min duration satisfied : Yes
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+
+================================================
+Additional Stats
+================================================
+Min latency (ns)                : 4730869200
+Max latency (ns)                : 669631267260
+Mean latency (ns)               : 425771200732
+50.00 percentile latency (ns)   : 465352545775
+90.00 percentile latency (ns)   : 643114478303
+95.00 percentile latency (ns)   : 656881053727
+97.00 percentile latency (ns)   : 662073744106
+99.00 percentile latency (ns)   : 667182813515
+99.90 percentile latency (ns)   : 669402776419
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 35112000
+target_qps : 53200
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 1
+max_query_count : 0
+qsl_rng_seed : 14646058500348515648
+sample_index_rng_seed : 1207248993894122914
+schedule_rng_seed : 11879132697760422006
+accuracy_log_rng_seed : 0
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 0
+print_timestamps : 0
+performance_issue_unique : 0
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 2513
+
+6 warnings encountered. See detailed log.
+
+No errors encountered during test.
+[I] Finished running actual test.
+&&&& PASSED RNN-T_Harness # ./build/bin/harness_rnnt
+Verifying performance.
+reference score = 52979.7
+test score = 52434.8
+TEST PASS
+Parsing arguments.
+Performance check pass: True
+TEST05 verification complete
+make[2]: Leaving directory '/work'
+make[1]: Leaving directory '/work'

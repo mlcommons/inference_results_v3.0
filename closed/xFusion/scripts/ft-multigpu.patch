@@ -1,0 +1,35 @@
+diff --git a/3rdparty/fp8_qgmma_1x1/sharedCubinLoader.h b/3rdparty/fp8_qgmma_1x1/sharedCubinLoader.h
+index 97eeb80..644973b 100755
+--- a/3rdparty/fp8_qgmma_1x1/sharedCubinLoader.h
++++ b/3rdparty/fp8_qgmma_1x1/sharedCubinLoader.h
+@@ -173,7 +173,11 @@ private:
+ 
+     inline uint64_t hashID(int32_t sm) const
+     {
+-        return (uint64_t)sm;
++        // Concatenate sm with deviceID to support Multi-GPU cubin loading
++        // Bottom 32 bits are for SM, top 32 bits for deviceID
++        int32_t deviceID{0};
++        cudaGetDevice(&deviceID);
++        return (uint64_t) deviceID << 32 | (uint64_t)sm;
+     }
+ 
+     std::unordered_map<uint64_t, std::unique_ptr<TKernelList> const> mKernels;
+diff --git a/src/fastertransformer/utils/allocator.h b/src/fastertransformer/utils/allocator.h
+index d7a1421..3ce774e 100644
+--- a/src/fastertransformer/utils/allocator.h
++++ b/src/fastertransformer/utils/allocator.h
+@@ -85,13 +85,6 @@ public:
+                 free((void**)(&void_ptr), is_host);
+                 return malloc(size, is_set_zero, is_host);
+             }
+-#if !defined(CUDA_MEMORY_POOL_DISABLED)
+-            else if (realloc_type == ReallocType::DECREASE) {
+-                FT_LOG_DEBUG("ReMalloc the buffer %p to release unused memory to memory pools.", void_ptr);
+-                free((void**)(&void_ptr), is_host);
+-                return malloc(size, is_set_zero, is_host);
+-            }
+-#endif
+             else {
+                 FT_LOG_DEBUG("Reuse original buffer %p with size %d and do nothing for reMalloc.", void_ptr, size);
+                 if (is_set_zero) {

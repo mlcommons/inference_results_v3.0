@@ -1,0 +1,27 @@
+## An example of an unstructured document for Power management settings to reproduce Perf, Power results
+
+# Boot/BIOS Firmware Settings
+
+## AMD CBS
+
+### NBIO Common Options
+#### SMU Common Options
+##### Power Policy Quick Settings = Standard
+
+### DF Common Options
+#### Memory Addressing
+##### NUMA nodes per socket = NPS4
+##### ACPI SRAT L3 Cche As NUMA Domain = Auto
+
+### CPU Common Options
+#### L1 Stream HW Prefetcher = Enabled
+#### L2 Stream HW Prefetcher = Enabled
+
+# Management Firmware Settings
+
+None
+
+# Power Management Settings  (command line or other)
+
+Run the scripts described in our code. See the **System setup for power measurement**
+section of the README.md located in closed/Neuchips.

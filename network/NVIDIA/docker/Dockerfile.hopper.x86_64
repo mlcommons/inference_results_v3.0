@@ -1,0 +1,166 @@
+# Copyright (c) 2018-2023, NVIDIA CORPORATION. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#  * Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#  * Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#  * Neither the name of NVIDIA CORPORATION nor the names of its
+#    contributors may be used to endorse or promote products derived
+#    from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
+# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+# PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+# OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+# Explicitly use bash instead of sh ('echo' behaves differently on some shells)
+SHELL ["/bin/bash", "-c"]
+
+ARG CUDA_VER=11.8
+# ARG CUDA_VER_PUBLIC=11.4
+ARG DRIVER_VER_MAJOR=520
+ARG USE_NIGHTLY=1
+
+ARG UBUNTU_VERSION=20.04
+ARG MOFED_VERSION=5.7-1.0.2.0
+
+ARG DISTRO=ubuntu2004
+ARG ARCH=x86_64
+
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
+ENV TZ=ETC/UTC
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install core packages
+# MLPINF-1247 - Some partners in China are reporting DNS issues with Apt, specifically with cuda-repo. Remove the .list.
+RUN rm /etc/apt/sources.list.d/cuda.list \
+ && apt update \
+ && apt install -y --no-install-recommends build-essential autoconf libtool git \
+        ccache curl wget pkg-config sudo ca-certificates automake libssl-dev \
+        bc python3-dev python3-pip google-perftools gdb libglib2.0-dev clang sshfs libre2-dev \
+        libboost-dev libnuma-dev numactl sysstat sshpass ntpdate less vim iputils-ping \
+ && apt remove -y cmake \
+ && apt remove -y libgflags-dev \
+ && apt remove -y libprotobuf-dev \
+ && apt -y autoremove
+RUN apt install -y --no-install-recommends pkg-config zip g++ zlib1g-dev unzip
+RUN apt install -y --no-install-recommends libarchive-dev
+
+# Install dependencies needed for RNN-T preprocessing
+RUN apt install -y sox
+
+# Needed by official RNNT accuracy script
+RUN apt install -y --no-install-recommends libsndfile1-dev
+
+# Install rapidJSON, needed by Triton
+RUN apt install rapidjson-dev
+
+COPY requirements.x86_64.1.txt requirements.x86_64.2.txt /tmp
+WORKDIR /tmp
+
+# Set up basic setuptools for pip install commands.
+RUN python3 -m pip install --upgrade pip \
+ && python3 -m pip install --upgrade setuptools wheel virtualenv
+
+# Break requirements into two lists because some of them require that other packages be fully installed first.
+RUN python3 -m pip install -r requirements.x86_64.1.txt \
+ && python3 -m pip install -r requirements.x86_64.2.txt
+
+# [MLPINF-1785] re-install to workaround a pycuda glitch
+RUN sudo python3 -m pip uninstall -y pycuda && python3 -m pip install pycuda==2021.1
+
+# install gflags
+# -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON -DBUILD_gflags_LIB=ON .. \
+RUN git clone -b v2.2.1 https://github.com/gflags/gflags.git \
+ && cd gflags \
+ && mkdir build && cd build \
+ && cmake -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON -DBUILD_gflags_LIB=ON .. \
+ && make -j \
+ && make install \
+ && cd /tmp && rm -rf gflags
+
+# install glog
+RUN git clone -b v0.3.5 https://github.com/google/glog.git \
+ && cd glog \
+ && cmake -H. -Bbuild -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON \
+ && cmake --build build \
+ && cmake --build build --target install \
+ && cd /tmp && rm -rf glog
+
+# Install CUB, needed by NMS OPT plugin
+RUN wget https://github.com/NVlabs/cub/archive/1.8.0.zip -O cub-1.8.0.zip \
+ && unzip cub-1.8.0.zip \
+ && mv cub-1.8.0/cub /usr/include/x86_64-linux-gnu/ \
+ && rm -rf cub-1.8.0.zip cub-1.8.0
+
+# Install libjemalloc2
+RUN echo 'deb http://archive.ubuntu.com/ubuntu focal main restricted universe multiverse' | tee -a /etc/apt/sources.list.d/focal.list \
+  && echo 'Package: *\nPin: release a=focal\nPin-Priority: -10\n' | tee -a /etc/apt/preferences.d/focal.pref \
+  && apt update \
+  && apt install --no-install-recommends -t focal -y libjemalloc2 libtcmalloc-minimal4
+
+# Install CuDNN 8.6.0
+ARG CUDNN_DEB_URL=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/
+RUN cd /tmp \
+ && install_deb_pkg() { wget $CUDNN_DEB_URL/$1 -O $1 && dpkg -i $1 && rm $1; } \
+ && install_deb_pkg libcudnn8_8.6.0.163-1+cuda11.8_amd64.deb \
+ && install_deb_pkg libcudnn8-dev_8.6.0.163-1+cuda11.8_amd64.deb \
+ && unset -f install_deb_pkg
+
+# Remove the default TRT 7.2 installation in the cudnn container
+RUN rm -rf /usr/local/lib/python3.8/dist-packages/tensorrt/
+
+# Mellanox OFED
+RUN cd /tmp && \
+    curl --proto '=https' -fSsL "https://content.mellanox.com/ofed/MLNX_OFED-${MOFED_VERSION}/MLNX_OFED_LINUX-${MOFED_VERSION}-ubuntu${UBUNTU_VERSION}-{ARCH}.tgz" | tar xz && \
+    cd MLNX_OFED_LINUX-${MOFED_VERSION}-* && \
+    ./mlnxofedinstall --user-space-only --without-fw-update -q && \
+    cd .. && \
+    rm -rf MLNX_OFED_LINUX*
+
+
+# Infiniband perf test / May be removed later
+RUN apt-get install -y libpci-dev
+RUN cd /usr/local/src && \
+    git clone https://github.com/linux-rdma/perftest.git && \
+    cd perftest && \
+    ./autogen.sh && ./configure CUDA_H_PATH=/usr/local/cuda/include/cuda.h && \
+    make -j && \
+    make install
+
+
+# With latest Ubuntu:20.04 container, there will be no 'python' or 'pip' even if we have installed 'python3' and
+# 'python3-pip'. So add softlink to avoid wheel installation failure.
+RUN ln -sf /usr/bin/python3 /usr/bin/python
+RUN ln -sf /usr/bin/pip3 /usr/bin/pip
+
+# Update GLIBC version needed for Triton TF-CPU backend
+RUN if [ ${USE_CPU} = 1 ]; then \
+ apt update && apt upgrade -y libstdc++6; fi
+ENV USE_CPU=${USE_CPU}
+
+RUN cd /tmp \
+    && pip3 uninstall -y nvidia-dali-cuda110 nvidia-dali-nvtf-plugin \
+    && wget http://sqrl/dldata/pip-dali-qa/nvidia-dali-cudagpgpu/nvidia-dali-cuda110/nvidia_dali_cuda110-1.17.0.dev0-5311386-py3-none-manylinux2014_x86_64.whl \
+    && pip3 install nvidia_dali_cuda110-1.17.0.dev0-5311386-py3-none-manylinux2014_x86_64.whl
+#    && wget http://sqrl/dldata/pip-dali-qa/nvidia-dali-cudagpgpu/nvidia-dali-cuda110/nvidia_dali_cuda110-1.15.0.dev0-4879085-py3-none-manylinux2014_x86_64.whl \
+#    && pip3 install nvidia_dali_cuda110-1.15.0.dev0-4879085-py3-none-manylinux2014_x86_64.whl
+
+
+WORKDIR /work

@@ -1,0 +1,37 @@
+client 2023-02-12 14:33:36,399 [INFO] Creating output directory '/home/arjun/CM/repos/octoml@ck/cm-mlops/script/run-mlperf-inference-app/valid_results/arjun_orin-tflite_cpp-cpu-armnn_tflite-v22.11-default_config/mobilenet-v2-precision_float-1.0-160/singlestream/performance/tmp_power'
+client 2023-02-12 14:33:36,413 [INFO] Sending command to the server: 'mlcommons/power client v3'
+client 2023-02-12 14:33:36,418 [INFO] Got response: 'mlcommons/power server v3'
+client 2023-02-12 14:33:36,418 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-02-12 14:33:36,474 [INFO] NTP:offset = 0.003 s, delay = 0.015 s 
+client 2023-02-12 14:33:36,474 [INFO] Sending command to the server: 'time'
+client 2023-02-12 14:33:36,477 [INFO] Got response: '1676212416.4792416'
+client 2023-02-12 14:33:36,477 [INFO] The time difference between the client and the server is within range -4.854 ms..-1.496 ms
+client 2023-02-12 14:33:36,477 [INFO] Sending command to the server: 'new,,a7d9913d-5508-484b-abeb-a735ab4fc61e'
+client 2023-02-12 14:33:36,484 [INFO] Got response: 'OK 2023-02-12_14-33-36,ca6534a8-46cf-46e9-aeb4-8739da90933a'
+client 2023-02-12 14:33:36,484 [INFO] Session id is '2023-02-12_14-33-36'
+client 2023-02-12 14:33:36,485 [INFO] Sources: {"sources": {"__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "client.py": "33ca4f26368777ac06e01f9567b714a4b8063886", "lib/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/client.py": "4c2b78fb4849a7e5b584ef792d82aaed20b17f57", "lib/common.py": "624d0c0acc7c39aaff3674f0b99d6a09da53d1dc", "lib/external/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "lib/external/ntplib.py": "4da8f970656505a40483206ef2b5d3dd5e81711d", "lib/server.py": "cda0cdfaee9bfa1249c64a7dd4f89b7bf1b279f0", "lib/source_hashes.py": "60a2e02193209e8d392803326208d5466342da18", "lib/summary.py": "aa92f0a3f975eecd44d3c0cd0236342ccc9f941d", "lib/time_sync.py": "3210db56eb0ff0df57bf4293dc4d4b03fffd46f1", "server.py": "c3f90f2f7eeb4db30727556d0c815ebc89b3d28b", "tests/unit/__init__.py": "da39a3ee5e6b4b0d3255bfef95601890afd80709", "tests/unit/test_server.py": "99ae15aef722f2000ee6ed1ae1523637bf1ae42b", "tests/unit/test_source_hashes.py": "00468a2907583c593e6574a1f6b404e4651c221a"}, "modules": {"ptd_client_server.lib.client": "lib/client.py", "ptd_client_server.lib.common": "lib/common.py", "ptd_client_server.lib.external.ntplib": "lib/external/ntplib.py", "ptd_client_server.lib.source_hashes": "lib/source_hashes.py", "ptd_client_server.lib.summary": "lib/summary.py", "ptd_client_server.lib.time_sync": "lib/time_sync.py"}}
+client 2023-02-12 14:33:36,485 [INFO] Running workload in ranging mode
+client 2023-02-12 14:33:36,485 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-02-12 14:33:36,514 [INFO] NTP:offset = 0.011 s, delay = 0.026 s 
+client 2023-02-12 14:33:36,514 [INFO] Sending command to the server: 'time'
+client 2023-02-12 14:33:36,518 [INFO] Got response: '1676212416.5190961'
+client 2023-02-12 14:33:36,518 [INFO] The time difference between the client and the server is within range -4.957 ms..-0.824 ms
+client 2023-02-12 14:33:36,518 [INFO] Sending command to the server: 'session,2023-02-12_14-33-36,start,ranging'
+client 2023-02-12 14:34:04,644 [INFO] Got response: 'OK'
+client 2023-02-12 14:34:04,645 [INFO] Running the workload '/home/arjun/CM/repos/octoml@ck/cm-mlops/script/run-mlperf-inference-app/run.out'
+client 2023-02-12 14:44:06,939 [INFO] Sending command to the server: 'session,2023-02-12_14-33-36,stop,ranging'
+client 2023-02-12 14:44:17,016 [INFO] Got response: 'OK'
+client 2023-02-12 14:44:17,052 [INFO] Copying loadgen logs from '/home/arjun/CM/repos/octoml@ck/cm-mlops/script/run-mlperf-inference-app/valid_results/arjun_orin-tflite_cpp-cpu-armnn_tflite-v22.11-default_config/mobilenet-v2-precision_float-1.0-160/singlestream/performance/run_1' to '/home/arjun/CM/repos/octoml@ck/cm-mlops/script/run-mlperf-inference-app/valid_results/arjun_orin-tflite_cpp-cpu-armnn_tflite-v22.11-default_config/mobilenet-v2-precision_float-1.0-160/singlestream/performance/tmp_power/ranging'
+client 2023-02-12 14:44:17,055 [INFO] Running workload in testing mode
+client 2023-02-12 14:44:17,055 [INFO] Synchronizing with the server and with time.google.com...
+client 2023-02-12 14:44:17,077 [INFO] NTP:offset = 0.005 s, delay = 0.017 s 
+client 2023-02-12 14:44:17,077 [INFO] Sending command to the server: 'time'
+client 2023-02-12 14:44:17,080 [INFO] Got response: '1676213057.084198'
+client 2023-02-12 14:44:17,081 [INFO] The time difference between the client and the server is within range -6.298 ms..-3.046 ms
+client 2023-02-12 14:44:17,081 [INFO] Sending command to the server: 'session,2023-02-12_14-33-36,start,testing'
+client 2023-02-12 14:44:30,662 [INFO] Got response: 'OK'
+client 2023-02-12 14:44:30,662 [INFO] Running the workload '/home/arjun/CM/repos/octoml@ck/cm-mlops/script/run-mlperf-inference-app/run.out'
+client 2023-02-12 14:54:31,323 [INFO] Sending command to the server: 'session,2023-02-12_14-33-36,stop,testing'
+client 2023-02-12 14:54:41,439 [INFO] Got response: 'OK'
+client 2023-02-12 14:54:41,444 [INFO] Copying loadgen logs from '/home/arjun/CM/repos/octoml@ck/cm-mlops/script/run-mlperf-inference-app/valid_results/arjun_orin-tflite_cpp-cpu-armnn_tflite-v22.11-default_config/mobilenet-v2-precision_float-1.0-160/singlestream/performance/run_1' to '/home/arjun/CM/repos/octoml@ck/cm-mlops/script/run-mlperf-inference-app/valid_results/arjun_orin-tflite_cpp-cpu-armnn_tflite-v22.11-default_config/mobilenet-v2-precision_float-1.0-160/singlestream/performance/tmp_power/run_1'
+client 2023-02-12 14:54:41,446 [INFO] Done runs

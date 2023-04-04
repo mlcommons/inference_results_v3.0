@@ -1,0 +1,22 @@
+{
+    "TestScenario.Offline": {
+        "count": 955293,
+        "good_items": 0,
+        "mean": 0.0,
+        "percentiles": {
+            "50.0": 0.0,
+            "80.0": 0.0,
+            "90.0": 0.0,
+            "95.0": 0.0,
+            "99.0": 0.0,
+            "99.9": 0.0
+        },
+        "qps": 1330.2606563945196,
+        "took": 718.1246738433838,
+        "total_items": 955293
+    },
+    "cmdline": "Namespace(model='dlrm', model_path='./python/dlrm_terabyte.pytorch', dataset='terabyte', dataset_path='/home/amd/neuchip_cpu_mlperf/terabyte_test_set', profile='dlrm-terabyte-pytorch', enable_profiling=False, scenario='Offline', test_num_workers=0, max_ind_range=40000000, data_sub_sample_rate=0.0, max_batchsize=16800, output='/home/amd/v3_neuchips_cpu/inference_results_v2.1/closed/Intel/code/dlrm-99.9/pytorch-cpu/output/pytorch-cpu/dlrm/Offline/performance/run_1', inputs=['continuous and categorical features'], outputs=['probability'], backend='pytorch-native', use_gpu=False, use_ipex=True, use_bf16=False, use_int8=True, int8_configuration_dir='int8_configure.json', threads=1, cache=0, accuracy=False, find_peak_performance=False, config='./mlperf.conf', user_config='./user.conf', duration=None, target_qps=None, max_latency=None, count_samples=None, count_queries=None, samples_per_query_multistream=None, samples_per_query_offline=204800, samples_to_aggregate_fix=None, samples_to_aggregate_min=None, samples_to_aggregate_max=None, samples_to_aggregate_quantile_file='../tools/dist_quantile.txt', samples_to_aggregate_trace_file='dlrm_trace_of_aggregated_samples.txt', numpy_rand_seed=123)",
+    "runtime": "pytorch-native-dlrm",
+    "time": 1677680771,
+    "version": "1.13.1+cpu"
+}

@@ -1,0 +1,18 @@
+{
+    "audit_success": true,
+    "audit_test": "TEST05",
+    "benchmark_full": "bert-99",
+    "benchmark_short": "bert",
+    "config_name": "vXE8545_A100_SXM_80GBx4_TRT-custom_k_99_MaxP-Offline",
+    "detected_system": "SystemConfiguration(host_cpu_conf=CPUConfiguration(layout={CPU(name=\"AMD EPYC 7543 32-Core Processor\", architecture=CPUArchitecture.x86_64, core_count=1, threads_per_core=1): 16}), host_mem_conf=MemoryConfiguration(host_memory_capacity=Memory(quantity=132.01986799999997, byte_suffix=ByteSuffix.GB), comparison_tolerance=0.05), accelerator_conf=AcceleratorConfiguration(layout={GPU(name=\"GRID A100DX-80C\", accelerator_type=AcceleratorType.Discrete, vram=Memory(quantity=80.0, byte_suffix=ByteSuffix.GiB), max_power_limit=None, pci_id=\"0x20B210DE\", compute_sm=80): 4}), numa_conf=NUMAConfiguration(numa_nodes={0: NUMANode(index=0, cpus=[Interval(start=0, end=15)], gpus=[0, 1, 2, 3]), 1: NUMANode(index=1, cpus=[Interval(start=0, end=15)], gpus=[0, 1, 2, 3])}, num_numa_nodes=2), system_id=\"vXE8545_A100_SXM_80GBx4\")",
+    "early_stopping_met": true,
+    "result_samples_per_second": 14953.5,
+    "result_validity": "VALID",
+    "satisfies_query_constraint": false,
+    "scenario": "Offline",
+    "scenario_key": "result_samples_per_second",
+    "summary_string": "result_samples_per_second: 14953.5, Result is VALID",
+    "system_name": "vXE8545_A100_SXM_80GBx4_TRT",
+    "tensorrt_version": "8.6.0",
+    "test_mode": "PerformanceOnly"
+}

@@ -1,0 +1,165 @@
+# Copyright (c) 2023, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+# Explicitly use bash instead of sh ('echo' behaves differently on some shells)
+SHELL ["/bin/bash", "-c"]
+
+ARG CUDA_VER=11.8
+ARG CUDA_VER_PUBLIC=11.8
+
+ARG DRIVER_VER_MAJOR=525
+ARG USE_CPU=0
+ARG USE_NIGHTLY=0
+
+ARG UBUNTU_VERSION=20.04
+ARG MOFED_VERSION=5.7-1.0.2.0
+
+ARG DISTRO=ubuntu2004
+ARG ARCH=x86_64
+
+ARG CUDNN_VER=8.7.0.84
+
+ARG TRT_MAJOR_VER=8
+ARG TRT_MINOR_VER=5
+ARG TRT_PATCH_VER=3
+ARG TRT_VER=${TRT_MAJOR_VER}.${TRT_MINOR_VER}.${TRT_PATCH_VER}
+
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
+ENV TZ=ETC/UTC
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install core packages
+RUN apt update -y \
+ && apt install -y --no-install-recommends build-essential autoconf libtool git \
+        ccache curl wget pkg-config sudo ca-certificates automake libssl-dev \
+        bc python3-dev python3-pip google-perftools gdb libglib2.0-dev clang sshfs libre2-dev \
+        libboost-dev libnuma-dev numactl sysstat sshpass ntpdate less vim iputils-ping \
+        libnl-3-dev libnl-route-3-dev \
+ && apt remove -y cmake \
+ && apt remove -y libgflags-dev \
+ && apt remove -y libprotobuf-dev \
+ && apt -y autoremove
+RUN apt install -y --no-install-recommends pkg-config zip g++ zlib1g-dev unzip
+RUN apt install -y --no-install-recommends libarchive-dev
+
+COPY requirements.x86_64.1.txt requirements.x86_64.2.txt /tmp
+WORKDIR /tmp
+
+# Set up basic setuptools for pip install commands.
+RUN python3 -m pip install --upgrade pip \
+ && python3 -m pip install --upgrade setuptools wheel virtualenv
+
+# Break requirements into two lists because some of them require that other packages be fully installed first.
+RUN python3 -m pip install -r requirements.x86_64.1.txt \
+ && python3 -m pip install -r requirements.x86_64.2.txt
+
+# [MLPINF-1785] re-install to workaround a pycuda glitch
+RUN sudo python3 -m pip uninstall -y pycuda && python3 -m pip install pycuda==2021.1
+
+# install gflags
+# -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON -DBUILD_gflags_LIB=ON .. \
+RUN git clone -b v2.2.1 https://github.com/gflags/gflags.git \
+ && cd gflags \
+ && mkdir build && cd build \
+ && cmake -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON -DBUILD_gflags_LIB=ON .. \
+ && make -j \
+ && make install \
+ && cd /tmp && rm -rf gflags
+
+# install glog
+RUN git clone -b v0.3.5 https://github.com/google/glog.git \
+ && cd glog \
+ && cmake -H. -Bbuild -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON \
+ && cmake --build build \
+ && cmake --build build --target install \
+ && cd /tmp && rm -rf glog
+
+# Install CUB, needed by NMS OPT plugin
+RUN wget https://github.com/NVlabs/cub/archive/1.8.0.zip -O cub-1.8.0.zip \
+ && unzip cub-1.8.0.zip \
+ && mv cub-1.8.0/cub /usr/include/x86_64-linux-gnu/ \
+ && rm -rf cub-1.8.0.zip cub-1.8.0
+
+# Install libjemalloc2
+RUN echo 'deb http://archive.ubuntu.com/ubuntu focal main restricted universe multiverse' | tee -a /etc/apt/sources.list.d/focal.list \
+  && echo 'Package: *\nPin: release a=focal\nPin-Priority: -10\n' | tee -a /etc/apt/preferences.d/focal.pref \
+  && apt update \
+  && apt install --no-install-recommends -t focal -y libjemalloc2 libtcmalloc-minimal4
+
+# Install cudnn
+ARG CUDNN_DEB_URL=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/
+RUN cd /tmp \
+ && install_deb_pkg() { wget $CUDNN_DEB_URL/$1 -O $1 && dpkg -i $1 && rm $1; } \
+ && install_deb_pkg libcudnn8_${CUDNN_VER}-1+cuda${CUDA_VER}_amd64.deb \
+ && install_deb_pkg libcudnn8-dev_${CUDNN_VER}-1+cuda${CUDA_VER}_amd64.deb \
+ && unset -f install_deb_pkg
+
+# Remove the default TRT installation in the cudnn container if any
+RUN rm -rf /usr/local/lib/python3.8/dist-packages/tensorrt/
+
+# Install TRT
+ARG TRT_DEB_URL=https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64
+RUN cd /tmp \
+    && install_deb_pkg() { wget $TRT_DEB_URL/$1 -O $1 && dpkg -i $1 && rm $1; } \
+    && install_deb_pkg libnvinfer${TRT_MAJOR_VER}_${TRT_VER}-1+cuda${CUDA_VER}_amd64.deb \
+    && install_deb_pkg libnvinfer-dev_${TRT_VER}-1+cuda${CUDA_VER}_amd64.deb \
+    && install_deb_pkg libnvinfer-plugin${TRT_MAJOR_VER}_${TRT_VER}-1+cuda${CUDA_VER}_amd64.deb \
+    && install_deb_pkg libnvinfer-plugin-dev_${TRT_VER}-1+cuda${CUDA_VER}_amd64.deb \
+    && install_deb_pkg libnvparsers${TRT_MAJOR_VER}_${TRT_VER}-1+cuda${CUDA_VER}_amd64.deb \
+    && install_deb_pkg libnvparsers-dev_${TRT_VER}-1+cuda${CUDA_VER}_amd64.deb \
+    && install_deb_pkg libnvonnxparsers${TRT_MAJOR_VER}_${TRT_VER}-1+cuda${CUDA_VER}_amd64.deb \
+    && install_deb_pkg libnvonnxparsers-dev_${TRT_VER}-1+cuda${CUDA_VER}_amd64.deb \
+    && install_deb_pkg python3-libnvinfer_${TRT_VER}-1+cuda${CUDA_VER}_amd64.deb \
+    && install_deb_pkg python3-libnvinfer-dev_${TRT_VER}-1+cuda${CUDA_VER}_amd64.deb \
+    && unset -f install_deb_pkg
+
+# Mellanox OFED
+RUN cd /tmp && \
+    curl --proto '=https' -fSsL "https://content.mellanox.com/ofed/MLNX_OFED-${MOFED_VERSION}/MLNX_OFED_LINUX-${MOFED_VERSION}-ubuntu${UBUNTU_VERSION}-${ARCH}.tgz" | tar xz && \
+    cd MLNX_OFED_LINUX-${MOFED_VERSION}-* && \
+    ./mlnxofedinstall --user-space-only --without-fw-update -q --distro ubuntu${UBUNTU_VERSION}&& \
+    cd .. && \
+    rm -rf MLNX_OFED_LINUX*
+
+
+# Infiniband perf test / May be removed later
+RUN apt-get install -y libpci-dev
+RUN cd /usr/local/src && \
+    git clone https://github.com/linux-rdma/perftest.git && \
+    cd perftest && \
+    ./autogen.sh && ./configure CUDA_H_PATH=/usr/local/cuda/include/cuda.h && \
+    make -j && \
+    make install
+
+# Add paramiko for python based SSH cmd
+RUN python3 -m pip install --upgrade pip \
+ && python3 -m pip install --upgrade paramiko
+
+# With latest Ubuntu:20.04 container, there will be no 'python' or 'pip' even if we have installed 'python3' and
+# 'python3-pip'. So add softlink to avoid wheel installation failure.
+RUN ln -sf /usr/bin/python3 /usr/bin/python
+RUN ln -sf /usr/bin/pip3 /usr/bin/pip
+
+# Update GLIBC version needed for Triton TF-CPU backend
+RUN if [ ${USE_CPU} = 1 ]; then \
+ apt update && apt upgrade -y libstdc++6; fi
+ENV USE_CPU=${USE_CPU}
+
+
+WORKDIR /work

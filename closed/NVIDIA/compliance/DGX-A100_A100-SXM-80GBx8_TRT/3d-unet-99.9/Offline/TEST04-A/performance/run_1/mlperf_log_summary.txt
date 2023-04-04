@@ -1,0 +1,53 @@
+================================================
+MLPerf Results Summary
+================================================
+SUT name : Server_3DUNet
+Scenario : Offline
+Mode     : PerformanceOnly
+Samples per second: 21.3497
+Result is : INVALID
+  Min duration satisfied : NO
+  Min queries satisfied : Yes
+  Early stopping satisfied: Yes
+Recommendations:
+ * Increase expected QPS so the loadgen pre-generates a larger (coalesced) query.
+
+================================================
+Additional Stats
+================================================
+Min latency (ns)                : 82718809
+Max latency (ns)                : 1967243411
+Mean latency (ns)               : 982012871
+50.00 percentile latency (ns)   : 994800236
+90.00 percentile latency (ns)   : 1628334171
+95.00 percentile latency (ns)   : 1704692952
+97.00 percentile latency (ns)   : 1889591571
+99.00 percentile latency (ns)   : 1967243411
+99.90 percentile latency (ns)   : 1967243411
+
+================================================
+Test Parameters Used
+================================================
+samples_per_query : 42
+target_qps : 24
+target_latency (ns): 0
+max_async_queries : 1
+min_duration (ms): 600000
+max_duration (ms): 0
+min_query_count : 1
+max_query_count : 0
+qsl_rng_seed : 6655344265603136530
+sample_index_rng_seed : 15863379492028895792
+schedule_rng_seed : 12662793979680847247
+accuracy_log_rng_seed : 0
+accuracy_log_probability : 0
+accuracy_log_sampling_target : 0
+print_timestamps : 0
+performance_issue_unique : 1
+performance_issue_same : 0
+performance_issue_same_index : 0
+performance_sample_count : 42
+
+1 warning encountered. See detailed log.
+
+No errors encountered during test.
