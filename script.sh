@@ -153,7 +153,8 @@ change_to_hardware_dir() {
   local hardware_name=$2
 
   # Construct the full path to the hardware directory
-  local full_path="$dir_name/closed/$hardware_name"
+  #  local full_path="$dir_name/closed/$hardware_name"
+  local full_path="closed/$hardware_name"
 
   # Check if the directory exists
   if [ -d "$full_path" ]; then
@@ -167,13 +168,14 @@ change_to_hardware_dir() {
 
 # Main function to orchestrate the steps
 main() {
+  local dir_name="inference_results_v3.0"
   export MLPERF_SCRATCH_PATH=$(pwd)/scratch
 
   ensure_python_dependencies
   read_yaml
-  local dir_name="inference"
+
   #  clone_repository "$dir_name" "$REPO_URL" "$REPO_BRANCH"
-  create_directory_structure
+  #  create_directory_structure
   change_to_hardware_dir "$dir_name" "$HARDWARE"
   set_timezone "$TIMEZONE"
 
@@ -185,8 +187,8 @@ main() {
     #    make prebuild DOCKER_COMMAND="make download_data BENCHMARKS='$model'"
     #    make prebuild DOCKER_COMMAND="make download_model BENCHMARKS='$model'"
     #    make prebuild DOCKER_COMMAND="make preprocess_data BENCHMARKS='$model'"
-    #    make prebuild DOCKER_COMMAND="make clean"
-    #    make prebuild DOCKER_COMMAND="make build"
+    make prebuild DOCKER_COMMAND="make clean"
+    make prebuild DOCKER_COMMAND="make build"
     make prebuild DOCKER_COMMAND="make run RUN_ARGS='--benchmarks=$model'"
 
   done
