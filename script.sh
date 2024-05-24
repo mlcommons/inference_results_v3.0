@@ -185,7 +185,7 @@ main() {
   # Loop over the benchmarks
   for model in "${BENCHMARK_MODELS[@]}"; do
     #    make prebuild DOCKER_COMMAND="make download_data BENCHMARKS='$model'"
-    #    make prebuild DOCKER_COMMAND="make download_model BENCHMARKS='$model'"
+    make prebuild DOCKER_COMMAND="make download_model BENCHMARKS='$model'"
     #    make prebuild DOCKER_COMMAND="make preprocess_data BENCHMARKS='$model'"
     make prebuild DOCKER_COMMAND="make clean"
     make prebuild DOCKER_COMMAND="make build"
