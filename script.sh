@@ -3,8 +3,12 @@
 run_custom_system_script() {
   # Run the Python script and capture the output
   local script_output
-  script_output=$(echo y | python3 -m scripts.custom_systems.add_custom_system)
+  nvidia_output=$(nvidia-smi)
+  gpu_name=$(echo "$nvidia_output" | grep -oP '(?<=\|   ).*(?=  [0-9])'| head -n 1 | awk '{print $2, $3}' | sed 's/ /_/')
+  echo "$gpu_name"
+  script_output=$(echo "$gpu_name" | python3 -m scripts.custom_systems.add_custom_system)
     system_id=$(echo "$script_output" | grep -oP 'NVIDIA\s[A-Z0-9]+' | sed 's/ /_/')
+    echo $system_id    
     # Generate content for the .py file
     local py_content
     py_content="import os\n"
@@ -255,7 +259,7 @@ main() {
   fi
 
   systemctl restart docker
-
+  rm -rf code/common/systems/custom_list.py
   run_custom_system_script
 
   # Loop over the benchmarks
@@ -265,13 +269,20 @@ main() {
     make prebuild DOCKER_COMMAND="make preprocess_data BENCHMARKS='$model'"
     make prebuild DOCKER_COMMAND="make clean"
     make prebuild DOCKER_COMMAND="make build"
-    make prebuild DOCKER_COMMAND="make run RUN_ARGS='--benchmarks=$model --scenarios=offline'"
+    output=$(make prebuild DOCKER_COMMAND="make run RUN_ARGS='--benchmarks=$model --scenarios=offline'")
+    echo "$output" 
+    # Check if "Result is : VALID" is in the output
+    if echo "$output" | grep -q "Result is : VALID"; then
+      echo "True"
+    else
+      echo "False"
+    fi
 
     sudo nvidia-smi mig -dci && sudo nvidia-smi mig -dgi
-
   done
 
 }
 
 # Call the main function to execute the script
 main
+	
