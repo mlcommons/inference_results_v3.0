@@ -247,7 +247,11 @@ def yes_no_prompt(message, default=True):
 
     resp = None
     #while resp is None or resp.lower() not in choices:
+<<<<<<< HEAD
     #    resp = input(f"{message} {choice_str}: ")
+=======
+    #   resp = input(f"{message} {choice_str}: ")
+>>>>>>> 834762c2518c2c1cea2a5aa4c0dea8ac7a6cebb6
 
     if resp == "":
         return default

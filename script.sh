@@ -3,6 +3,7 @@
 run_custom_system_script() {
   # Run the Python script and capture the output
   local script_output
+<<<<<<< HEAD
   nvidia_output=$(nvidia-smi)
   gpu_name=$(echo "$nvidia_output" | grep -oP '(?<=\|   ).*(?=  [0-9])'| head -n 1 | awk '{print $2, $3}' | sed 's/ /_/')
   echo "$gpu_name"
@@ -30,21 +31,45 @@ run_custom_system_script() {
     py_content+="@ConfigRegistry.register(HarnessType.Custom, AccuracyTarget.k_99, PowerSetting.MaxP)\n"
     py_content+="class ${system_id}(OfflineGPUBaseConfig):\n"
     py_content+="    system = KnownSystem.${system_id}\n"
+=======
+  script_output=$(echo y | python3 -m scripts.custom_systems.add_custom_system)
+  system_id=$(echo "$script_output" | grep -oP 'NVIDIA\s[A-Z0-9]+' | sed 's/ /_/')
+  # Generate content for the .py file
+  local py_content
+  py_content="import os\n"
+  py_content+="import sys\n"
+  py_content+="sys.path.insert(0, os.getcwd())\n\n"
+  py_content+="from code.common.constants import Benchmark, Scenario\n"
+  py_content+="from code.common.systems.system_list import KnownSystem\n"
+  py_content+="from configs.configuration import *\n"
+  py_content+="from configs.bert import GPUBaseConfig, CPUBaseConfig\n\n"
+  py_content+="class OfflineGPUBaseConfig(GPUBaseConfig):\n"
+  py_content+="    scenario = Scenario.Offline\n"
+  py_content+="    gpu_copy_streams = 2\n"
+  py_content+="    gpu_inference_streams = 2\n"
+  py_content+="    enable_interleaved = False\n"
+  py_content+="    use_small_tile_gemm_plugin = True\n"
+  py_content+="    gpu_batch_size = 1024\n"
+  py_content+="    offline_expected_qps = 3400\n"
+  py_content+="    workspace_size = 7516192768\n\n"
+  py_content+="@ConfigRegistry.register(HarnessType.Custom, AccuracyTarget.k_99, PowerSetting.MaxP)\n"
+  py_content+="class ${system_id}(OfflineGPUBaseConfig):\n"
+  py_content+="    system = KnownSystem.${system_id}\n"
+>>>>>>> 834762c2518c2c1cea2a5aa4c0dea8ac7a6cebb6
 
-    # Write content to the .py file
-    local py_file_path="configs/bert/Offline/__init__.py"
-    #local py_file_path="configs/bert/Offline/__init__.py"
-    echo -e "$py_content" >| "$py_file_path"
+  # Write content to the .py file
+  local py_file_path="configs/bert/Offline/__init__.py"
+  #local py_file_path="configs/bert/Offline/__init__.py"
+  echo -e "$py_content" >|"$py_file_path"
 
-    echo "Updated .py file at $py_file_path"
+  echo "Updated .py file at $py_file_path"
 
-    # Path to your configuration file
-    CONFIG_FILE_PATH="configs/bert/Offline/custom.py"
+  # Path to your configuration file
+  CONFIG_FILE_PATH="configs/bert/Offline/custom.py"
 
-    # Clear the contents of the configuration file
-    echo "" >| $CONFIG_FILE_PATH
+  # Clear the contents of the configuration file
+  echo "" >|$CONFIG_FILE_PATH
 }
-
 
 # Function to ensure Python and PyYAML are installed
 ensure_python_dependencies() {
@@ -224,7 +249,6 @@ main() {
   #  create_directory_structure
   change_to_hardware_dir "$dir_name" "$HARDWARE"
   set_timezone "$TIMEZONE"
-  
 
   # Convert benchmarks into an array
   IFS=' ' read -r -a BENCHMARK_MODELS <<<"$BENCHMARKS"
@@ -236,7 +260,7 @@ main() {
 
   # Extracting the last GPU name
   last_gpu_name=$(echo "$output" | grep -oP 'MIG \d+g\.\d+gb(?=\s+\d+)' | tail -1)
-  
+
   last_gpu_name=$(echo "$last_gpu_name" | grep -oE "[^ ]+$")
   echo "$last_gpu_name"
 
@@ -252,7 +276,7 @@ main() {
   # Check if the command was successful
   if [[ $result == *"Successfully"* ]]; then
     echo "Successfully created GPU instance ID $last_gpu_name"
-    # Continue with your script here 
+    # Continue with your script here
   else
     echo "Error: Failed to create GPU instance ID $last_gpu_name"
     exit 1
@@ -270,7 +294,11 @@ main() {
     make prebuild DOCKER_COMMAND="make clean"
     make prebuild DOCKER_COMMAND="make build"
     output=$(make prebuild DOCKER_COMMAND="make run RUN_ARGS='--benchmarks=$model --scenarios=offline'")
+<<<<<<< HEAD
     echo "$output" 
+=======
+
+>>>>>>> 834762c2518c2c1cea2a5aa4c0dea8ac7a6cebb6
     # Check if "Result is : VALID" is in the output
     if echo "$output" | grep -q "Result is : VALID"; then
       echo "True"
