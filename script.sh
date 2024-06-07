@@ -4,32 +4,32 @@ run_custom_system_script() {
   # Run the Python script and capture the output
   local script_output
   nvidia_output=$(nvidia-smi)
-  gpu_name=$(echo "$nvidia_output" | grep -oP '(?<=\|   ).*(?=  [0-9])'| head -n 1 | awk '{print $2, $3}' | sed 's/ /_/')
+  gpu_name=$(echo "$nvidia_output" | grep -oP '(?<=\|   ).*(?=  [0-9])' | head -n 1 | awk '{print $2, $3}' | sed 's/ /_/')
   echo "$gpu_name"
   script_output=$(echo "$gpu_name" | python3 -m scripts.custom_systems.add_custom_system)
-    system_id=$(echo "$script_output" | grep -oP 'NVIDIA\s[A-Z0-9]+' | sed 's/ /_/')
-    echo $system_id    
-    # Generate content for the .py file
-    local py_content
-    py_content="import os\n"
-    py_content+="import sys\n"
-    py_content+="sys.path.insert(0, os.getcwd())\n\n"
-    py_content+="from code.common.constants import Benchmark, Scenario\n"
-    py_content+="from code.common.systems.system_list import KnownSystem\n"
-    py_content+="from configs.configuration import *\n"
-    py_content+="from configs.bert import GPUBaseConfig, CPUBaseConfig\n\n"
-    py_content+="class OfflineGPUBaseConfig(GPUBaseConfig):\n"
-    py_content+="    scenario = Scenario.Offline\n"
-    py_content+="    gpu_copy_streams = 2\n"
-    py_content+="    gpu_inference_streams = 2\n"
-    py_content+="    enable_interleaved = False\n"
-    py_content+="    use_small_tile_gemm_plugin = True\n"
-    py_content+="    gpu_batch_size = 1024\n"
-    py_content+="    offline_expected_qps = 3400\n"
-    py_content+="    workspace_size = 7516192768\n\n"
-    py_content+="@ConfigRegistry.register(HarnessType.Custom, AccuracyTarget.k_99, PowerSetting.MaxP)\n"
-    py_content+="class ${system_id}(OfflineGPUBaseConfig):\n"
-    py_content+="    system = KnownSystem.${system_id}\n"
+  system_id=$(echo "$script_output" | grep -oP 'NVIDIA\s[A-Z0-9]+' | sed 's/ /_/')
+  echo $system_id
+  # Generate content for the .py file
+  local py_content
+  py_content="import os\n"
+  py_content+="import sys\n"
+  py_content+="sys.path.insert(0, os.getcwd())\n\n"
+  py_content+="from code.common.constants import Benchmark, Scenario\n"
+  py_content+="from code.common.systems.system_list import KnownSystem\n"
+  py_content+="from configs.configuration import *\n"
+  py_content+="from configs.bert import GPUBaseConfig, CPUBaseConfig\n\n"
+  py_content+="class OfflineGPUBaseConfig(GPUBaseConfig):\n"
+  py_content+="    scenario = Scenario.Offline\n"
+  py_content+="    gpu_copy_streams = 2\n"
+  py_content+="    gpu_inference_streams = 2\n"
+  py_content+="    enable_interleaved = False\n"
+  py_content+="    use_small_tile_gemm_plugin = True\n"
+  py_content+="    gpu_batch_size = 1024\n"
+  py_content+="    offline_expected_qps = 3400\n"
+  py_content+="    workspace_size = 7516192768\n\n"
+  py_content+="@ConfigRegistry.register(HarnessType.Custom, AccuracyTarget.k_99, PowerSetting.MaxP)\n"
+  py_content+="class ${system_id}(OfflineGPUBaseConfig):\n"
+  py_content+="    system = KnownSystem.${system_id}\n"
 
   # Write content to the .py file
   local py_file_path="configs/bert/Offline/__init__.py"
@@ -282,4 +282,3 @@ main() {
 
 # Call the main function to execute the script
 main
-	
