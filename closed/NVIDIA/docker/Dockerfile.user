@@ -20,9 +20,10 @@ ARG GID
 ARG UID
 ARG GROUP
 ARG USER
-RUN echo root:root | chpasswd \
- && groupadd -f -g ${GID} ${GROUP} \
- && useradd -G sudo -g ${GID} -u ${UID} -m ${USER} \
- && echo ${USER}:${USER} | chpasswd \
- && echo -e "\nexport PS1=\"(mlperf) \\u@\\h:\\w\\$ \"" | tee -a /home/${USER}/.bashrc \
- && echo -e "\n%sudo ALL=(ALL:ALL) NOPASSWD:ALL\n" | tee -a /etc/sudoers
+RUN id -u ${USER} >/dev/null 2>&1 || \
+    (echo root:root | chpasswd \
+    && groupadd -f -g ${GID} ${GROUP} \
+    && useradd -G sudo -g ${GID} -u ${UID} -m ${USER} \
+    && echo ${USER}:${USER} | chpasswd \
+    && echo -e "\nexport PS1=\"(mlperf) \\u@\\h:\\w\\$ \"" | tee -a /home/${USER}/.bashrc \
+    && echo -e "\n%sudo ALL=(ALL:ALL) NOPASSWD:ALL\n" | tee -a /etc/sudoers)
